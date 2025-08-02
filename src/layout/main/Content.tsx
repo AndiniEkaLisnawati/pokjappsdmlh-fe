@@ -7,7 +7,7 @@ export default function Content() {
         {id: 3, title: "Kerjasama Pelatihan",path:"/kerjasama-pelatihan", image: "https://images.pexels.com/photos/247599/pexels-photo-247599.jpeg?auto=compress&cs=tinysrgb&w=600"},
         {id: 4, title: "Dokumentasi Kegiatan",path:"/dokumentasi-kegiatan", image: "https://images.pexels.com/photos/709552/pexels-photo-709552.jpeg?auto=compress&cs=tinysrgb&w=600"},
         {id: 5, title: "Kurikulum",path:"/kurikulum", image: "https://images.pexels.com/photos/709552/pexels-photo-709552.jpeg?auto=compress&cs=tinysrgb&w=600"},
-        {id: 6, title: "Silabus",path:"silabus", image: "https://images.pexels.com/photos/709552/pexels-photo-709552.jpeg?auto=compress&cs=tinysrgb&w=600"}
+        {id: 6, title: "Silabus",path:"/silabus", image: "https://images.pexels.com/photos/709552/pexels-photo-709552.jpeg?auto=compress&cs=tinysrgb&w=600"}
     ];
 
     return (

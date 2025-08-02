@@ -15,6 +15,8 @@ export default function Slide({ id, title, path, image }: SlideProps) {
         <Image
           src={image}
           alt={title}
+          width={800}
+          height={500}
           className="h-72 w-full object-cover transform group-hover:scale-105 transition duration-500 ease-in-out"
         />
         <div className="absolute inset-0 bg-black/40 group-hover:bg-black/10 transition-all flex flex-col justify-center items-center text-white">

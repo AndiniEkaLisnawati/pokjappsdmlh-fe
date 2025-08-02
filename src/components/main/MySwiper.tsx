@@ -25,6 +25,8 @@ export default function MySwiper({ image }: SwiperProps) {
             key={idx}
             src={img}
             alt={`slide-${idx}`}
+            width={600}
+            height={400}
             className={`w-full h-screen absolute inset-0 transition-opacity duration-1000 ${
                 idx === current ? "opacity-100" : "opacity-0"
             }`}
