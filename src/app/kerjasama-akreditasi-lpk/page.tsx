@@ -117,37 +117,42 @@ export default function Page() {
   return (
     <div className="w-full min-h-screen gap-10 bg-gray-100 dark:bg-neutral-900 transition-colors duration-700 flex flex-col items-center px-4">
 
-      {/* Jumbotron */}
-      <div className="relative w-full h-[60vh] flex flex-col md:flex-row items-center justify-center gap-8 bg-gradient-to-br from-white to-sky-100 dark:from-neutral-900 dark:to-black transition-all duration-700 px-6 md:px-16">
-        <Image
-          src={Jumbotron}
-          alt="Jumbotron Illustration"
-          width={420}
-          height={420}
-          className="hidden md:block h-[250px] md:h-[350px] w-auto object-cover drop-shadow-2xl rounded-xl mb-6 md:mb-0 md:self-end"
-          priority
-        />
+      <section className="w-screen px-4 sm:px-6 lg:px-8 py-5">
+        <div className="max-w-7xl mx-auto">
+          <div className="relative w-full min-h-[60vh] flex flex-col-reverse md:flex-row items-center justify-between gap-8 bg-gradient-to-br from-white to-sky-100 dark:from-slate-900 dark:to-slate-800 transition-all duration-700 px-6 md:px-16 py-12 rounded-2xl shadow-lg">
 
-        <div className="text-center md:text-left max-w-2xl">
-          <div className="inline-flex items-center gap-2 mb-4">
-            <Handshake className="w-6 h-6 text-indigo-600 dark:text-indigo-400" />
-            <span className="text-sm font-semibold uppercase tracking-wide text-indigo-600 dark:text-indigo-400">
-              Kemitraan & Akreditasi
-            </span>
+            <div className="text-center md:text-left max-w-2xl">
+              <div className="inline-flex items-center gap-2 mb-4">
+                <Handshake className="w-6 h-6 text-indigo-600 dark:text-indigo-400" />
+                <span className="text-sm font-semibold uppercase tracking-wide text-indigo-600 dark:text-indigo-400">
+                  Kemitraan, dan Akreditasi
+                </span>
+              </div>
+
+              <h1 className="text-3xl md:text-5xl font-extrabold leading-tight text-gray-800 dark:text-white mb-4">
+                <span className="bg-gradient-to-r from-indigo-700 to-blue-500 bg-clip-text text-transparent">
+                  Partnerships, Accreditation & LPK
+                </span>
+              </h1>
+
+              <p className="text-base md:text-lg text-gray-700 dark:text-gray-300 max-w-xl mb-6">
+                Kelola kemitraan strategis, proses akreditasi, dan lembaga pelatihan kerja
+                untuk meningkatkan kualitas program pengembangan SDM lingkungan hidup.
+              </p>
+            </div>
+
+            {/* Image */}
+            <Image
+              src={Jumbotron}
+              alt="Ilustrasi Program Pelatihan"
+              width={420}
+              height={420}
+              className="w-auto h-[250px] md:h-[360px] object-cover drop-shadow-2xl rounded-xl mb-6 md:mb-0 md:self-end"
+              priority
+            />
           </div>
-
-          <h1 className="text-3xl md:text-5xl font-extrabold leading-tight text-gray-800 dark:text-white mb-4">
-            <span className="bg-gradient-to-r from-indigo-700 to-blue-500 bg-clip-text text-transparent">
-              Partnerships, Accreditation & LPK
-            </span>
-          </h1>
-
-          <p className="text-base md:text-lg text-gray-700 dark:text-gray-300 max-w-xl">
-            Kelola kemitraan strategis, proses akreditasi, dan lembaga pelatihan kerja
-            untuk meningkatkan kualitas program pengembangan SDM lingkungan hidup.
-          </p>
         </div>
-      </div>
+      </section>
 
 
       {/* Konten Utama */}

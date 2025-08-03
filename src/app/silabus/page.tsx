@@ -6,6 +6,8 @@ import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { FileText, Search, Download, Eye, Calendar, Clock, Users } from "lucide-react";
+import Image from "next/image";
+import Logo from "../../../public/Logos4.png"
 
 const Syllabus = () => {
   const syllabuses = [
@@ -124,31 +126,50 @@ const Syllabus = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-tr from-slate-50 via-slate-50 to-teal-100 dark:from-slate-800 dark:to-teal-900 dark:via-slate-800 dark:text-slate-50">
+      <section className="w-screen px-4 sm:px-6 lg:px-8 py-5">
+        <div className="max-w-7xl mx-auto">
+          <div className="relative w-full min-h-[60vh] flex flex-col-reverse md:flex-row items-center justify-between gap-8 bg-gradient-to-br from-white to-sky-100 dark:from-slate-900 dark:to-slate-800 transition-all duration-700 px-6 md:px-16 py-12 rounded-2xl shadow-lg">
 
-      
-      {/* Hero Section */}
-      <section className="py-16 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto text-center">
-          <div className="inline-flex items-center space-x-3 mb-6">
-            <FileText className="w-8 h-8 text-primary" />
-            <span className="text-sm font-medium text-accent uppercase tracking-wider">Silabus</span>
+
+            <div className="text-center md:text-left max-w-2xl">
+              <div className="inline-flex items-center gap-2 mb-4">
+                <FileText className="w-6 h-6 text-indigo-600 dark:text-indigo-400" />
+                <span className="text-sm font-semibold uppercase tracking-wide text-indigo-600 dark:text-indigo-400">
+                  silabus
+                </span>
+              </div>
+
+              <h1 className="text-3xl md:text-5xl font-extrabold leading-tight text-gray-800 dark:text-white mb-4">
+                <span className="bg-gradient-to-r from-indigo-700 to-blue-500 bg-clip-text text-transparent">
+                  Syllabus
+                </span>
+              </h1>
+
+              <p className="text-xl text-muted-foreground mb-8 max-w-3xl mx-auto">
+                Silabus detail dengan rencana pembelajaran, materi, dan metode evaluasi
+                untuk setiap mata pelajaran dalam program pelatihan.
+              </p>
+
+
+              <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
+
+                <Button size="lg" className="shadow-xl">
+                  <FileText className="w-5 h-5 mr-2" />
+                  Upload Silabus Baru
+                </Button>
+              </div>
+            </div>
+
+            {/* Image */}
+            <Image
+              src={Logo}
+              alt="Ilustrasi Program Pelatihan"
+              width={420}
+              height={420}
+              className="w-auto h-[250px] md:h-[360px] object-cover drop-shadow-2xl rounded-xl mb-6 md:mb-0 md:self-end"
+              priority
+            />
           </div>
-          
-          <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
-            <span className="bg-gradient-to-r from-indigo-700 to-blue-500 bg-clip-text text-transparent">
-              Syllabus
-            </span>
-          </h1>
-          
-          <p className="text-xl text-muted-foreground mb-8 max-w-3xl mx-auto">
-            Silabus detail dengan rencana pembelajaran, materi, dan metode evaluasi 
-            untuk setiap mata pelajaran dalam program pelatihan.
-          </p>
-
-          <Button size="lg" className="shadow-xl">
-            <FileText className="w-5 h-5 mr-2" />
-            Upload Silabus Baru
-          </Button>
         </div>
       </section>
 
@@ -196,8 +217,8 @@ const Syllabus = () => {
                   <div className="flex-1">
                     <div className="relative">
                       <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
-                      <Input 
-                        placeholder="Cari silabus atau mata kuliah..." 
+                      <Input
+                        placeholder="Cari silabus atau mata kuliah..."
                         className="pl-10"
                       />
                     </div>

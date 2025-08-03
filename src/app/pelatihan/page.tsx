@@ -15,7 +15,7 @@ import {
   FileText
 } from "lucide-react";
 import Image from "next/image";
-import Logo from "../../../public/Jumbotron.png"
+import Logo from "../../../public/Logos5.png"
 const Training = () => {
   const upcomingTrainings = [
     {
@@ -107,10 +107,9 @@ const Training = () => {
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-slate-800 dark:text-slate-50">
 
-      {/* Hero Section */}
       <section className="w-screen px-4 sm:px-6 lg:px-8 py-5">
         <div className="max-w-7xl mx-auto">
-          <div className="relative w-full min-h-[60vh] flex flex-col-reverse md:flex-row items-center justify-between gap-8 bg-gradient-to-br from-white to-sky-100 dark:from-neutral-900 dark:to-black transition-all duration-700 px-6 md:px-16 py-12 rounded-2xl shadow-lg">
+          <div className="relative w-full min-h-[60vh] flex flex-col-reverse md:flex-row items-center justify-between gap-8 bg-gradient-to-br from-white to-sky-100 dark:from-slate-900 dark:to-slate-800 transition-all duration-700 px-6 md:px-16 py-12 rounded-2xl shadow-lg">
 
      
             <div className="text-center md:text-left max-w-2xl">

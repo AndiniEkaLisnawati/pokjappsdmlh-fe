@@ -5,6 +5,8 @@ import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { BookOpen, Search, Download, Eye, Calendar, FileText } from "lucide-react";
+import Logo from "../../../public/Logos3.png";
+import Image from "next/image";
 
 const Curriculum = () => {
   const curriculums = [
@@ -119,36 +121,56 @@ const Curriculum = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background to-muted/30">
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-800 dark:text-slate-50">
 
-      
-      {/* Hero Section */}
-      <section className="py-16 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto text-center">
-          <div className="inline-flex items-center space-x-3 mb-6">
-            <BookOpen className="w-8 h-8 text-primary" />
-            <span className="text-sm font-medium text-accent uppercase tracking-wider">Kurikulum</span>
+
+      <section className="w-screen px-4 sm:px-6 lg:px-8 py-5">
+        <div className="max-w-7xl mx-auto">
+          <div className="relative w-full min-h-[60vh] flex flex-col-reverse md:flex-row items-center justify-between gap-8 bg-gradient-to-br from-white to-sky-100 dark:from-slate-900 dark:to-slate-800 transition-all duration-700 px-6 md:px-16 py-12 rounded-2xl shadow-lg">
+
+
+            <div className="text-center md:text-left max-w-2xl">
+              <div className="inline-flex items-center gap-2 mb-4">
+                <BookOpen className="w-6 h-6 text-indigo-600 dark:text-indigo-400" />
+                <span className="text-sm font-semibold uppercase tracking-wide text-indigo-600 dark:text-indigo-400">
+                  kurikulum
+                </span>
+              </div>
+
+              <h1 className="text-3xl md:text-5xl font-extrabold leading-tight text-gray-800 dark:text-white mb-4">
+                <span className="bg-gradient-to-r from-indigo-700 to-blue-500 bg-clip-text text-transparent">
+                  Curriculum
+                </span>
+              </h1>
+
+              <p className="text-base md:text-lg text-gray-700 dark:text-gray-300 max-w-xl mb-6">
+                Kurikulum terstruktur dan up-to-date untuk semua program pelatihan
+                sesuai standar kompetensi nasional lingkungan hidup.
+              </p>
+
+              <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
+                <Button size="lg" className="shadow-xl">
+                  <FileText className="w-5 h-5 mr-2" />
+                  Upload Kurikulum Baru
+                </Button>
+              </div>
+            </div>
+
+            {/* Image */}
+            <Image
+              src={Logo}
+              alt="Ilustrasi Program Pelatihan"
+              width={420}
+              height={420}
+              className="w-auto h-[250px] md:h-[360px] object-cover drop-shadow-2xl rounded-xl mb-6 md:mb-0 md:self-end"
+              priority
+            />
           </div>
-          
-          <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
-            <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-              Curriculum
-            </span>
-          </h1>
-          
-          <p className="text-xl text-muted-foreground mb-8 max-w-3xl mx-auto">
-            Kurikulum terstruktur dan up-to-date untuk semua program pelatihan 
-            sesuai standar kompetensi nasional lingkungan hidup.
-          </p>
-
-          <Button size="lg" className="shadow-xl">
-            <FileText className="w-5 h-5 mr-2" />
-            Upload Kurikulum Baru
-          </Button>
         </div>
       </section>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16 mt-10">
         {/* Statistics */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
           <Card>
@@ -184,8 +206,8 @@ const Curriculum = () => {
               <div className="flex-1">
                 <div className="relative">
                   <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
-                  <Input 
-                    placeholder="Cari kurikulum..." 
+                  <Input
+                    placeholder="Cari kurikulum..."
                     className="pl-10"
                   />
                 </div>
