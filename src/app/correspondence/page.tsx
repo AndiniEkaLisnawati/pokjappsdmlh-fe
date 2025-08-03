@@ -8,8 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Mail, Send, FileText, Calendar, User, Download, Eye, Clock } from "lucide-react";
-import Image from "next/image";
-import Logo from "../../../public/Jumbotron.png"
+
 
 const Correspondence = () => {
   const submissions = [
@@ -81,42 +80,27 @@ const Correspondence = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br dark:bg-slate-800 dark:text-slate-50 from-background to-muted/30">
 
-      <section className="w-screen px-4 sm:px-6 lg:px-8 py-5">
-        <div className="max-w-7xl mx-auto">
-          <div className="relative w-full min-h-[60vh] flex flex-col-reverse md:flex-row items-center justify-between gap-8 bg-gradient-to-br from-white to-sky-100 dark:from-slate-900 dark:to-slate-800 transition-all duration-700 px-6 md:px-16 py-12 rounded-2xl shadow-lg">
-
-
-            <div className="text-center md:text-left max-w-2xl">
-              <div className="inline-flex items-center gap-2 mb-4">
-                <Mail className="w-6 h-6 text-indigo-600 dark:text-indigo-400" />
+      
+      <section className="py-16 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto text-center">
+          <div className="inline-flex items-center space-x-3 mb-6">
+              <Mail className="w-6 h-6 text-indigo-600 dark:text-indigo-400" />
                 <span className="text-sm font-semibold uppercase tracking-wide text-indigo-600 dark:text-indigo-400">
                   Surat Menyurat
                 </span>
-              </div>
-
-              <h1 className="text-3xl md:text-5xl font-extrabold leading-tight text-gray-800 dark:text-white mb-4">
-                <span className="bg-gradient-to-r from-indigo-700 to-blue-500 bg-clip-text text-transparent">
-                  Correspondence & Administration
-                </span>
-              </h1>
-
-              <p className="text-base md:text-lg text-gray-700 dark:text-gray-300 max-w-xl mb-6">
-                Sistem administrasi dan korespondensi internal untuk kelancaran operasional
-                dan komunikasi resmi antar unit kerja.
-              </p>
-
-            </div>
-
-            {/* Image */}
-            <Image
-              src={Logo}
-              alt="Ilustrasi Program Pelatihan"
-              width={420}
-              height={420}
-              className="w-auto h-[250px] md:h-[360px] object-cover drop-shadow-2xl rounded-xl mb-6 md:mb-0 md:self-end"
-              priority
-            />
           </div>
+
+          <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
+            <span className="bg-gradient-to-r from-indigo-900 to-blue-400 bg-clip-text text-transparent">
+             Corresponden & Administrations
+            </span>
+          </h1>
+
+          <p className="text-xl text-muted-foreground mb-8 max-w-3xl mx-auto">
+            Sistem administrasi dan korespondensi internal untuk kelancaran operasional
+                dan komunikasi resmi antar unit kerja.
+          </p>
+
         </div>
       </section>
 

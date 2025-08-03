@@ -120,25 +120,25 @@ const Portfolio = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background to-muted/30">      
+    <div className="min-h-screen bg-gradient-to-br from-background to-muted/30">
 
       <section className="py-16 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto text-center">
           <div className="inline-flex items-center space-x-3 mb-6">
             <Users className="w-8 h-8 text-primary" />
-          <span className="text-sm font-medium uppercase tracking-wider bg-gradient-to-bl from-blue-600 to-blue-700 bg-clip-text text-transparent">
-  Portfolio Widyaiswara
-</span>
+            <span className="text-sm font-medium uppercase tracking-wider bg-gradient-to-bl from-blue-600 to-blue-700 bg-clip-text text-transparent">
+              Portfolio Widyaiswara
+            </span>
           </div>
-          
+
           <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
             <span className="bg-gradient-to-r from-indigo-900 to-blue-400 bg-clip-text text-transparent">
               Lecturer Portfolio
             </span>
           </h1>
-          
+
           <p className="text-xl text-muted-foreground mb-8 max-w-3xl mx-auto">
-            Profil lengkap para widyaiswara dan instruktur ahli dalam bidang lingkungan hidup 
+            Profil lengkap para widyaiswara dan instruktur ahli dalam bidang lingkungan hidup
             dengan keahlian, sertifikasi, dan pengalaman yang beragam.
           </p>
 
@@ -185,8 +185,8 @@ const Portfolio = () => {
               <div className="flex-1">
                 <div className="relative">
                   <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
-                  <Input 
-                    placeholder="Cari widyaiswara berdasarkan nama atau keahlian..." 
+                  <Input
+                    placeholder="Cari widyaiswara berdasarkan nama atau keahlian..."
                     className="pl-10"
                   />
                 </div>
@@ -231,9 +231,9 @@ const Portfolio = () => {
                 <div className="flex items-start gap-4">
                   <div className="w-16 h-16 bg-muted rounded-full flex items-center justify-center overflow-hidden">
                     <Image
-                    width={30}
-                    height={30} 
-                      src={lecturer.photo} 
+                      width={30}
+                      height={30}
+                      src={lecturer.photo}
                       alt={lecturer.name}
                       className="w-full h-full object-cover"
                     />
@@ -251,7 +251,7 @@ const Portfolio = () => {
                   </div>
                 </div>
               </CardHeader>
-              
+
               <CardContent className="space-y-4">
                 {/* Expertise */}
                 <div>
