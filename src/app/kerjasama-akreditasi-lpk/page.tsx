@@ -1,14 +1,13 @@
 "use client";
 import Jumbotron from "@/app/kerjasama-akreditasi-lpk/img/Jumbotron.png";
 import Image from "next/image";
-import GoToTop from "@/components/main/GoToTop";
 import Card from "@/components/main/ProfileCard";
 import KLHK from "@/app/kerjasama-akreditasi-lpk/img/Klhk.png";
 import AccreditationCard from "@/components/main/AccreditationCard";
 import BAN from "@/app/kerjasama-akreditasi-lpk/img/BAN.png";
 import LpkCard from "@/components/main/LpkCard";
 import Worker from "@/app/kerjasama-akreditasi-lpk/img/Worker.png";
-import GoToHome from "@/components/main/GoToHome";
+import { Handshake } from "lucide-react";
 
 export default function Page() {
 
@@ -116,28 +115,51 @@ export default function Page() {
   ];
 
   return (
-    <div className="w-full min-h-screen gap-10 bg-gray-100 dark:bg-gray-900 transition-colors duration-700 flex flex-col items-center px-4">
+    <div className="w-full min-h-screen gap-10 bg-gray-100 dark:bg-neutral-900 transition-colors duration-700 flex flex-col items-center px-4">
+
       {/* Jumbotron */}
-      <div className="top-0 left-0 right-0 w-screen h-[50vh] flex justify-center items-center bg-gradient-to-t from-white to-sky-200 dark:from-gray-700 dark:to-black transition-all duration-700">
+      <div className="relative w-full h-[60vh] flex flex-col md:flex-row items-center justify-center gap-8 bg-gradient-to-br from-white to-sky-100 dark:from-neutral-900 dark:to-black transition-all duration-700 px-6 md:px-16">
         <Image
           src={Jumbotron}
-          alt="jumbotron"
-          width={430}
-          height={450}
-          className="drop-shadow-xl relative w-auto h-full rounded-lg"
+          alt="Jumbotron Illustration"
+          width={420}
+          height={420}
+          className="hidden md:block h-[250px] md:h-[350px] w-auto object-cover drop-shadow-2xl rounded-xl mb-6 md:mb-0 md:self-end"
           priority
         />
+
+        <div className="text-center md:text-left max-w-2xl">
+          <div className="inline-flex items-center gap-2 mb-4">
+            <Handshake className="w-6 h-6 text-indigo-600 dark:text-indigo-400" />
+            <span className="text-sm font-semibold uppercase tracking-wide text-indigo-600 dark:text-indigo-400">
+              Kemitraan & Akreditasi
+            </span>
+          </div>
+
+          <h1 className="text-3xl md:text-5xl font-extrabold leading-tight text-gray-800 dark:text-white mb-4">
+            <span className="bg-gradient-to-r from-indigo-700 to-blue-500 bg-clip-text text-transparent">
+              Partnerships, Accreditation & LPK
+            </span>
+          </h1>
+
+          <p className="text-base md:text-lg text-gray-700 dark:text-gray-300 max-w-xl">
+            Kelola kemitraan strategis, proses akreditasi, dan lembaga pelatihan kerja
+            untuk meningkatkan kualitas program pengembangan SDM lingkungan hidup.
+          </p>
+        </div>
       </div>
 
+
       {/* Konten Utama */}
-      <div className=" flex flex-col items-center text-center gap-4">
+      <div className=" flex flex-col items-center text-center gap-4 mt-10 md:mt-5">
         <div className="kerjasama flex flex-col gap-3 justify-center items-center">
-          <h1 className="text-3xl font-bold text-slate-900 dark:text-white tracking-wide transition-all duration-500">
+
+          <h1 className="text-3xl font-bold text-slate-900 dark:text-white tracking-wide transition-colors duration-500">
             Kerjasama
           </h1>
-          <div className="w-52 h-1.5 bg-teal-300 rounded-3xl" />
+          <div className="w-52 h-1.5 bg-teal-300 dark:bg-teal-700 rounded-3xl" />
 
-          <p className="text-teal-900 dark:text-gray-300 max-w-xl">
+          <p className="text-teal-900 dark:text-slate-300 max-w-xl text-center">
             Kami bekerjasama dengan berbagai mitra untuk pelatihan dan
             pengembangan sumber daya manusia di bidang lingkungan hidup.
           </p>
@@ -161,12 +183,12 @@ export default function Page() {
           <div className="w-52 h-1.5 bg-teal-300 rounded-3xl" />
 
           <div className="grid grid-cols-1 sm:grid-cols-[1fr_1fr] md:grid-cols-[2fr_1fr] gap-4 w-full max-w-6xl mx-auto bg-teal-50 px-4 sm:px-0 h-auto sm:h-[500px] overflow-hidden rounded-xl shadow-md">
-            <div className="bg-slate-50 dark:bg-slate-100 w-full h-full p-6 flex flex-col justify-center space-y-4">
-              <h1 className="text-xl md:text-2xl font-semibold text-gray-800">
+            <div className="bg-slate-50 dark:bg-slate-800 dark:text-slate-50 w-full h-full p-6 flex flex-col justify-center space-y-4">
+              <h1 className="text-xl md:text-2xl font-semibold">
                 Akreditasi Resmi POKJAPPSDMLH
               </h1>
 
-              <p className="text-gray-700 leading-relaxed text-sm md:text-base">
+              <p className=" leading-relaxed text-sm md:text-base">
                 Lembaga ini telah terakreditasi oleh Badan Akreditasi Nasional
                 sebagai bentuk pengakuan atas komitmen dalam menjaga mutu
                 pendidikan dan standar pelayanan. Status akreditasi mencerminkan
@@ -245,8 +267,8 @@ export default function Page() {
                 />
               ))}
             </div>
-            <div className="hidden md:block w-full items-center shadow-md rounded-2xl bg-slate-50 h-auto">
-            
+            <div className="hidden md:block w-full items-center shadow-md rounded-2xl bg-slate-50 dark:bg-slate-800 dark:text-slate-50 h-auto">
+
               <Image
                 src={Worker}
                 width={500}
@@ -256,9 +278,6 @@ export default function Page() {
             </div>
           </div>
         </div>
-
-        <GoToTop />
-        <GoToHome />
       </div>
     </div>
   );

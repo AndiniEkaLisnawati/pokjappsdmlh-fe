@@ -1,6 +1,7 @@
 import './globals.css'
 import type { Metadata } from 'next'
 import Header from '@/components/main/Header'
+import Footer from "@/components/main/Footer"
 
 export const metadata: Metadata = {
   title: 'POKJAPPSDMLH',
@@ -22,6 +23,7 @@ export default function RootLayout({
       <body>
         <Header></Header>
         {children}
+        <Footer></Footer>
       </body>
     </html>
   )

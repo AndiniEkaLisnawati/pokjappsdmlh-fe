@@ -77,7 +77,7 @@ const Correspondence = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background to-muted/30">
+    <div className="min-h-screen bg-gradient-to-br dark:bg-slate-800 dark:text-slate-50 from-background to-muted/30">
 
       <section className="py-16 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto text-center">

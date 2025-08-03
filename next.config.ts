@@ -11,7 +11,8 @@ const nextConfig: NextConfig = {
     './layout/**/*.{js, ts, jsx, tsx}'
   ],
   theme: {
-    extend: {},
+    extend: {
+    },
   },
 };
 

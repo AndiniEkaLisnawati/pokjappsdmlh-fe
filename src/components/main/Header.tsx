@@ -1,7 +1,7 @@
 "use client"
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Menu, X, Users, Home, FileText, Mail } from "lucide-react";
+import { Menu, X, Users, Home, Mail } from "lucide-react";
 import ToggleTheme from "@/components/main/ToggleTheme";
 import Image from "next/image";
 import Logo from "../../../public/image.png";
@@ -14,13 +14,12 @@ export default function Header(){
     { href: "/", label: "Beranda", icon: Home },
     { href: "/portfolio", label: "Portfolio Widyaiswara", icon: Users },
     { href: "/correspondence", label: "Surat Menyurat", icon: Mail },
-    { href: "/documentation", label: "Dokumentasi", icon: FileText },
   ];
 
 
 
   return (
-    <nav className="bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b border-border sticky top-0 z-50">
+    <nav className="bg-background/90 dark:bg-slate-800 dark:text-slate-50 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b border-border sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
        
@@ -36,19 +35,23 @@ export default function Header(){
             {navLinks.map((link) => {
               const Icon = link.icon;
               return (
+                <>
                 <a
                   key={link.href}
                   href={link.href}
                   className="flex items-center space-x-2 text-muted-foreground hover:text-foreground transition-colors duration-200"
-                >
+                  >
                   <Icon className="w-4 h-4" />
                   <span className="font-medium">{link.label}</span>
                 </a>
+                  </>
               );
             })}
+       
           </div>
 
           <div className="hidden md:flex items-center space-x-4">
+          <ToggleTheme></ToggleTheme>
             <Button variant="outline" size="sm">
               Admin Panel
             </Button>

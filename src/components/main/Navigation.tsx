@@ -1,7 +1,7 @@
 "use client"
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Menu, X, Users, Home, FileText, Mail } from "lucide-react";
+import { Menu, X, Users, Home, Mail } from "lucide-react";
 
 const Navigation = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -10,7 +10,6 @@ const Navigation = () => {
     { href: "/", label: "Beranda", icon: Home },
     { href: "/portfolio", label: "Portfolio Widyaiswara", icon: Users },
     { href: "/correspondence", label: "Surat Menyurat", icon: Mail },
-    { href: "/documentation", label: "Dokumentasi", icon: FileText },
   ];
 
   return (
