@@ -1,20 +1,25 @@
 "use client"
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Menu, X, Users, Home, Mail } from "lucide-react";
+import { Menu, X, Users, Home, Building, Handshake, BookOpenText, GraduationCap } from "lucide-react";
 import ToggleTheme from "@/components/main/ToggleTheme";
 import Image from "next/image";
 import Logo from "../../../public/image.png";
+
 
 export default function Header(){
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const isAdmin = false;
 
   const navLinks = [
-    { href: "/", label: "Beranda", icon: Home },
-    { href: "/portfolio", label: "Portfolio Widyaiswara", icon: Users },
-    { href: "/correspondence", label: "Surat Menyurat", icon: Mail },
+    { href: "/", label: "Home", icon: Home },
+    { href: "/portfolio", label: "Widyaiswara", icon: Users },
+    { href: "/akreditasi-lpk", label: "LPK accreditation", icon: Building },
+    { href: "/partner-kerjasama", label: "collabs", icon: Handshake },
+    { href: "/kurikulum", label: "syllabus", icon: BookOpenText },
+    { href: "/pelatihan", label: "Training", icon: GraduationCap },
   ];
+    
 
 
 
@@ -52,9 +57,6 @@ export default function Header(){
 
           <div className="hidden md:flex items-center space-x-4">
           <ToggleTheme></ToggleTheme>
-            <Button variant="outline" size="sm">
-              Admin Panel
-            </Button>
           </div>
 
           <div className="md:hidden">

@@ -1,9 +1,7 @@
-'use client';
+
 
 import MySwiper from '@/components/main/MySwiper';
-import { Button } from '@/components/ui/button';
 import {
-    Users,
     Building2
 } from 'lucide-react';
 
@@ -21,7 +19,7 @@ export default function Hero() {
 
                 <MySwiper image={images} />
                 <div className='bg-gradient-to-tr from-transparent to-slate-100/90 dark:to-gray-900 drop-shadow-md inset-0 absolute justify-center items-center flex flex-col'>
-                    <div className="max-w-7xl mx-auto text-center">
+                    <div className="max-w-7xl mx-auto text-center flex flex-col justify-center items-center">
                         <div className="inline-flex items-center space-x-3 mb-6 animate-bounce-gentle">
                             <div className="p-2 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-full shadow-lg">
                                 <Building2 className="w-8 h-8 text-white" />
@@ -34,17 +32,12 @@ export default function Hero() {
                                 POKJA PPSDMLH
                             </span>
                         </h1>
+                        <div className="bg-teal-200/50 rounded-bl-3xl rounded-tr-3xl p-1.5 max-w-3/4">
 
-                        <p className="text-xl text-black dark:text-slate-50 mb-8 max-w-3xl mx-auto animate-slide-up">
-                            Platform terintegrasi untuk pengelolaan dan koordinasi Pengembangan Program
-                            Sumber Daya Manusia Lingkungan Hidup yang efisien dan terstruktur.
-                        </p>
-
-                        <div className="flex flex-col sm:flex-row gap-4 justify-center items-center animate-scale-in">
-                            <Button size="lg" className="bg-blue-600 hover:bg-blue-700 text-white shadow-xl transition-all duration-300 hover:scale-105">
-                                <Users className="w-5 h-5 mr-2" />
-                                Portfolio Widyaiswara
-                            </Button>
+                            <p className="text-xl font-semibold text-teal-900 dark:text-slate-50 mb-8 max-w-3xl mx-auto animate-slide-up">
+                                Platform terintegrasi untuk pengelolaan dan koordinasi Pengembangan Program
+                                Sumber Daya Manusia Lingkungan Hidup yang efisien dan terstruktur.
+                            </p>
                         </div>
                     </div>
                 </div>

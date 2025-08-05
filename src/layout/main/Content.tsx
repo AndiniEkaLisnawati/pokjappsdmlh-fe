@@ -4,7 +4,8 @@ Handshake,
 GraduationCap,
 Camera,
 BookOpen,
-FileText,
+User,
+Building,
 } from "lucide-react";
 
 export default function Content() {
@@ -12,19 +13,19 @@ export default function Content() {
 const items = [
   {
     id: 1,
-    title: "Collaboration, Accreditation, & LPK",
-    path: "/kerjasama-akreditasi-lpk",
+    title: "LPK Accreditation",
+    path: "/akreditasi-lpk",
     image: "https://images.pexels.com/photos/346529/pexels-photo-346529.jpeg?auto=compress&cs=tinysrgb&w=600",
-    icon: <Handshake className="w-6 h-6" />,
+    icon: <Building className="w-6 h-6" />,
     gradient: "from-blue-600 to-blue-700",
     description: "Kelola kemitraan strategis, proses akreditasi, dan lembaga pelatihan kerja untuk meningkatkan kualitas program pengembangan SDM."
   },
   {
     id: 2,
-    title: "Training Partnerships",
-    path: "/kerjasama-pelatihan",
+    title: "Collabs Partnerships",
+    path: "/partner-kerjasama",
     image: "https://images.pexels.com/photos/147411/italy-mountains-dawn-daybreak-147411.jpeg?auto=compress&cs=tinysrgb&w=600",
-    icon: <GraduationCap className="w-6 h-6" />,
+    icon: <Handshake className="w-6 h-6" />,
     gradient: "from-emerald-600 to-emerald-700",
     description: "Jaringan kemitraan pelatihan dengan berbagai institusi untuk memperluas akses dan kualitas program pelatihan."
   },
@@ -33,7 +34,7 @@ const items = [
     title: "Training",
     path: "/pelatihan",
     image: "https://images.pexels.com/photos/247599/pexels-photo-247599.jpeg?auto=compress&cs=tinysrgb&w=600",
-    icon: <Handshake className="w-6 h-6" />,
+    icon: <GraduationCap className="w-6 h-6" />,
     gradient: "from-yellow-600 to-yellow-700",
     description: "Program pelatihan komprehensif untuk pengembangan kompetensi SDM lingkungan hidup dengan metode pembelajaran modern."
   },
@@ -57,10 +58,10 @@ const items = [
   },
   {
     id: 6,
-    title: "Syllabus",
-    path: "/silabus",
+    title: "Widyaiswara",
+    path: "/portofolio",
     image: "https://images.pexels.com/photos/709552/pexels-photo-709552.jpeg?auto=compress&cs=tinysrgb&w=600",
-    icon: <FileText className="w-6 h-6" />,
+    icon: <User className="w-6 h-6" />,
     gradient: "from-teal-600 to-teal-700",
     description: "Silabus detail dengan rencana pembelajaran, materi, dan metode evaluasi untuk setiap mata pelajaran."
   }

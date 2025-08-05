@@ -3,12 +3,18 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { BookOpen, Search, Download, Eye, Calendar, FileText } from "lucide-react";
-import Logo from "../../../public/Logos3.png";
+import { BookOpen, Search, Eye, Calendar, FileText, Filter } from "lucide-react";
+import { useState } from "react";
 import Image from "next/image";
+import Logo from "../../../public/Logos4.png"
 
 const Curriculum = () => {
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedField, setSelectedField] = useState("all");
+  const [selectedLevel, setSelectedLevel] = useState("all");
+
   const curriculums = [
     {
       id: 1,
@@ -123,35 +129,36 @@ const Curriculum = () => {
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-slate-800 dark:text-slate-50">
 
-
-      <section className="w-screen px-4 sm:px-6 lg:px-8 py-5">
+       <section className="w-screen px-4 sm:px-6 lg:px-8 py-5">
         <div className="max-w-7xl mx-auto">
           <div className="relative w-full min-h-[60vh] flex flex-col-reverse md:flex-row items-center justify-between gap-8 bg-gradient-to-br from-white to-sky-100 dark:from-slate-900 dark:to-slate-800 transition-all duration-700 px-6 md:px-16 py-12 rounded-2xl shadow-lg">
 
 
             <div className="text-center md:text-left max-w-2xl">
               <div className="inline-flex items-center gap-2 mb-4">
-                <BookOpen className="w-6 h-6 text-indigo-600 dark:text-indigo-400" />
+                <FileText className="w-6 h-6 text-indigo-600 dark:text-indigo-400" />
                 <span className="text-sm font-semibold uppercase tracking-wide text-indigo-600 dark:text-indigo-400">
-                  kurikulum
+                  silabus
                 </span>
               </div>
 
               <h1 className="text-3xl md:text-5xl font-extrabold leading-tight text-gray-800 dark:text-white mb-4">
                 <span className="bg-gradient-to-r from-indigo-700 to-blue-500 bg-clip-text text-transparent">
-                  Curriculum
+                  Syllabus
                 </span>
               </h1>
 
-              <p className="text-base md:text-lg text-gray-700 dark:text-gray-300 max-w-xl mb-6">
-                Kurikulum terstruktur dan up-to-date untuk semua program pelatihan
-                sesuai standar kompetensi nasional lingkungan hidup.
+              <p className="text-xl text-muted-foreground mb-8 max-w-3xl mx-auto">
+                Silabus detail dengan rencana pembelajaran, materi, dan metode evaluasi
+                untuk setiap mata pelajaran dalam program pelatihan.
               </p>
 
+
               <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
+
                 <Button size="lg" className="shadow-xl">
                   <FileText className="w-5 h-5 mr-2" />
-                  Upload Kurikulum Baru
+                  Upload Silabus Baru
                 </Button>
               </div>
             </div>
@@ -169,8 +176,7 @@ const Curriculum = () => {
         </div>
       </section>
 
-
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16 mt-10">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
         {/* Statistics */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
           <Card>
@@ -206,14 +212,42 @@ const Curriculum = () => {
               <div className="flex-1">
                 <div className="relative">
                   <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
-                  <Input
-                    placeholder="Cari kurikulum..."
+                  <Input 
+                    placeholder="Cari kurikulum..." 
                     className="pl-10"
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
                   />
                 </div>
               </div>
+              <Select value={selectedField} onValueChange={setSelectedField}>
+                <SelectTrigger className="w-full md:w-48">
+                  <SelectValue placeholder="Bidang" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">Semua Bidang</SelectItem>
+                  <SelectItem value="teknologi">Teknologi</SelectItem>
+                  <SelectItem value="lingkungan">Lingkungan</SelectItem>
+                  <SelectItem value="audit">Audit</SelectItem>
+                  <SelectItem value="regulasi">Regulasi</SelectItem>
+                  <SelectItem value="energi">Energi</SelectItem>
+                  <SelectItem value="konservasi">Konservasi</SelectItem>
+                </SelectContent>
+              </Select>
+              <Select value={selectedLevel} onValueChange={setSelectedLevel}>
+                <SelectTrigger className="w-full md:w-48">
+                  <SelectValue placeholder="Level" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">Semua Level</SelectItem>
+                  <SelectItem value="dasar">Dasar</SelectItem>
+                  <SelectItem value="menengah">Menengah</SelectItem>
+                  <SelectItem value="lanjutan">Lanjutan</SelectItem>
+                </SelectContent>
+              </Select>
               <Button variant="outline">
-                Filter
+                <Filter className="w-4 h-4 mr-2" />
+                Clear
               </Button>
             </div>
           </CardContent>
@@ -241,7 +275,15 @@ const Curriculum = () => {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {curriculums.map((curriculum) => (
+                {curriculums
+                  .filter(curriculum => {
+                    const matchesSearch = curriculum.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                                        curriculum.description.toLowerCase().includes(searchTerm.toLowerCase());
+                    const matchesField = selectedField === "all" || curriculum.field.toLowerCase() === selectedField;
+                    const matchesLevel = selectedLevel === "all" || curriculum.level.toLowerCase() === selectedLevel;
+                    return matchesSearch && matchesField && matchesLevel;
+                  })
+                  .map((curriculum) => (
                   <TableRow key={curriculum.id}>
                     <TableCell>
                       <div>
@@ -277,14 +319,11 @@ const Curriculum = () => {
                       </div>
                     </TableCell>
                     <TableCell>
-                      <div className="flex gap-2">
+               
                         <Button size="sm" variant="outline">
                           <Eye className="w-4 h-4" />
                         </Button>
-                        <Button size="sm" variant="outline">
-                          <Download className="w-4 h-4" />
-                        </Button>
-                      </div>
+             
                     </TableCell>
                   </TableRow>
                 ))}

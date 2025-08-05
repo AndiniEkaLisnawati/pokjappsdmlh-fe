@@ -89,29 +89,29 @@ const Training = () => {
     }
   ];
 
-  const trainingMaterials = [
-    {
-      id: 1,
-      title: "Environmental Law Handbook",
-      type: "PDF",
-      size: "2.5 MB",
-      downloads: 156
-    },
-    {
-      id: 2,
-      title: "Sustainability Assessment Guide",
-      type: "PDF",
-      size: "1.8 MB",
-      downloads: 203
-    },
-    {
-      id: 3,
-      title: "Training Methodology Video",
-      type: "MP4",
-      size: "45 MB",
-      downloads: 89
-    }
-  ];
+  // const trainingMaterials = [
+  //   {
+  //     id: 1,
+  //     title: "Environmental Law Handbook",
+  //     type: "PDF",
+  //     size: "2.5 MB",
+  //     downloads: 156
+  //   },
+  //   {
+  //     id: 2,
+  //     title: "Sustainability Assessment Guide",
+  //     type: "PDF",
+  //     size: "1.8 MB",
+  //     downloads: 203
+  //   },
+  //   {
+  //     id: 3,
+  //     title: "Training Methodology Video",
+  //     type: "MP4",
+  //     size: "45 MB",
+  //     downloads: 89
+  //   }
+  // ];
 
   return (
     <>
@@ -164,9 +164,8 @@ const Training = () => {
           </div>
         </div>
       </div>
-    </div>
 
-  <section className="pb-16 px-4 sm:px-6 lg:px-8">
+  <section className="pb-10 pt-5 px-4 sm:px-6 lg:px-8 dark:bg-slate-800 dark:text-sla">
       <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-12 mt-10 ">
         <Card className="text-center">
           <CardContent className="pt-6">
@@ -290,8 +289,8 @@ const Training = () => {
                       <Users className="w-4 h-4 mr-2" />
                       {training.participants} peserta
                     </div>
-                    <div className="flex items-center text-muted-foreground">
                       <Award className="w-4 h-4 mr-2" />
+                    <div className="flex items-center text-muted-foreground">
                       {training.certificates} sertifikat diterbitkan
                     </div>
                   </div>
@@ -306,6 +305,7 @@ const Training = () => {
   </section>
 
 
+    </div>
   </>
   );
 };

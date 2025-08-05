@@ -148,9 +148,8 @@ const Portfolio = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-800 dark:text-slate-50">
 
-      {/* Hero Section */}
       <section className="py-16 px-4 sm:px-6 lg:px-8 animate-fade-in">
         <div className="max-w-7xl mx-auto text-center">
           <div className="inline-flex items-center space-x-3 mb-6 animate-bounce-gentle">
@@ -166,7 +165,7 @@ const Portfolio = () => {
             </span>
           </h1>
 
-          <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto animate-slide-up">
+          <p className="text-xl text-gray-600 dark:text-slate-50 mb-8 max-w-3xl mx-auto animate-slide-up">
             Profil lengkap para widyaiswara dan instruktur ahli dalam bidang lingkungan hidup
             dengan keahlian, sertifikasi, dan pengalaman yang beragam.
           </p>
