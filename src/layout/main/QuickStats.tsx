@@ -3,7 +3,7 @@ import React from 'react'
 const QuickStats = () => {
   return (
     <div>
-         <section className="py-16 px-4 sm:px-6 lg:px-8 bg-white/70 backdrop-blur-sm">
+         <section className="py-16 px-4 sm:px-6 lg:px-8 bg-white/70 dark:bg-slate-900/90 backdrop-blur-sm">
         <div className="max-w-7xl mx-auto animate-fade-in">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
             <div className="space-y-2 p-6 rounded-xl bg-blue-50 hover:bg-blue-100 transition-colors duration-300">
