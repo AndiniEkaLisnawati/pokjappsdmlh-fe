@@ -1,6 +1,5 @@
 import React from 'react'
 import BaseCard from './BaseCard';
-import Image from 'next/image';
 import PDFViewer from './PDFViewer';
 
 interface AccreditationCardProps{
