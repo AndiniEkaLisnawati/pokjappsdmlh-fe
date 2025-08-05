@@ -93,7 +93,7 @@ const Partnerships = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background to-muted/30">
+    <div className="min-h-screen dark:bg-slate-900 bg-gray-100 dark:text-slate-50">
       <section className="w-screen px-4 sm:px-6 lg:px-8 py-5">
         <div className="max-w-7xl mx-auto">
           <div className="relative w-full min-h-[60vh] flex flex-col-reverse md:flex-row items-center justify-between gap-8 bg-gradient-to-br from-white to-sky-100 dark:from-slate-900 dark:to-slate-800 transition-all duration-700 px-6 md:px-16 py-12 rounded-2xl shadow-lg">
@@ -102,13 +102,13 @@ const Partnerships = () => {
               <div className="inline-flex items-center gap-2 mb-4">
                 <Handshake className="w-6 h-6 text-indigo-600 dark:text-indigo-400" />
                 <span className="text-sm font-semibold uppercase tracking-wide text-indigo-600 dark:text-indigo-400">
-                  Kemitraan, dan Akreditasi
+                   Akreditasi
                 </span>
               </div>
 
               <h1 className="text-3xl md:text-5xl font-extrabold leading-tight text-gray-800 dark:text-white mb-4">
                 <span className="bg-gradient-to-r from-indigo-700 to-blue-500 bg-clip-text text-transparent">
-                  Partnerships, Accreditation & LPK
+                   Accreditation LPK
                 </span>
               </h1>
 
@@ -132,7 +132,7 @@ const Partnerships = () => {
       </section>
 
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16 mt-5 py-10">
         {/* Statistics Cards */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
           <Card>

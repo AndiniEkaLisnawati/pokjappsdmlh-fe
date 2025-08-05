@@ -4,7 +4,7 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input";
 import Image from "next/image";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Camera, Calendar, MapPin, Users, Search, Filter, Eye, Download } from "lucide-react";
+import { Camera, Calendar, MapPin, Users, Search, Filter, Eye } from "lucide-react";
 import DocumentationImg from "../../../public/Logos6.png"
 import Workshop from "../../../public/workhop.jpeg"
 import Pelatihan from "../../../public/pelatihan.jpeg"
@@ -12,10 +12,15 @@ import Forum from "../../../public/forum.jpeg"
 import Expo from "../../../public/expo.jpeg"
 import Kunjungan from "../../../public/kunjungan.jpeg"
 import Seminar from "../../../public/seminar.jpeg"
+import { useState } from "react";
 
 
 
 const Documentation = () => {
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedType, setSelectedType] = useState("all")
+  const [selectedMonth, setSelectedMonth] = useState("all")
+
   const activities = [
     {
       id: 1,
@@ -132,7 +137,7 @@ const Documentation = () => {
               </div>
             </div>
 
-            {/* Image */}
+        
             <Image
               src={DocumentationImg}
               alt="Ilustrasi Program Pelatihan"
@@ -175,20 +180,22 @@ const Documentation = () => {
           </Card>
         </div>
 
-        {/* Filters */}
+
         <Card className="mb-8">
           <CardContent className="p-6">
             <div className="flex flex-col md:flex-row gap-4">
               <div className="flex-1">
                 <div className="relative">
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
+                  <Search values={searchTerm} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
                   <Input
                     placeholder="Cari kegiatan..."
                     className="pl-10"
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
                   />
                 </div>
               </div>
-              <Select>
+              <Select value={selectedType} onValueChange={setSelectedType}>
                 <SelectTrigger className="w-full md:w-48">
                   <SelectValue placeholder="Jenis Kegiatan" />
                 </SelectTrigger>
@@ -202,7 +209,7 @@ const Documentation = () => {
                   <SelectItem value="expo">Expo</SelectItem>
                 </SelectContent>
               </Select>
-              <Select>
+              <Select value={selectedMonth} onValueChange={setSelectedMonth}>
                 <SelectTrigger className="w-full md:w-48">
                   <SelectValue placeholder="Bulan" />
                 </SelectTrigger>
@@ -221,9 +228,16 @@ const Documentation = () => {
           </CardContent>
         </Card>
 
-        {/* Activities Grid */}
+
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {activities.map((activity) => (
+
+          {activities.filter(activity => {
+            const matchesSearch = activity.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+              activity.description.toLowerCase().includes(searchTerm.toLowerCase());
+            const matchesType = selectedType === "all" || activity.type.toLowerCase() === selectedType;
+            const matchesMonth = selectedMonth === "all" || activity.date.split("-")[1];
+            return matchesSearch && matchesType && matchesMonth;
+          }).map((activity) => (
             <Card key={activity.id} className="overflow-hidden hover:shadow-lg transition-shadow">
               <div className="aspect-video relative">
                 <Image
@@ -273,10 +287,13 @@ const Documentation = () => {
                 </div>
               </CardContent>
             </Card>
-          ))}
+          ))
+          }
+
         </div>
 
-        {/* Load More */}
+
+
         <div className="text-center mt-12">
           <Button variant="outline" size="lg">
             Muat Lebih Banyak

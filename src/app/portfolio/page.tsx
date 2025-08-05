@@ -4,10 +4,16 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Users, Search, Filter, Download, Mail, Phone, Award, GraduationCap } from "lucide-react";
+import { Users, Search, Filter, Mail, Phone, Award, GraduationCap, Eye } from "lucide-react";
+import { useState } from "react";
 import Image from "next/image";
 
 const Portfolio = () => {
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedEducation, setSelectedEducation] = useState("all");
+  const [selectedType, setSelectedType] = useState("all");
+  const [selectedExpertise, setSelectedExpertise] = useState("all");
+
   const lecturers = [
     {
       id: 1,
@@ -22,7 +28,8 @@ const Portfolio = () => {
       phone: "+62 21 1234567",
       trainings_conducted: 45,
       participants_trained: 1250,
-      status: "Aktif"
+      status: "Aktif",
+      type: "Internal"
     },
     {
       id: 2,
@@ -37,7 +44,8 @@ const Portfolio = () => {
       phone: "+62 21 1234568",
       trainings_conducted: 68,
       participants_trained: 1850,
-      status: "Aktif"
+      status: "Aktif",
+      type: "Internal"
     },
     {
       id: 3,
@@ -52,7 +60,8 @@ const Portfolio = () => {
       phone: "+62 21 1234569",
       trainings_conducted: 52,
       participants_trained: 1420,
-      status: "Aktif"
+      status: "Aktif",
+      type: "Internal"
     },
     {
       id: 4,
@@ -67,7 +76,8 @@ const Portfolio = () => {
       phone: "+62 21 1234570",
       trainings_conducted: 28,
       participants_trained: 780,
-      status: "Aktif"
+      status: "Aktif",
+      type: "Internal"
     },
     {
       id: 5,
@@ -82,7 +92,8 @@ const Portfolio = () => {
       phone: "+62 21 1234571",
       trainings_conducted: 38,
       participants_trained: 1050,
-      status: "Aktif"
+      status: "Aktif",
+      type: "Internal"
     },
     {
       id: 6,
@@ -97,7 +108,24 @@ const Portfolio = () => {
       phone: "+62 21 1234572",
       trainings_conducted: 22,
       participants_trained: 650,
-      status: "Cuti"
+      status: "Cuti",
+      type: "Internal"
+    },
+    {
+      id: 7,
+      name: "Dr. Rizki Pratama, S.T., M.T.",
+      photo: "/placeholder.svg",
+      expertise: ["Teknologi Bersih", "Energi Hijau", "Smart Grid"],
+      position: "Trainer Eksternal",
+      education: "S2 Teknik Elektro - Universitas Indonesia",
+      experience: "10 Tahun",
+      certifications: ["Clean Technology Specialist", "Energy Management Expert"],
+      email: "rizki.pratama@external.com",
+      phone: "+62 21 1234573",
+      trainings_conducted: 18,
+      participants_trained: 450,
+      status: "Aktif",
+      type: "External"
     }
   ];
 
@@ -120,27 +148,30 @@ const Portfolio = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 text-black dark:bg-slate-800 dark:text-slate-50">
-         
-      <section className="py-16 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
+
+      {/* Hero Section */}
+      <section className="py-16 px-4 sm:px-6 lg:px-8 animate-fade-in">
         <div className="max-w-7xl mx-auto text-center">
-          <div className="inline-flex items-center space-x-3 mb-6">
-            <Users className="w-8 h-8 text-primary" />
-            <span className="text-sm font-medium text-blue-400 uppercase tracking-wider">Widyaiswara/Pengajar</span>
+          <div className="inline-flex items-center space-x-3 mb-6 animate-bounce-gentle">
+            <div className="p-2 bg-blue-100 rounded-full">
+              <Users className="w-8 h-8 text-blue-600" />
+            </div>
+            <span className="text-sm font-medium text-blue-600 uppercase tracking-wider">Portfolio Widyaiswara</span>
           </div>
-          
-          <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
-            <span className="bg-gradient-to-r from-indigo-500 to-blue-500 bg-clip-text text-transparent">
+
+          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6 animate-slide-up">
+            <span className="bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
               Lecturer Portfolio
             </span>
           </h1>
-          
-          <p className="text-xl text-muted-foreground mb-8 max-w-3xl mx-auto">
-            Profil lengkap para widyaiswara dan instruktur ahli dalam bidang lingkungan hidup 
+
+          <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto animate-slide-up">
+            Profil lengkap para widyaiswara dan instruktur ahli dalam bidang lingkungan hidup
             dengan keahlian, sertifikasi, dan pengalaman yang beragam.
           </p>
 
-          <Button size="lg" className="shadow-xl">
+          <Button size="lg" className="bg-blue-600 hover:bg-blue-700 text-white shadow-xl transition-all duration-300 hover:scale-105 animate-scale-in">
             <Users className="w-5 h-5 mr-2" />
             Tambah Widyaiswara
           </Button>
@@ -149,59 +180,61 @@ const Portfolio = () => {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
         {/* Statistics */}
-        <div className="grid grid-cols-2 md:grid-cols-6 gap-6 mb-8">
-          <Card>
+        <div className="grid grid-cols-2 md:grid-cols-6 gap-6 mb-8 animate-fade-in">
+          <Card className="hover:shadow-lg transition-all duration-300 hover:-translate-y-1 border-0 bg-white/70 backdrop-blur-sm">
             <CardContent className="p-6 text-center">
-              <div className="text-3xl font-bold text-primary mb-2">28</div>
-              <div className="text-sm text-muted-foreground">Internal</div>
+              <div className="text-3xl font-bold text-blue-600 mb-2">28</div>
+              <div className="text-sm text-gray-600">Internal</div>
             </CardContent>
           </Card>
-          <Card>
+          <Card className="hover:shadow-lg transition-all duration-300 hover:-translate-y-1 border-0 bg-white/70 backdrop-blur-sm">
             <CardContent className="p-6 text-center">
-              <div className="text-3xl font-bold text-primary mb-2">17</div>
-              <div className="text-sm text-muted-foreground">Eksternal</div>
+              <div className="text-3xl font-bold text-blue-600 mb-2">17</div>
+              <div className="text-sm text-gray-600">Eksternal</div>
             </CardContent>
           </Card>
-          <Card>
+          <Card className="hover:shadow-lg transition-all duration-300 hover:-translate-y-1 border-0 bg-white/70 backdrop-blur-sm">
             <CardContent className="p-6 text-center">
-              <div className="text-3xl font-bold text-primary mb-2">45</div>
-              <div className="text-sm text-muted-foreground">Total</div>
+              <div className="text-3xl font-bold text-blue-600 mb-2">45</div>
+              <div className="text-sm text-gray-600">Total</div>
             </CardContent>
           </Card>
-          <Card>
+          <Card className="hover:shadow-lg transition-all duration-300 hover:-translate-y-1 border-0 bg-white/70 backdrop-blur-sm">
             <CardContent className="p-6 text-center">
-              <div className="text-3xl font-bold text-blue-600 mb-2">32</div>
-              <div className="text-sm text-muted-foreground">S1</div>
+              <div className="text-3xl font-bold text-indigo-600 mb-2">32</div>
+              <div className="text-sm text-gray-600">S1</div>
             </CardContent>
           </Card>
-          <Card>
+          <Card className="hover:shadow-lg transition-all duration-300 hover:-translate-y-1 border-0 bg-white/70 backdrop-blur-sm">
             <CardContent className="p-6 text-center">
               <div className="text-3xl font-bold text-purple-600 mb-2">13</div>
-              <div className="text-sm text-muted-foreground">S2</div>
+              <div className="text-sm text-gray-600">S2</div>
             </CardContent>
           </Card>
-          <Card>
+          <Card className="hover:shadow-lg transition-all duration-300 hover:-translate-y-1 border-0 bg-white/70 backdrop-blur-sm">
             <CardContent className="p-6 text-center">
-              <div className="text-3xl font-bold text-green-600 mb-2">8</div>
-              <div className="text-sm text-muted-foreground">Bidang Keahlian</div>
+              <div className="text-3xl font-bold text-emerald-600 mb-2">8</div>
+              <div className="text-sm text-gray-600">Bidang Keahlian</div>
             </CardContent>
           </Card>
         </div>
 
         {/* Filters */}
-        <Card className="mb-8">
+        <Card className="mb-8 border-0 bg-white/70 backdrop-blur-sm shadow-lg animate-slide-up">
           <CardContent className="p-6">
             <div className="flex flex-col md:flex-row gap-4">
               <div className="flex-1">
                 <div className="relative">
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
-                  <Input 
-                    placeholder="Cari widyaiswara berdasarkan nama atau keahlian..." 
-                    className="pl-10"
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 w-4 h-4" />
+                  <Input
+                    placeholder="Cari widyaiswara berdasarkan nama atau keahlian..."
+                    className="pl-10 border-gray-200 focus:border-blue-500 transition-colors"
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
                   />
                 </div>
               </div>
-              <Select>
+              <Select value={selectedEducation} onValueChange={setSelectedEducation}>
                 <SelectTrigger className="w-full md:w-48">
                   <SelectValue placeholder="Tingkat Pendidikan" />
                 </SelectTrigger>
@@ -209,19 +242,20 @@ const Portfolio = () => {
                   <SelectItem value="all">Semua Tingkat</SelectItem>
                   <SelectItem value="s1">S1</SelectItem>
                   <SelectItem value="s2">S2</SelectItem>
+                  <SelectItem value="s3">S3</SelectItem>
                 </SelectContent>
               </Select>
-              <Select>
+              <Select value={selectedType} onValueChange={setSelectedType}>
                 <SelectTrigger className="w-full md:w-48">
                   <SelectValue placeholder="Status" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">Semua Status</SelectItem>
                   <SelectItem value="internal">Internal</SelectItem>
-                  <SelectItem value="eksternal">Eksternal</SelectItem>
+                  <SelectItem value="external">Eksternal</SelectItem>
                 </SelectContent>
               </Select>
-              <Select>
+              <Select value={selectedExpertise} onValueChange={setSelectedExpertise}>
                 <SelectTrigger className="w-full md:w-48">
                   <SelectValue placeholder="Bidang Keahlian" />
                 </SelectTrigger>
@@ -234,7 +268,7 @@ const Portfolio = () => {
                   <SelectItem value="air">Pengolahan Air</SelectItem>
                 </SelectContent>
               </Select>
-              <Button variant="outline">
+              <Button variant="outline" className="border-blue-200 text-blue-600 hover:bg-blue-50 transition-colors">
                 <Filter className="w-4 h-4 mr-2" />
                 Filter
               </Button>
@@ -243,97 +277,107 @@ const Portfolio = () => {
         </Card>
 
         {/* Lecturers Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {lecturers.map((lecturer) => (
-            <Card key={lecturer.id} className="overflow-hidden hover:shadow-lg transition-shadow">
-              <CardHeader className="pb-4">
-                <div className="flex items-start gap-4">
-                  <div className="w-16 h-16 bg-muted rounded-full flex items-center justify-center overflow-hidden">
-                    <Image 
-                      src={lecturer.photo} 
-                      alt={lecturer.name}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 animate-fade-in">
+          {lecturers
+            .filter(lecturer => {
+              const matchesSearch = lecturer.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                lecturer.expertise.some(exp => exp.toLowerCase().includes(searchTerm.toLowerCase()));
+              const matchesEducation = selectedEducation === "all" || lecturer.education.toLowerCase().includes(selectedEducation);
+              const matchesType = selectedType === "all" || lecturer.type?.toLowerCase() === selectedType;
+              const matchesExpertise = selectedExpertise === "all" ||
+                lecturer.expertise.some(exp => exp.toLowerCase().includes(selectedExpertise));
+              return matchesSearch && matchesEducation && matchesType && matchesExpertise;
+            })
+            .map((lecturer) => (
+              <Card key={lecturer.id} className="overflow-hidden hover:shadow-xl hover:-translate-y-2 transition-all duration-300 group border-0 bg-white/80 backdrop-blur-sm">
+                <CardHeader className="pb-4">
+                  <div className="flex items-start gap-4">
+                    <div className="w-16 h-16 bg-muted rounded-full flex items-center justify-center overflow-hidden">
+                      <Image
                       fill
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-start justify-between mb-2">
-                      <h3 className="font-semibold text-lg line-clamp-2">{lecturer.name}</h3>
-                      <Badge variant={getStatusColor(lecturer.status)} className="text-xs">
-                        {lecturer.status}
-                      </Badge>
+                        src={lecturer.photo}
+                        alt={lecturer.name}
+                        className="w-full h-full object-cover"
+                      />
                     </div>
-                    <span className={`px-2 py-1 rounded-full text-xs font-medium ${getPositionColor(lecturer.position)}`}>
-                      {lecturer.position}
-                    </span>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-start justify-between mb-2">
+                        <h3 className="font-semibold text-lg line-clamp-2">{lecturer.name}</h3>
+                        <Badge variant={getStatusColor(lecturer.status)} className="text-xs">
+                          {lecturer.status}
+                        </Badge>
+                      </div>
+                      <span className={`px-2 py-1 rounded-full text-xs font-medium ${getPositionColor(lecturer.position)}`}>
+                        {lecturer.position}
+                      </span>
+                    </div>
                   </div>
-                </div>
-              </CardHeader>
-              
-              <CardContent className="space-y-4">
-                {/* Expertise */}
-                <div>
-                  <h4 className="font-medium text-sm mb-2">Bidang Keahlian</h4>
-                  <div className="flex flex-wrap gap-1">
-                    {lecturer.expertise.slice(0, 2).map((skill, index) => (
-                      <Badge key={index} variant="secondary" className="text-xs">
-                        {skill}
-                      </Badge>
-                    ))}
-                    {lecturer.expertise.length > 2 && (
-                      <Badge variant="outline" className="text-xs">
-                        +{lecturer.expertise.length - 2}
-                      </Badge>
-                    )}
-                  </div>
-                </div>
+                </CardHeader>
 
-                {/* Education & Experience */}
-                <div className="space-y-2">
-                  <div className="flex items-center gap-2 text-sm">
-                    <GraduationCap className="w-4 h-4 text-muted-foreground" />
-                    <span className="text-muted-foreground truncate">{lecturer.education}</span>
+                <CardContent className="space-y-4">
+                  {/* Expertise */}
+                  <div>
+                    <h4 className="font-medium text-sm mb-2">Bidang Keahlian</h4>
+                    <div className="flex flex-wrap gap-1">
+                      {lecturer.expertise.slice(0, 2).map((skill, index) => (
+                        <Badge key={index} variant="secondary" className="text-xs">
+                          {skill}
+                        </Badge>
+                      ))}
+                      {lecturer.expertise.length > 2 && (
+                        <Badge variant="outline" className="text-xs">
+                          +{lecturer.expertise.length - 2}
+                        </Badge>
+                      )}
+                    </div>
                   </div>
-                  <div className="flex items-center gap-2 text-sm">
-                    <Award className="w-4 h-4 text-muted-foreground" />
-                    <span className="text-muted-foreground">{lecturer.experience} Pengalaman</span>
-                  </div>
-                </div>
 
-                {/* Stats */}
-                <div className="grid grid-cols-2 gap-4 py-3 border-t border-border">
-                  <div className="text-center">
-                    <div className="text-lg font-bold text-primary">{lecturer.trainings_conducted}</div>
-                    <div className="text-xs text-muted-foreground">Pelatihan</div>
+                  {/* Education & Experience */}
+                  <div className="space-y-2">
+                    <div className="flex items-center gap-2 text-sm">
+                      <GraduationCap className="w-4 h-4 text-muted-foreground" />
+                      <span className="text-muted-foreground truncate">{lecturer.education}</span>
+                    </div>
+                    <div className="flex items-center gap-2 text-sm">
+                      <Award className="w-4 h-4 text-muted-foreground" />
+                      <span className="text-muted-foreground">{lecturer.experience} Pengalaman</span>
+                    </div>
                   </div>
-                  <div className="text-center">
-                    <div className="text-lg font-bold text-primary">{lecturer.participants_trained}</div>
-                    <div className="text-xs text-muted-foreground">Peserta</div>
-                  </div>
-                </div>
 
-                {/* Contact & Actions */}
-                <div className="flex gap-2">
-                  <Button size="sm" variant="outline" className="flex-1">
-                    <Mail className="w-4 h-4 mr-1" />
-                    Email
-                  </Button>
-                  <Button size="sm" variant="outline" className="flex-1">
-                    <Phone className="w-4 h-4 mr-1" />
-                    Telepon
-                  </Button>
-                  <Button size="sm" variant="outline">
-                    <Download className="w-4 h-4" />
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
+                  {/* Stats */}
+                  <div className="grid grid-cols-2 gap-4 py-3 border-t border-gray-100">
+                    <div className="text-center">
+                      <div className="text-lg font-bold text-blue-600">{lecturer.trainings_conducted}</div>
+                      <div className="text-xs text-gray-500">Pelatihan</div>
+                    </div>
+                    <div className="text-center">
+                      <div className="text-lg font-bold text-blue-600">{lecturer.participants_trained}</div>
+                      <div className="text-xs text-gray-500">Peserta</div>
+                    </div>
+                  </div>
+
+                  {/* Contact & Actions */}
+                  <div className="flex gap-2">
+                    <Button size="sm" variant="outline" className="flex-1 border-blue-200 text-blue-600 hover:bg-blue-50 transition-colors">
+                      <Mail className="w-4 h-4 mr-1" />
+                      Email
+                    </Button>
+                    <Button size="sm" variant="outline" className="flex-1 border-blue-200 text-blue-600 hover:bg-blue-50 transition-colors">
+                      <Phone className="w-4 h-4 mr-1" />
+                      Telepon
+                    </Button>
+                    <Button size="sm" variant="outline" className="border-blue-200 text-blue-600 hover:bg-blue-50 transition-colors">
+                      <Eye className="w-4 h-4" />
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
         </div>
 
         {/* Load More */}
-        <div className="text-center mt-12">
-          <Button variant="outline" size="lg">
+        <div className="text-center mt-12 animate-fade-in">
+          <Button variant="outline" size="lg" className="border-blue-200 text-blue-600 hover:bg-blue-50 transition-all duration-300 hover:scale-105">
             Muat Lebih Banyak
           </Button>
         </div>

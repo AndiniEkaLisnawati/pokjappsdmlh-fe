@@ -1,3 +1,4 @@
+"use client"
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -10,45 +11,53 @@ import {
   Calendar,
   MapPin,
   User,
-  Download,
-  Play,
+  EyeIcon,
   FileText
 } from "lucide-react";
-import Image from "next/image";
+import Image from 'next/image';
 import Logo from "../../../public/Logos5.png"
 const Training = () => {
-  const upcomingTrainings = [
+  const worksheetFolders = [
     {
       id: 1,
-      title: "Environmental Impact Assessment Training",
+      title: "Pelatihan AMDAL Batch 15",
       instructor: "Dr. Ahmad Santoso",
       duration: "3 Days",
       participants: 25,
+      maleParticipants: 15,
+      femaleParticipants: 10,
+      trainersCount: 4,
       date: "15-17 Februari 2025",
       location: "Jakarta",
-      status: "Open",
+      status: "Ongoing",
       type: "Sertifikasi"
     },
     {
       id: 2,
-      title: "Waste Management Best Practices",
+      title: "Workshop Pengelolaan Limbah B3",
       instructor: "Ir. Siti Rahayu, M.Eng",
       duration: "2 Days",
       participants: 30,
+      maleParticipants: 18,
+      femaleParticipants: 12,
+      trainersCount: 3,
       date: "22-23 Februari 2025",
       location: "Bandung",
-      status: "Full",
+      status: "Completed",
       type: "Workshop"
     },
     {
       id: 3,
-      title: "Climate Change Adaptation Strategies",
+      title: "Pelatihan Green Technology",
       instructor: "Prof. Dr. Budi Hartono",
       duration: "5 Days",
       participants: 20,
+      maleParticipants: 12,
+      femaleParticipants: 8,
+      trainersCount: 5,
       date: "1-5 Maret 2025",
       location: "Yogyakarta",
-      status: "Open",
+      status: "Ongoing",
       type: "Sertifikasi"
     }
   ];
@@ -105,13 +114,13 @@ const Training = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-800 dark:text-slate-50">
+    <>
+    <div className="min-h-screen bg-gray-100 dark:bg-slate-900 dark:text-slate-50">
 
-      <section className="w-screen px-4 sm:px-6 lg:px-8 py-5">
+      <div className="w-screen px-4 sm:px-6 lg:px-8 py-5">
         <div className="max-w-7xl mx-auto">
           <div className="relative w-full min-h-[60vh] flex flex-col-reverse md:flex-row items-center justify-between gap-8 bg-gradient-to-br from-white to-sky-100 dark:from-slate-900 dark:to-slate-800 transition-all duration-700 px-6 md:px-16 py-12 rounded-2xl shadow-lg">
 
-     
             <div className="text-center md:text-left max-w-2xl">
               <div className="inline-flex items-center gap-2 mb-4">
                 <BookOpen className="w-6 h-6 text-indigo-600 dark:text-indigo-400" />
@@ -143,9 +152,9 @@ const Training = () => {
               </div>
             </div>
 
-            {/* Image */}
+
             <Image
-              src={Logo} 
+              src={Logo}
               alt="Ilustrasi Program Pelatihan"
               width={420}
               height={420}
@@ -154,12 +163,11 @@ const Training = () => {
             />
           </div>
         </div>
-      </section>
+      </div>
+    </div>
 
-
-
-      {/* Quick Stats */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-12 mt-16 px-5">
+  <section className="pb-16 px-4 sm:px-6 lg:px-8">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-12 mt-10 ">
         <Card className="text-center">
           <CardContent className="pt-6">
             <div className="text-2xl font-bold text-primary mb-1">48</div>
@@ -185,146 +193,120 @@ const Training = () => {
           </CardContent>
         </Card>
       </div>
+    <div className="max-w-7xl mx-auto">
+      <Tabs defaultValue="upcoming" className="space-y-8">
+        <TabsList className="grid w-full grid-cols-2">
+          <TabsTrigger value="upcoming">Worksheet Folders</TabsTrigger>
+          <TabsTrigger value="completed">Completed Training</TabsTrigger>
+        </TabsList>
 
-      {/* Main Content */}
-      <section className="pb-16 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto">
-          <Tabs defaultValue="upcoming" className="space-y-8">
-            <TabsList className="grid w-full grid-cols-3 bg-gray-200 ">
-              <TabsTrigger value="upcoming" className="" >Pelatihan Mendatang</TabsTrigger>
-              <TabsTrigger value="completed" className="">Pelatihan Selesai</TabsTrigger>
-              <TabsTrigger value="materials" className="">Materi & Sumber</TabsTrigger>
-            </TabsList>
+        {/* Worksheet Folders */}
+        <TabsContent value="upcoming" className="space-y-6">
+          <div className="grid gap-6">
+            {worksheetFolders.map((training) => (
+              <Card key={training.id} className="hover:shadow-lg transition-shadow">
+                <CardHeader>
+                  <div className="flex justify-between items-start">
+                    <div className="space-y-2">
+                      <div className="flex items-center space-x-2">
+                        <Badge variant={training.status === "Ongoing" ? "default" : "secondary"}>
+                          {training.status}
+                        </Badge>
+                        <Badge variant="outline">{training.type}</Badge>
+                      </div>
+                      <CardTitle className="text-xl">{training.title}</CardTitle>
+                      <CardDescription className="flex items-center space-x-4 text-sm">
+                        <span className="flex items-center">
+                          <User className="w-4 h-4 mr-1" />
+                          {training.instructor}
+                        </span>
+                        <span className="flex items-center">
+                          <Clock className="w-4 h-4 mr-1" />
+                          {training.duration}
+                        </span>
+                      </CardDescription>
+                    </div>
+                    <Button variant="outline" size="sm">
+                      <EyeIcon className="w-4 h-4 mr-1" />
+                      View Only
+                    </Button>
+                  </div>
+                </CardHeader>
+                <CardContent>
+                  <div className="grid grid-cols-2 md:grid-cols-5 gap-4 text-sm">
+                    <div className="flex items-center text-muted-foreground">
+                      <Calendar className="w-4 h-4 mr-2" />
+                      {training.date}
+                    </div>
+                    <div className="flex items-center text-muted-foreground">
+                      <MapPin className="w-4 h-4 mr-2" />
+                      {training.location}
+                    </div>
+                    <div className="flex items-center text-blue-600">
+                      <Users className="w-4 h-4 mr-2" />
+                      {training.maleParticipants} Laki-laki
+                    </div>
+                    <div className="flex items-center text-pink-600">
+                      <Users className="w-4 h-4 mr-2" />
+                      {training.femaleParticipants} Perempuan
+                    </div>
+                    <div className="flex items-center text-green-600">
+                      <User className="w-4 h-4 mr-2" />
+                      {training.trainersCount} Trainer
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </TabsContent>
 
-            {/* Upcoming Trainings */}
-            <TabsContent value="upcoming" className="space-y-6">
-              <div className="grid gap-6">
-                {upcomingTrainings.map((training) => (
-                  <Card key={training.id} className="hover:shadow-lg transition-shadow">
-                    <CardHeader>
-                      <div className="flex justify-between items-start">
-                        <div className="space-y-2">
-                          <div className="flex items-center space-x-2">
-                            <Badge variant={training.status === "Open" ? "default" : "secondary"}>
-                              {training.status}
-                            </Badge>
-                            <Badge variant="outline">{training.type}</Badge>
-                          </div>
-                          <CardTitle className="text-xl">{training.title}</CardTitle>
-                          <CardDescription className="flex items-center space-x-4 text-sm">
-                            <span className="flex items-center">
-                              <User className="w-4 h-4 mr-1" />
-                              {training.instructor}
-                            </span>
-                            <span className="flex items-center">
-                              <Clock className="w-4 h-4 mr-1" />
-                              {training.duration}
-                            </span>
-                          </CardDescription>
-                        </div>
-                        <Button variant="outline" size="sm">
-                          Detail
-                        </Button>
+        {/* Completed Trainings */}
+        <TabsContent value="completed" className="space-y-6">
+          <div className="grid gap-6">
+            {completedTrainings.map((training) => (
+              <Card key={training.id} className="hover:shadow-lg transition-shadow">
+                <CardHeader>
+                  <div className="flex justify-between items-start">
+                    <div className="space-y-2">
+                      <CardTitle className="text-xl">{training.title}</CardTitle>
+                      <CardDescription>{training.date}</CardDescription>
+                    </div>
+                    <div className="text-right">
+                      <div className="flex items-center space-x-1 mb-1">
+                        <Award className="w-4 h-4 text-yellow-500" />
+                        <span className="text-sm font-medium">{training.rating}</span>
                       </div>
-                    </CardHeader>
-                    <CardContent>
-                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
-                        <div className="flex items-center text-muted-foreground">
-                          <Calendar className="w-4 h-4 mr-2" />
-                          {training.date}
-                        </div>
-                        <div className="flex items-center text-muted-foreground">
-                          <MapPin className="w-4 h-4 mr-2" />
-                          {training.location}
-                        </div>
-                        <div className="flex items-center text-muted-foreground">
-                          <Users className="w-4 h-4 mr-2" />
-                          {training.participants} peserta
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
-            </TabsContent>
+                      <Button variant="outline" size="sm">
+                        <EyeIcon className="w-4 h-4 mr-1" />
+                        View Certificate
+                      </Button>
+                    </div>
+                  </div>
+                </CardHeader>
+                <CardContent>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                    <div className="flex items-center text-muted-foreground">
+                      <Users className="w-4 h-4 mr-2" />
+                      {training.participants} peserta
+                    </div>
+                    <div className="flex items-center text-muted-foreground">
+                      <Award className="w-4 h-4 mr-2" />
+                      {training.certificates} sertifikat diterbitkan
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </TabsContent>
 
-            {/* Completed Trainings */}
-            <TabsContent value="completed" className="space-y-6">
-              <div className="grid gap-6">
-                {completedTrainings.map((training) => (
-                  <Card key={training.id} className="hover:shadow-lg transition-shadow">
-                    <CardHeader>
-                      <div className="flex justify-between items-start">
-                        <div className="space-y-2">
-                          <CardTitle className="text-xl">{training.title}</CardTitle>
-                          <CardDescription>{training.date}</CardDescription>
-                        </div>
-                        <div className="text-right">
-                          <div className="flex items-center space-x-1 mb-1">
-                            <Award className="w-4 h-4 text-yellow-500" />
-                            <span className="text-sm font-medium">{training.rating}</span>
-                          </div>
-                          <Button variant="outline" size="sm">
-                            <Download className="w-4 h-4 mr-1" />
-                            Sertifikat
-                          </Button>
-                        </div>
-                      </div>
-                    </CardHeader>
-                    <CardContent>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-                        <div className="flex items-center text-muted-foreground">
-                          <Users className="w-4 h-4 mr-2" />
-                          {training.participants} peserta
-                        </div>
-                        <div className="flex items-center text-muted-foreground">
-                          <Award className="w-4 h-4 mr-2" />
-                          {training.certificates} sertifikat diterbitkan
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
-            </TabsContent>
-
-            {/* Training Materials */}
-            <TabsContent value="materials" className="space-y-6">
-              <div className="grid gap-4">
-                {trainingMaterials.map((material) => (
-                  <Card key={material.id} className="hover:shadow-lg transition-shadow">
-                    <CardContent className="pt-6">
-                      <div className="flex justify-between items-center">
-                        <div className="space-y-1">
-                          <h3 className="font-semibold">{material.title}</h3>
-                          <div className="flex items-center space-x-4 text-sm text-muted-foreground">
-                            <span className="flex items-center">
-                              {material.type === "PDF" ? (
-                                <FileText className="w-4 h-4 mr-1" />
-                              ) : (
-                                <Play className="w-4 h-4 mr-1" />
-                              )}
-                              {material.type}
-                            </span>
-                            <span>{material.size}</span>
-                            <span>{material.downloads} downloads</span>
-                          </div>
-                        </div>
-                        <Button variant="outline" size="sm">
-                          <Download className="w-4 h-4 mr-1" />
-                          Download
-                        </Button>
-                      </div>
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
-            </TabsContent>
-          </Tabs>
-        </div>
-      </section>
-
+      </Tabs>
     </div>
+  </section>
+
+
+  </>
   );
 };
 

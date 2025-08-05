@@ -1,60 +1,60 @@
 "use client"
-import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { GraduationCap, Calendar, MapPin, Users, ExternalLink } from "lucide-react";
-import Logo from "../../../public/Logos2.png"
-import Image from "next/image";
+import { GraduationCap, Calendar, MapPin, Users } from "lucide-react";
+import Logo from "../../../public/Logos2.png";
+import Image from 'next/image';
+
 const TrainingPartnerships = () => {
-  const trainings = [
+  const partnerships = [
     {
       id: 1,
-      title: "Pelatihan Teknologi Hijau untuk Industri",
-      partner: "Institut Teknologi Bandung",
-      duration: "5 Hari",
-      startDate: "2024-02-15",
-      endDate: "2024-02-19",
-      location: "Jakarta",
-      participants: 25,
-      status: "Berlangsung",
-      category: "Teknologi"
+      partnerName: "Pemerintah Provinsi DKI Jakarta",
+      scope: "Pelatihan Pengelolaan Sampah dan Limbah B3",
+      pksNumber: "PKS-001/KLHK/2024",
+      region: "DKI Jakarta",
+      trainingsHeld: 3,
+      startDate: "2024-01-15",
+      endDate: "2024-12-31",
+      status: "Aktif",
+      category: "Pemda Provinsi"
     },
     {
       id: 2,
-      title: "Workshop Manajemen Limbah B3",
-      partner: "Universitas Gadjah Mada",
-      duration: "3 Hari",
-      startDate: "2024-03-10",
-      endDate: "2024-03-12",
-      location: "Yogyakarta",
-      participants: 30,
-      status: "Mendatang",
-      category: "Lingkungan"
+      partnerName: "Kementerian Perindustrian RI",
+      scope: "Sertifikasi Green Industry dan Teknologi Bersih",
+      pksNumber: "PKS-002/KLHK/2024",
+      region: "Nasional",
+      trainingsHeld: 5,
+      startDate: "2024-02-01",
+      endDate: "2024-11-30",
+      status: "Aktif",
+      category: "Kementerian"
     },
     {
       id: 3,
-      title: "Sertifikasi Auditor Lingkungan",
-      partner: "Badan Standardisasi Nasional",
-      duration: "7 Hari",
-      startDate: "2024-01-20",
-      endDate: "2024-01-26",
-      location: "Bogor",
-      participants: 20,
-      status: "Selesai",
-      category: "Sertifikasi"
+      partnerName: "Pemerintah Provinsi Jawa Barat",
+      scope: "Pelatihan AMDAL dan UKL-UPL",
+      pksNumber: "PKS-003/KLHK/2024",
+      region: "Jawa Barat",
+      trainingsHeld: 2,
+      startDate: "2024-03-10",
+      endDate: "2024-12-15",
+      status: "Aktif",
+      category: "Pemda Provinsi"
     },
     {
       id: 4,
-      title: "Pelatihan AMDAL dan UKL-UPL",
-      partner: "Kementerian Lingkungan Hidup",
-      duration: "4 Hari",
-      startDate: "2024-04-05",
-      endDate: "2024-04-08",
-      location: "Bandung",
-      participants: 35,
-      status: "Mendatang",
-      category: "Regulasi"
+      partnerName: "Kementerian ESDM",
+      scope: "Pelatihan Monitoring Kualitas Air dan Udara",
+      pksNumber: "PKS-004/KLHK/2024",
+      region: "Nasional",
+      trainingsHeld: 4,
+      startDate: "2024-01-20",
+      endDate: "2024-10-31",
+      status: "Selesai",
+      category: "Kementerian"
     }
   ];
 
@@ -78,10 +78,9 @@ const TrainingPartnerships = () => {
   };
 
   return (
-    <>
-      <div className="min-h-screen dark:bg-slate-800 dark:text-slate-50 bg-gradient-to-br from-background to-muted/30">
-
-        <section className="w-screen px-4 sm:px-6 lg:px-8 py-5">
+    <div className="min-h-screen max-w-screen dark:bg-slate-900 bg-gray-100 dark:text-slate-50">
+  
+     <section className="w-screen px-4 sm:px-6 lg:px-8 py-5">
           <div className="max-w-7xl mx-auto">
             <div className="relative w-full min-h-[60vh] flex flex-col-reverse md:flex-row items-center justify-between gap-8 bg-gradient-to-br from-white to-sky-100 dark:from-slate-900 dark:to-slate-800 transition-all duration-700 px-6 md:px-16 py-12 rounded-2xl shadow-lg">
 
@@ -119,142 +118,134 @@ const TrainingPartnerships = () => {
           </div>
         </section>
 
-
-        <div className="max-w-7xl mx-auto px-4 mt-10 sm:px-6 lg:px-8 pb-16">
-          {/* Statistics Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-            <Card>
-              <CardContent className="p-6 text-center">
-                <div className="text-3xl font-bold text-primary mb-2">12</div>
-                <div className="text-sm text-muted-foreground">Program Aktif</div>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardContent className="p-6 text-center">
-                <div className="text-3xl font-bold text-primary mb-2">8</div>
-                <div className="text-sm text-muted-foreground">Mitra Institusi</div>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardContent className="p-6 text-center">
-                <div className="text-3xl font-bold text-primary mb-2">245</div>
-                <div className="text-sm text-muted-foreground">Total Peserta</div>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardContent className="p-6 text-center">
-                <div className="text-3xl font-bold text-primary mb-2">95%</div>
-                <div className="text-sm text-muted-foreground">Tingkat Kepuasan</div>
-              </CardContent>
-            </Card>
-          </div>
-
-          {/* Training Programs Table */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
+        {/* Statistics Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
           <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Calendar className="w-5 h-5" />
-                Program Pelatihan Kemitraan
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Program Pelatihan</TableHead>
-                    <TableHead>Mitra</TableHead>
-                    <TableHead>Kategori</TableHead>
-                    <TableHead>Jadwal</TableHead>
-                    <TableHead>Lokasi</TableHead>
-                    <TableHead>Peserta</TableHead>
-                    <TableHead>Status</TableHead>
-                    <TableHead>Aksi</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {trainings.map((training) => (
-                    <TableRow key={training.id}>
-                      <TableCell>
-                        <div>
-                          <div className="font-medium">{training.title}</div>
-                          <div className="text-sm text-muted-foreground">{training.duration}</div>
-                        </div>
-                      </TableCell>
-                      <TableCell className="font-medium">{training.partner}</TableCell>
-                      <TableCell>
-                        <span className={`px-2 py-1 rounded-full text-xs font-medium ${getCategoryColor(training.category)}`}>
-                          {training.category}
-                        </span>
-                      </TableCell>
-                      <TableCell>
-                        <div className="text-sm">
-                          <div>{new Date(training.startDate).toLocaleDateString('id-ID')}</div>
-                          <div className="text-muted-foreground">s/d {new Date(training.endDate).toLocaleDateString('id-ID')}</div>
-                        </div>
-                      </TableCell>
-                      <TableCell>
-                        <div className="flex items-center gap-1">
-                          <MapPin className="w-4 h-4 text-muted-foreground" />
-                          {training.location}
-                        </div>
-                      </TableCell>
-                      <TableCell>
-                        <div className="flex items-center gap-1">
-                          <Users className="w-4 h-4 text-muted-foreground" />
-                          {training.participants}
-                        </div>
-                      </TableCell>
-                      <TableCell>
-                        <Badge variant={getStatusColor(training.status)}>
-                          {training.status}
-                        </Badge>
-                      </TableCell>
-                      <TableCell>
-                        <div className="flex gap-2">
-                          <Button size="sm" variant="outline">
-                            <ExternalLink className="w-4 h-4" />
-                          </Button>
-                        </div>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
+            <CardContent className="p-6 text-center">
+              <div className="text-3xl font-bold text-primary mb-2">4</div>
+              <div className="text-sm text-muted-foreground">Total Kemitraan</div>
             </CardContent>
           </Card>
-
-          {/* Partner Institutions */}
-          <Card className="mt-8">
-            <CardHeader>
-              <CardTitle>Institusi Mitra</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                {[
-                  "Institut Teknologi Bandung",
-                  "Universitas Gadjah Mada",
-                  "Badan Standardisasi Nasional",
-                  "Kementerian Lingkungan Hidup",
-                  "Universitas Indonesia",
-                  "Institut Pertanian Bogor",
-                  "Universitas Diponegoro",
-                  "LIPI"
-                ].map((partner, index) => (
-                  <div key={index} className="border border-border rounded-lg p-4 text-center hover:shadow-md transition-shadow">
-                    <div className="w-16 h-16 bg-slate-400 rounded-full mx-auto mb-3 flex items-center justify-center">
-                      <span className="font-bold text-lg text-muted-foreground">
-                        {partner.split(' ').map(word => word[0]).join('').slice(0, 2)}
-                      </span>
-                    </div>
-                    <h3 className="font-medium text-sm">{partner}</h3>
-                  </div>
-                ))}
-              </div>
+          <Card>
+            <CardContent className="p-6 text-center">
+              <div className="text-3xl font-bold text-primary mb-2">2</div>
+              <div className="text-sm text-muted-foreground">Pemda Provinsi</div>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardContent className="p-6 text-center">
+              <div className="text-3xl font-bold text-primary mb-2">2</div>
+              <div className="text-sm text-muted-foreground">Kementerian</div>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardContent className="p-6 text-center">
+              <div className="text-3xl font-bold text-primary mb-2">14</div>
+              <div className="text-sm text-muted-foreground">Pelatihan Dilaksanakan</div>
             </CardContent>
           </Card>
         </div>
+
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Calendar className="w-5 h-5" />
+              Daftar Kemitraan dan PKS
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Mitra</TableHead>
+                  <TableHead>Nomor PKS</TableHead>
+                  <TableHead>Ruang Lingkup</TableHead>
+                  <TableHead>Wilayah</TableHead>
+                  <TableHead>Pelatihan</TableHead>
+                  <TableHead>Status</TableHead>
+                  <TableHead>Aksi</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {partnerships.map((partnership) => (
+                  <TableRow key={partnership.id}>
+                    <TableCell>
+                      <div>
+                        <div className="font-medium">{partnership.partnerName}</div>
+                        <div className={`text-sm text-muted-foreground ${getCategoryColor(partnership.category)}`}>{partnership.category}</div>
+                      </div>
+                    </TableCell>
+                    <TableCell>
+                      <div className="font-mono text-sm">{partnership.pksNumber}</div>
+                    </TableCell>
+                    <TableCell>
+                      <div className="text-sm max-w-xs">{partnership.scope}</div>
+                    </TableCell>
+                    <TableCell>
+                      <div className="flex items-center gap-1">
+                        <MapPin className="w-4 h-4 text-muted-foreground" />
+                        {partnership.region}
+                      </div>
+                    </TableCell>
+                    <TableCell>
+                      <div className="flex items-center gap-1">
+                        <Users className="w-4 h-4 text-muted-foreground" />
+                        {partnership.trainingsHeld} pelatihan
+                      </div>
+                    </TableCell>
+                    <TableCell>
+                      <Badge variant={getStatusColor(partnership.status)}>
+                        {partnership.status}
+                      </Badge>
+                    </TableCell>
+                    <TableCell>
+                      <div className="text-center">
+                        <div className="inline-flex items-center gap-1 px-2 py-1 bg-green-50 text-green-700 rounded-full text-xs">
+                          <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                          Active Partnership
+                        </div>
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </CardContent>
+        </Card>
+
+  
+        <Card className="mt-8">
+          <CardHeader>
+            <CardTitle>Mitra Pemerintah</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+              {[
+                { name: "Pemerintah Provinsi DKI Jakarta", logo: "🏛️" },
+                { name: "Kementerian Perindustrian RI", logo: "🏭" }, 
+                { name: "Pemerintah Provinsi Jawa Barat", logo: "🏞️" },
+                { name: "Kementerian ESDM", logo: "⚡" },
+                { name: "Pemerintah Provinsi Jawa Tengah", logo: "🏛️" },
+                { name: "Kementerian Kelautan & Perikanan", logo: "🌊" },
+                { name: "Pemerintah Provinsi Jawa Timur", logo: "🗻" },
+                { name: "Kementerian Pertanian", logo: "🌾" }
+              ].map((partner, index) => (
+                <div key={index} className="group border border-border rounded-lg p-6 text-center hover:shadow-lg hover:border-primary/20 transition-all duration-300 hover:-translate-y-1">
+                  <div className="w-16 h-16 bg-gradient-to-br from-primary/10 to-accent/10 rounded-full mx-auto mb-4 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform">
+                    {partner.logo}
+                  </div>
+                  <h3 className="font-medium text-sm text-foreground group-hover:text-primary transition-colors">{partner.name}</h3>
+                  <div className="mt-2">
+                    <Badge variant="outline" className="text-xs">Official Partner</Badge>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
       </div>
-    </>
+    </div>
   );
 };
 
