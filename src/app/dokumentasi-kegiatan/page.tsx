@@ -6,6 +6,14 @@ import Image from "next/image";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Camera, Calendar, MapPin, Users, Search, Filter, Eye, Download } from "lucide-react";
 import DocumentationImg from "../../../public/Logos6.png"
+import Workshop from "../../../public/workhop.jpeg"
+import Pelatihan from "../../../public/pelatihan.jpeg"
+import Forum from "../../../public/forum.jpeg"
+import Expo from "../../../public/expo.jpeg"
+import Kunjungan from "../../../public/kunjungan.jpeg"
+import Seminar from "../../../public/seminar.jpeg"
+
+
 
 const Documentation = () => {
   const activities = [
@@ -18,7 +26,7 @@ const Documentation = () => {
       participants: 150,
       photos: 25,
       description: "Workshop tentang implementasi teknologi ramah lingkungan di industri",
-      image: "/placeholder.svg"
+      image: Workshop
     },
     {
       id: 2,
@@ -29,7 +37,7 @@ const Documentation = () => {
       participants: 300,
       photos: 45,
       description: "Seminar nasional tentang isu-isu terkini lingkungan hidup di Indonesia",
-      image: "/placeholder.svg"
+      image: Seminar
     },
     {
       id: 3,
@@ -40,7 +48,7 @@ const Documentation = () => {
       participants: 40,
       photos: 18,
       description: "Pelatihan sertifikasi sistem manajemen lingkungan ISO 14001",
-      image: "/placeholder.svg"
+      image: Pelatihan
     },
     {
       id: 4,
@@ -51,7 +59,7 @@ const Documentation = () => {
       participants: 25,
       photos: 32,
       description: "Kunjungan ke industri yang menerapkan prinsip-prinsip ramah lingkungan",
-      image: "/placeholder.svg"
+      image: Kunjungan
     },
     {
       id: 5,
@@ -62,7 +70,7 @@ const Documentation = () => {
       participants: 80,
       photos: 22,
       description: "Forum diskusi tentang kebijakan lingkungan hidup terbaru",
-      image: "/placeholder.svg"
+      image: Forum
     },
     {
       id: 6,
@@ -73,7 +81,7 @@ const Documentation = () => {
       participants: 500,
       photos: 60,
       description: "Pameran teknologi dan inovasi untuk lingkungan hidup",
-      image: "/placeholder.svg"
+      image: Expo
     }
   ];
 
@@ -184,7 +192,7 @@ const Documentation = () => {
                 <SelectTrigger className="w-full md:w-48">
                   <SelectValue placeholder="Jenis Kegiatan" />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="bg-slate-50">
                   <SelectItem value="all">Semua</SelectItem>
                   <SelectItem value="workshop">Workshop</SelectItem>
                   <SelectItem value="seminar">Seminar</SelectItem>
@@ -217,13 +225,12 @@ const Documentation = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {activities.map((activity) => (
             <Card key={activity.id} className="overflow-hidden hover:shadow-lg transition-shadow">
-              <div className="aspect-video bg-muted relative">
+              <div className="aspect-video relative">
                 <Image
                   src={activity.image}
                   alt={activity.title}
-                  width={30}
-                  height={30}
                   className="w-full h-full object-cover"
+                  fill
                 />
                 <div className="absolute top-4 left-4">
                   <span className={`px-2 py-1 rounded-full text-xs font-medium ${getTypeColor(activity.type)}`}>
@@ -262,10 +269,6 @@ const Documentation = () => {
                   <Button size="sm" variant="outline" className="flex-1">
                     <Eye className="w-4 h-4 mr-2" />
                     Lihat
-                  </Button>
-                  <Button size="sm" variant="outline" className="flex-1">
-                    <Download className="w-4 h-4 mr-2" />
-                    Unduh
                   </Button>
                 </div>
               </CardContent>

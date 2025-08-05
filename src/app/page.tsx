@@ -7,7 +7,7 @@ import QuickStats from "@/layout/main/QuickStats";
 export default function Home() {
   return (
     <>
-    <div className=" bg-slate-50 dark:bg-slate-800 dark:text-slate-50">
+    <div className="bg-gray-100 dark:bg-slate-800 dark:text-slate-50">
 
       <Hero />
       <Content />

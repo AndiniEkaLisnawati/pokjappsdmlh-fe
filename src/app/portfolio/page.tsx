@@ -120,25 +120,23 @@ const Portfolio = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background to-muted/30">
-
+    <div className="min-h-screen bg-slate-50 text-black dark:bg-slate-800 dark:text-slate-50">
+         
       <section className="py-16 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto text-center">
           <div className="inline-flex items-center space-x-3 mb-6">
             <Users className="w-8 h-8 text-primary" />
-            <span className="text-sm font-medium uppercase tracking-wider bg-gradient-to-bl from-blue-600 to-blue-700 bg-clip-text text-transparent">
-              Portfolio Widyaiswara
-            </span>
+            <span className="text-sm font-medium text-blue-400 uppercase tracking-wider">Widyaiswara/Pengajar</span>
           </div>
-
+          
           <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
-            <span className="bg-gradient-to-r from-indigo-900 to-blue-400 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-indigo-500 to-blue-500 bg-clip-text text-transparent">
               Lecturer Portfolio
             </span>
           </h1>
-
+          
           <p className="text-xl text-muted-foreground mb-8 max-w-3xl mx-auto">
-            Profil lengkap para widyaiswara dan instruktur ahli dalam bidang lingkungan hidup
+            Profil lengkap para widyaiswara dan instruktur ahli dalam bidang lingkungan hidup 
             dengan keahlian, sertifikasi, dan pengalaman yang beragam.
           </p>
 
@@ -151,29 +149,41 @@ const Portfolio = () => {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
         {/* Statistics */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+        <div className="grid grid-cols-2 md:grid-cols-6 gap-6 mb-8">
           <Card>
             <CardContent className="p-6 text-center">
-              <div className="text-3xl font-bold text-primary mb-2">25</div>
-              <div className="text-sm text-muted-foreground">Total Widyaiswara</div>
+              <div className="text-3xl font-bold text-primary mb-2">28</div>
+              <div className="text-sm text-muted-foreground">Internal</div>
             </CardContent>
           </Card>
           <Card>
             <CardContent className="p-6 text-center">
-              <div className="text-3xl font-bold text-primary mb-2">12</div>
+              <div className="text-3xl font-bold text-primary mb-2">17</div>
+              <div className="text-sm text-muted-foreground">Eksternal</div>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardContent className="p-6 text-center">
+              <div className="text-3xl font-bold text-primary mb-2">45</div>
+              <div className="text-sm text-muted-foreground">Total</div>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardContent className="p-6 text-center">
+              <div className="text-3xl font-bold text-blue-600 mb-2">32</div>
+              <div className="text-sm text-muted-foreground">S1</div>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardContent className="p-6 text-center">
+              <div className="text-3xl font-bold text-purple-600 mb-2">13</div>
+              <div className="text-sm text-muted-foreground">S2</div>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardContent className="p-6 text-center">
+              <div className="text-3xl font-bold text-green-600 mb-2">8</div>
               <div className="text-sm text-muted-foreground">Bidang Keahlian</div>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardContent className="p-6 text-center">
-              <div className="text-3xl font-bold text-primary mb-2">320</div>
-              <div className="text-sm text-muted-foreground">Total Pelatihan</div>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardContent className="p-6 text-center">
-              <div className="text-3xl font-bold text-primary mb-2">8,450</div>
-              <div className="text-sm text-muted-foreground">Peserta Terlatih</div>
             </CardContent>
           </Card>
         </div>
@@ -185,12 +195,32 @@ const Portfolio = () => {
               <div className="flex-1">
                 <div className="relative">
                   <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
-                  <Input
-                    placeholder="Cari widyaiswara berdasarkan nama atau keahlian..."
+                  <Input 
+                    placeholder="Cari widyaiswara berdasarkan nama atau keahlian..." 
                     className="pl-10"
                   />
                 </div>
               </div>
+              <Select>
+                <SelectTrigger className="w-full md:w-48">
+                  <SelectValue placeholder="Tingkat Pendidikan" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">Semua Tingkat</SelectItem>
+                  <SelectItem value="s1">S1</SelectItem>
+                  <SelectItem value="s2">S2</SelectItem>
+                </SelectContent>
+              </Select>
+              <Select>
+                <SelectTrigger className="w-full md:w-48">
+                  <SelectValue placeholder="Status" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">Semua Status</SelectItem>
+                  <SelectItem value="internal">Internal</SelectItem>
+                  <SelectItem value="eksternal">Eksternal</SelectItem>
+                </SelectContent>
+              </Select>
               <Select>
                 <SelectTrigger className="w-full md:w-48">
                   <SelectValue placeholder="Bidang Keahlian" />
@@ -202,17 +232,6 @@ const Portfolio = () => {
                   <SelectItem value="hukum">Hukum Lingkungan</SelectItem>
                   <SelectItem value="ekologi">Ekologi</SelectItem>
                   <SelectItem value="air">Pengolahan Air</SelectItem>
-                </SelectContent>
-              </Select>
-              <Select>
-                <SelectTrigger className="w-full md:w-48">
-                  <SelectValue placeholder="Jabatan" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">Semua Jabatan</SelectItem>
-                  <SelectItem value="utama">Widyaiswara Utama</SelectItem>
-                  <SelectItem value="madya">Widyaiswara Madya</SelectItem>
-                  <SelectItem value="muda">Widyaiswara Muda</SelectItem>
                 </SelectContent>
               </Select>
               <Button variant="outline">
@@ -230,11 +249,10 @@ const Portfolio = () => {
               <CardHeader className="pb-4">
                 <div className="flex items-start gap-4">
                   <div className="w-16 h-16 bg-muted rounded-full flex items-center justify-center overflow-hidden">
-                    <Image
-                      width={30}
-                      height={30}
-                      src={lecturer.photo}
+                    <Image 
+                      src={lecturer.photo} 
                       alt={lecturer.name}
+                      fill
                       className="w-full h-full object-cover"
                     />
                   </div>
@@ -251,7 +269,7 @@ const Portfolio = () => {
                   </div>
                 </div>
               </CardHeader>
-
+              
               <CardContent className="space-y-4">
                 {/* Expertise */}
                 <div>
