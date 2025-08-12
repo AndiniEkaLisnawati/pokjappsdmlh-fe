@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { GraduationCap, Calendar, MapPin, Users } from "lucide-react";
-import Logo from "../../../public/Logos2.png";
+import Logo from "../../../../public/Logos2.png";
 import Image from 'next/image';
 
 const TrainingPartnerships = () => {

@@ -15,7 +15,7 @@ import {
   FileText
 } from "lucide-react";
 import Image from 'next/image';
-import Logo from "../../../public/Logos5.png"
+import Logo from "../../../../public/Logos5.png"
 const Training = () => {
   const worksheetFolders = [
     {

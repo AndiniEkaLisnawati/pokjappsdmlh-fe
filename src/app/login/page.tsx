@@ -35,11 +35,15 @@ export default function LoginPage() {
         console.log(getUserRole());
 
         if (decoded.role?.toLowerCase() === 'admin') {
-          toast.success("Login Success!");
+           toast.success("Login Succes!", {
+            description: "Welcome to Dashboard Platform POKJABANGKOM"
+          })
           router.push('/admin/dashboard');
           return;
         } else {
-          toast.success("Login admin gagal!");
+          toast.success("Login Succes!", {
+            description: "Welcome to Platform Internal POKJABANGKOM"
+          })
           router.push('/');
           return;
         }
@@ -48,7 +52,9 @@ export default function LoginPage() {
 
 
     } catch (err) {
-      toast.error('please check your password or email!')
+      toast.error("Login Failed!", {
+        description: "Please check your password and email."
+      })
       console.error("Login failed:", err);
     }
   };

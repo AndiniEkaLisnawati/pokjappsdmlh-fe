@@ -59,7 +59,7 @@ const items = [
   {
     id: 6,
     title: "Widyaiswara",
-    path: "/portofolio",
+    path: "/portfolio",
     image: "https://images.pexels.com/photos/709552/pexels-photo-709552.jpeg?auto=compress&cs=tinysrgb&w=600",
     icon: <User className="w-6 h-6" />,
     gradient: "from-teal-600 to-teal-700",
@@ -69,7 +69,7 @@ const items = [
 
 
     return (
-        <section className="py-16 px-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8 bg-gray-50 dark:bg-gray-900">
+        <section className="py-16 px-4 dark:text-slate-50 dark:font-bold hover:text-slate-50 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8 bg-gray-50 dark:bg-gray-900">
             {items.map((item) => (
                 <Slide key={item.id} id={item.id} title={item.title} image={item.image} path={item.path} icon={item.icon} gradient={item.gradient} description={item.description} />
             ))}

@@ -8,7 +8,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { BookOpen, Search, Eye, Calendar, FileText, Filter } from "lucide-react";
 import { useState } from "react";
 import Image from "next/image";
-import Logo from "../../../public/Logos4.png"
+import Logo from "../../../../public/Logos4.png"
 
 const Curriculum = () => {
   const [searchTerm, setSearchTerm] = useState("");

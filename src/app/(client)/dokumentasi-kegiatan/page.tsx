@@ -5,13 +5,13 @@ import { Input } from "@/components/ui/input";
 import Image from "next/image";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Camera, Calendar, MapPin, Users, Search, Filter, Eye } from "lucide-react";
-import DocumentationImg from "../../../public/Logos6.png"
-import Workshop from "../../../public/workhop.jpeg"
-import Pelatihan from "../../../public/pelatihan.jpeg"
-import Forum from "../../../public/forum.jpeg"
-import Expo from "../../../public/expo.jpeg"
-import Kunjungan from "../../../public/kunjungan.jpeg"
-import Seminar from "../../../public/seminar.jpeg"
+import DocumentationImg from "../../../../public/Logos6.png"
+import Workshop from "../../../../public/workhop.jpeg"
+import Pelatihan from "../../../../public/pelatihan.jpeg"
+import Forum from "../../../../public/forum.jpeg"
+import Expo from "../../../../public/expo.jpeg"
+import Kunjungan from "../../../../public/kunjungan.jpeg"
+import Seminar from "../../../../public/seminar.jpeg"
 import { useState } from "react";
 
 

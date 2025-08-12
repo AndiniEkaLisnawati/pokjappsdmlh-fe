@@ -4,7 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Handshake, Award, Building2, Phone } from "lucide-react";
 import Image from "next/image";
-import Jumbotron from "../../../public/Jumbotron2.png"
+import Jumbotron from "../../../../public/Jumbotron2.png"
 
 const Partnerships = () => {
   const lpkData = [
