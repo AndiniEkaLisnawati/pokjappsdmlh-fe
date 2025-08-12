@@ -35,7 +35,7 @@ const WidyaiswaraManagement = () => {
   const [selectedSpecialization, setSelectedSpecialization] = useState("all");
   const [selectedStatus, setSelectedStatus] = useState("all");
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [editingItem, setEditingItem] = useState<any>(null);
+  const [editingItem, setEditingItem] = useState<Widyaiswara | null>(null);
 
   const form = useForm<WidyaiswaraFormData>({
     resolver: zodResolver(widyaiswaraSchema),
@@ -175,7 +175,23 @@ const WidyaiswaraManagement = () => {
     form.reset();
   };
 
-  const handleEdit = (item: any) => {
+  type Widyaiswara = {
+id?: number;
+  name: string;
+  email: string;
+  phone: string;
+  specialization: string;
+  experience: string;
+  education: string;
+  certifications: string;
+  bio: string;
+  status: string;
+  avatar: string;
+  trainingsCount: number;
+  participantsCount: number;
+};
+
+  const handleEdit = (item: Widyaiswara) => {
     setEditingItem(item);
     form.reset({
       name: item.name,
@@ -372,7 +388,7 @@ const WidyaiswaraManagement = () => {
                   <FormField
                     control={form.control}
                     name="avatar"
-                    render={({ field }) => (
+                    render={({ }) => (
                       <FormItem>
                         <FormLabel>Avatar</FormLabel>
                         <FormControl>

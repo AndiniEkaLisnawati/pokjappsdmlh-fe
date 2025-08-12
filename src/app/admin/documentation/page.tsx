@@ -31,7 +31,7 @@ const DocumentationManagement = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedType, setSelectedType] = useState("all");
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [editingItem, setEditingItem] = useState<any>(null);
+  const [editingItem, setEditingItem] = useState<Item | null>(null);
 
   const form = useForm<DocumentationFormData>({
     resolver: zodResolver(documentationSchema),
@@ -134,7 +134,19 @@ const DocumentationManagement = () => {
     form.reset();
   };
 
-  const handleEdit = (item: any ) => {
+type Item = {
+  id: number;
+  title: string;
+  description: string;
+  date: string;
+  location: string;
+  type: string;
+  participants: number;
+  photos: number;
+  image: string;
+};
+
+  const handleEdit = (item: Item ) => {
     setEditingItem(item);
     form.reset({
       title: item.title,
@@ -304,7 +316,7 @@ const DocumentationManagement = () => {
                   <FormField
                     control={form.control}
                     name="image"
-                    render={({ field }) => (
+                    render={({ }) => (
                       <FormItem>
                         <FormLabel>Cover Image</FormLabel>
                         <FormControl>

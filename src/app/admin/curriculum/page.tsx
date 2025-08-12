@@ -34,7 +34,20 @@ const CurriculumManagement = () => {
   const [selectedField, setSelectedField] = useState("all");
   const [selectedLevel, setSelectedLevel] = useState("all");
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [editingItem, setEditingItem] = useState<any>(null);
+  const [editingItem, setEditingItem] = useState< Item| null>(null);
+
+  type Item = {
+  id: number;
+  title: string;
+  description: string;
+  field: string;
+  level: string;
+  duration: string;
+  modules: number;
+  version: string;
+  status: string;
+  fileSize: string;
+};
 
   const form = useForm<CurriculumFormData>({
     resolver: zodResolver(curriculumSchema),
@@ -171,7 +184,9 @@ const CurriculumManagement = () => {
     form.reset();
   };
 
-  const handleEdit = (item: any) => {
+
+
+  const handleEdit = (item: Item) => {
     setEditingItem(item);
     form.reset({
       title: item.title,
