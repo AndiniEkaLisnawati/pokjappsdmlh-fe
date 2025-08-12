@@ -173,7 +173,7 @@ const TrainingPartnerships = () => {
                     <TableCell>
                       <div>
                         <div className="font-medium">{partnership.partnerName}</div>
-                        <div className={`text-sm text-muted-foreground ${getCategoryColor(partnership.category)}`}>{partnership.category}</div>
+                        <div className={`text-sm text-black dark:text-slate-50 dark:bg-gray-800 ${getCategoryColor(partnership.category)}`}>{partnership.category}</div>
                       </div>
                     </TableCell>
                     <TableCell>

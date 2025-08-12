@@ -8,6 +8,7 @@ const config: Config = {
     "./components/**/*.{ts,tsx}",
     "./app/**/*.{ts,tsx}",
     "./src/**/*.{ts,tsx}",
+    "./layout/**/*.{ts,tsx}",
   ],
   theme: {
     container: {
@@ -80,15 +81,15 @@ const config: Config = {
           from: { height: "var(--radix-accordion-content-height)" },
           to: { height: "0" },
         },
-        "bounce-gentle": {
+        "bounceGentle": {
           "0%, 100%": { transform: "translateY(0)" },
-          "50%": { transform: "translateY(-10%)" },
+          "50%": { transform: "translateY(-20%)" },
         },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
-        "bounce-gentle": "bounce-gentle 3s infinite",
+        "bounce-gentle": "bounceGentle 3s infinite",
       },
     },
   },

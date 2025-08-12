@@ -135,7 +135,7 @@ const Curriculum = () => {
 
 
             <div className="text-center md:text-left max-w-2xl">
-              <div className="inline-flex items-center gap-2 mb-4">
+              <div className="inline-flex items-center gap-2 mb-4 animate-bounce-gentle">
                 <FileText className="w-6 h-6 text-indigo-600 dark:text-indigo-400" />
                 <span className="text-sm font-semibold uppercase tracking-wide text-indigo-600 dark:text-indigo-400">
                   silabus

@@ -37,19 +37,19 @@ export default function Header(){
           </div>
 
           <div className="hidden md:flex items-center space-x-8">
-            {navLinks.map((link) => {
+            {navLinks.map((link, idx) => {
               const Icon = link.icon;
               return (
-                <>
+                
                 <a
-                  key={link.href}
+                  key={idx}
                   href={link.href}
                   className="flex items-center space-x-2 text-muted-foreground hover:text-foreground transition-colors duration-200"
                   >
                   <Icon className="w-4 h-4" />
                   <span className="font-medium">{link.label}</span>
                 </a>
-                  </>
+              
               );
             })}
        

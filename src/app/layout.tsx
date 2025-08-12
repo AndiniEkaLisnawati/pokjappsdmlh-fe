@@ -2,6 +2,7 @@ import './globals.css'
 import type { Metadata } from 'next'
 import Header from '@/components/main/Header'
 import Footer from "@/components/main/Footer"
+import {Toaster} from '@/components/ui/sonner'
 
 export const metadata: Metadata = {
   title: 'POKJAPPSDMLH',
@@ -23,6 +24,7 @@ export default function RootLayout({
       <body>
         <Header></Header>
         {children}
+        <Toaster></Toaster>
         <Footer></Footer>
       </body>
     </html>
