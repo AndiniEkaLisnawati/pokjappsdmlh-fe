@@ -1,5 +1,5 @@
 "use client"
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -13,12 +13,13 @@ import { Plus, Search, Edit, Trash2, Building2, Phone } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
+import axios from "axios";
 import { toast } from "sonner";
 
 const lpkSchema = z.object({
   name: z.string().min(1, "Name is required"),
   type: z.string().min(1, "Type is required"),
-  location: z.string().min(1, "Location is required"),
+  locations: z.string().min(1, "locations is required"),
   programs: z.string().min(1, "Programs are required"),
   status: z.string().min(1, "Status is required"),
   accreditationNumber: z.string().min(1, "Accreditation number is required"),
@@ -33,7 +34,7 @@ interface LPK {
   id: number;
   name: string;
   type: string;
-  location: string;
+  locations: string;
   programs: string[];
   status: string;
   accreditationNumber: string;
@@ -48,63 +49,20 @@ const LPKManagement = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingLPK, setEditingLPK] = useState<LPK | null>(null);
 
-  const [lpkData, setLPKData] = useState<LPK[]>([
-    {
-      id: 1,
-      name: "LPK Universitas Indonesia",
-      type: "Perguruan Tinggi",
-      location: "Depok",
-      programs: ["Environmental Management", "Waste Management", "Climate Change"],
-      status: "Terakreditasi",
-      accreditationNumber: "ACC-LPK-2023-001",
-      contactPerson: "Dr. Ahmad Santoso",
-      phone: "+62-21-786-7222",
-      trainingTypes: "Manajemen Lingkungan, Audit Lingkungan"
-    },
-    {
-      id: 2,
-      name: "LPK Institut Teknologi Bandung",
-      type: "Perguruan Tinggi",
-      location: "Bandung", 
-      programs: ["Green Technology", "Renewable Energy", "Environmental Engineering"],
-      status: "Terakreditasi",
-      accreditationNumber: "ACC-LPK-2023-002",
-      contactPerson: "Prof. Dr. Siti Rahayu",
-      phone: "+62-22-250-0935",
-      trainingTypes: "Teknologi Hijau, Energi Terbarukan, Teknik Lingkungan"
-    },
-    {
-      id: 3,
-      name: "LPK Universitas Gadjah Mada",
-      type: "Perguruan Tinggi",
-      location: "Yogyakarta",
-      programs: ["Environmental Assessment", "Sustainable Development"],
-      status: "Terakreditasi", 
-      accreditationNumber: "ACC-LPK-2023-003",
-      contactPerson: "Dr. Budi Hartono",
-      phone: "+62-274-544-008",
-      trainingTypes: "Penilaian Lingkungan, Pembangunan Berkelanjutan"
-    },
-    {
-      id: 4,
-      name: "LPK Politeknik Negeri Jakarta",
-      type: "Perguruan Tinggi",
-      location: "Jakarta",
-      programs: ["Industrial Waste Management", "Environmental Monitoring"],
-      status: "Proses Akreditasi",
-      accreditationNumber: "PROC-LPK-2024-001",
-      contactPerson: "Ir. Made Santika",
-      phone: "+62-21-739-4760",
-      trainingTypes: "Pengelolaan Limbah Industri, Monitoring Lingkungan"
-    }
-  ]);
+  const [lpkData, setLPKData] = useState<LPK[]>([]);
+
+  useEffect(() => {
+    axios.get("http://localhost:3000/api/lpk")
+      .then(res => setLPKData(res.data))
+      .catch(err => console.error(err))
+  }, [])
 
   const form = useForm<LPKFormData>({
     resolver: zodResolver(lpkSchema),
     defaultValues: {
       name: "",
       type: "",
-      location: "",
+      locations: "",
       programs: "",
       status: "",
       accreditationNumber: "",
@@ -114,44 +72,36 @@ const LPKManagement = () => {
     }
   });
 
-  const onSubmit = (data: LPKFormData) => {
-    if (editingLPK) {
+  const onSubmit = async (data: LPKFormData) => {
+    try {
+      if (editingLPK) {
+        await axios.put(`http://localhost:3000/api/lpk/${editingLPK.id}`, {
+          ...data,
+          programs: data.programs.split(",").map(p => p.trim()),
+        });
+        toast.success("LPK Updated", {
+          description: "LPK has been successfully updated.",
+        });
+      } else {
+        await axios.post("http://localhost:3000/api/lpk", {
+          ...data,
+          programs: data.programs.split(",").map(p => p.trim()),
+        });
+        toast.success("LPK Added", {
+          description: "New LPK has been successfully added.",
+        });
+      }
 
-      setLPKData(prev => prev.map(lpk => 
-        lpk.id === editingLPK.id 
-          ? { 
-              ...lpk, 
-              ...data, 
-              programs: data.programs.split(",").map(p => p.trim())
-            }
-          : lpk
-      ));
-      toast.success("LPK Updated",
-        {description: "LPK has been successfully updated.",
-      });
-    } else {
-    
-      const newLPK: LPK = {
-        id: Math.max(...lpkData.map(l => l.id), 0) + 1,
-        name: data.name,
-        type: data.type,
-        location: data.location,
-        status: data.status,
-        accreditationNumber: data.accreditationNumber,
-        contactPerson: data.contactPerson,
-        phone: data.phone,
-        trainingTypes: data.trainingTypes,
-        programs: data.programs.split(",").map(p => p.trim()),
-      };
-      setLPKData(prev => [...prev, newLPK]);
-      toast.success("LPK Added",
-        {description: "New LPK has been successfully added.",
-      });
+      const res = await axios.get("http://localhost:3000/api/lpk");
+      setLPKData(res.data);
+
+      setIsDialogOpen(false);
+      setEditingLPK(null);
+      form.reset();
+    } catch (error) {
+      console.error(error);
+      toast.error("Error", { description: "Failed to save LPK." });
     }
-    
-    setIsDialogOpen(false);
-    setEditingLPK(null);
-    form.reset();
   };
 
   const handleEdit = (lpk: LPK) => {
@@ -159,7 +109,7 @@ const LPKManagement = () => {
     form.reset({
       name: lpk.name,
       type: lpk.type,
-      location: lpk.location,
+      locations: lpk.locations,
       programs: lpk.programs.join(", "),
       status: lpk.status,
       accreditationNumber: lpk.accreditationNumber,
@@ -171,23 +121,29 @@ const LPKManagement = () => {
   };
 
   const handleDelete = (id: number) => {
-    setLPKData(prev => prev.filter(lpk => lpk.id !== id));
-    toast.warning("LPK Deleted",
-      {description: "LPK has been successfully deleted.",
-    });
+    axios.delete(`http://localhost:3000/api/lpk/${id}`)
+
+    setTimeout(() => {
+      axios.get("http://localhost:3000/api/lpk")
+        .then(res => setLPKData(res.data))
+        toast.warning("LPK Deleted",
+          {
+            description: "LPK has been successfully deleted.",
+          });
+    }, 10);
   };
 
   const filteredLPK = lpkData.filter(lpk => {
     const matchesSearch = lpk.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         lpk.location.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         lpk.contactPerson.toLowerCase().includes(searchTerm.toLowerCase());
+      lpk.locations.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      lpk.contactPerson.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesStatus = statusFilter === "all" || lpk.status === statusFilter;
     return matchesSearch && matchesStatus;
   });
 
   return (
     <div className="space-y-6">
-    
+
       <div className="flex justify-between items-center">
         <div>
           <h1 className="text-3xl font-bold">LPK Management</h1>
@@ -244,10 +200,10 @@ const LPKManagement = () => {
                   />
                   <FormField
                     control={form.control}
-                    name="location"
+                    name="locations"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Location</FormLabel>
+                        <FormLabel>locations</FormLabel>
                         <FormControl>
                           <Input {...field} />
                         </FormControl>
@@ -390,15 +346,15 @@ const LPKManagement = () => {
         </Card>
       </div>
 
-    
+
       <Card>
         <CardContent className="p-6">
           <div className="flex flex-col md:flex-row gap-4">
             <div className="flex-1">
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
-                <Input 
-                  placeholder="Search LPK..." 
+                <Input
+                  placeholder="Search LPK..."
                   className="pl-10"
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
@@ -420,7 +376,7 @@ const LPKManagement = () => {
         </CardContent>
       </Card>
 
-    
+
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
@@ -433,7 +389,7 @@ const LPKManagement = () => {
             <TableHeader>
               <TableRow>
                 <TableHead>LPK Name</TableHead>
-                <TableHead>Location</TableHead>
+                <TableHead>locations</TableHead>
                 <TableHead>Contact</TableHead>
                 <TableHead>Status</TableHead>
                 <TableHead>Programs</TableHead>
@@ -450,7 +406,7 @@ const LPKManagement = () => {
                       <div className="text-xs text-muted-foreground">{lpk.accreditationNumber}</div>
                     </div>
                   </TableCell>
-                  <TableCell>{lpk.location}</TableCell>
+                  <TableCell>{lpk.locations}</TableCell>
                   <TableCell>
                     <div>
                       <div className="font-medium text-sm">{lpk.contactPerson}</div>

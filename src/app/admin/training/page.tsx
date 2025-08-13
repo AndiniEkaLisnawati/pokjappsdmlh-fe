@@ -8,7 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { Plus, Search, Edit, Trash2, BookOpen, Calendar, MapPin, User, Clock } from "lucide-react";
+import { Plus, Search, Edit, Trash2, BookOpen, Calendar, MapPin, Users, User, Clock } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -28,7 +28,18 @@ const trainingSchema = z.object({
   type: z.string().min(1, "Type is required"),
 });
 
+const completedTrainingSchema = z.object({
+  title: z.string().min(1, "Title is required"),
+  participants: z.number().min(1, "Participants must be at least 1"),
+  completionDate: z.string().min(1, "Completion date is required"),
+  duration: z.string().min(1, "Duration is required"),
+  location: z.string().min(1, "Location is required"),
+  certificate: z.string().min(1, "Certificate info is required"),
+  satisfaction: z.number().min(1).max(5, "Rating must be between 1-5"),
+});
+
 type TrainingFormData = z.infer<typeof trainingSchema>;
+type CompletedTrainingFormData = z.infer<typeof completedTrainingSchema>;
 
 interface Training {
   id: number;
@@ -45,12 +56,28 @@ interface Training {
   type: string;
 }
 
+interface CompletedTraining {
+  id: number;
+  title: string;
+  participants: number;
+  completionDate: string;
+  duration: string;
+  location: string;
+  certificate: string;
+  satisfaction: number;
+}
+
 const TrainingManagement = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
   const [typeFilter, setTypeFilter] = useState("all");
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingTraining, setEditingTraining] = useState<Training | null>(null);
+  
+  // Completed Training state
+  const [isCompletedDialogOpen, setIsCompletedDialogOpen] = useState(false);
+  const [editingCompletedTraining, setEditingCompletedTraining] = useState<CompletedTraining | null>(null);
+  const [completedSearchTerm, setCompletedSearchTerm] = useState("");
 
   const [trainings, setTrainings] = useState<Training[]>([
     {
@@ -97,6 +124,29 @@ const TrainingManagement = () => {
     }
   ]);
 
+  const [completedTrainings, setCompletedTrainings] = useState<CompletedTraining[]>([
+    {
+      id: 1,
+      title: "Pelatihan AMDAL Batch 14",
+      participants: 28,
+      completionDate: "2024-12-15",
+      duration: "3 Days",
+      location: "Jakarta",
+      certificate: "KLHK-CERT-001/2024",
+      satisfaction: 4.8
+    },
+    {
+      id: 2,
+      title: "Workshop Pengelolaan Limbah B3",
+      participants: 25,
+      completionDate: "2024-11-30",
+      duration: "2 Days",
+      location: "Bandung",
+      certificate: "KLHK-CERT-002/2024",
+      satisfaction: 4.5
+    }
+  ]);
+
   const form = useForm<TrainingFormData>({
     resolver: zodResolver(trainingSchema),
     defaultValues: {
@@ -111,6 +161,19 @@ const TrainingManagement = () => {
       location: "",
       status: "",
       type: "",
+    }
+  });
+
+  const completedForm = useForm<CompletedTrainingFormData>({
+    resolver: zodResolver(completedTrainingSchema),
+    defaultValues: {
+      title: "",
+      participants: 0,
+      completionDate: "",
+      duration: "",
+      location: "",
+      certificate: "",
+      satisfaction: 5,
     }
   });
 
@@ -159,7 +222,52 @@ const TrainingManagement = () => {
   const handleDelete = (id: number) => {
     setTrainings(prev => prev.filter(training => training.id !== id));
     toast.warning("Training Deleted",
-      {description: "Training has been successfully deleted."
+      {description: "Training has been successfully deleted.",
+    });
+  };
+
+  const onCompletedSubmit = (data: CompletedTrainingFormData) => {
+    if (editingCompletedTraining) {
+      setCompletedTrainings(prev => prev.map(training => 
+        training.id === editingCompletedTraining.id 
+          ? { ...training, ...data }
+          : training
+      ));
+      toast.success("Completed Training Updated",
+        {description: "Completed training has been successfully updated.",
+      });
+    } else {
+      const newCompleted: CompletedTraining = {
+        id: Math.max(...completedTrainings.map(t => t.id), 0) + 1,
+        title: data.title,
+        participants: data.participants,
+        completionDate: data.completionDate,
+        duration: data.duration,
+        location: data.location,
+        certificate: data.certificate,
+        satisfaction: data.satisfaction,
+      };
+      setCompletedTrainings(prev => [...prev, newCompleted]);
+      toast.success("Completed Training Added",
+        {description: "New completed training has been successfully added.",
+      });
+    }
+    
+    setIsCompletedDialogOpen(false);
+    setEditingCompletedTraining(null);
+    completedForm.reset();
+  };
+
+  const handleCompletedEdit = (training: CompletedTraining) => {
+    setEditingCompletedTraining(training);
+    completedForm.reset(training);
+    setIsCompletedDialogOpen(true);
+  };
+
+  const handleCompletedDelete = (id: number) => {
+    setCompletedTrainings(prev => prev.filter(training => training.id !== id));
+    toast.success("Completed Training Deleted",
+      {description: "Completed training has been successfully deleted.",
     });
   };
 
@@ -182,9 +290,16 @@ const TrainingManagement = () => {
     return matchesSearch && matchesStatus && matchesType;
   });
 
+  const filteredCompletedTrainings = completedTrainings.filter(training => {
+    const matchesSearch = training.title.toLowerCase().includes(completedSearchTerm.toLowerCase()) ||
+                         training.location.toLowerCase().includes(completedSearchTerm.toLowerCase()) ||
+                         training.certificate.toLowerCase().includes(completedSearchTerm.toLowerCase());
+    return matchesSearch;
+  });
+
   return (
     <div className="space-y-6">
- 
+      {/* Header */}
       <div className="flex justify-between items-center">
         <div>
           <h1 className="text-3xl font-bold">Training Management</h1>
@@ -398,7 +513,7 @@ const TrainingManagement = () => {
         </Dialog>
       </div>
 
-
+      {/* Stats */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <Card>
           <CardContent className="p-6 text-center">
@@ -432,6 +547,7 @@ const TrainingManagement = () => {
         </Card>
       </div>
 
+      {/* Filters */}
       <Card>
         <CardContent className="p-6">
           <div className="flex flex-col md:flex-row gap-4">
@@ -474,7 +590,7 @@ const TrainingManagement = () => {
         </CardContent>
       </Card>
 
- 
+      {/* Training Table */}
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
@@ -550,6 +666,226 @@ const TrainingManagement = () => {
                         <Edit className="w-4 h-4" />
                       </Button>
                       <Button size="sm" variant="outline" onClick={() => handleDelete(training.id)}>
+                        <Trash2 className="w-4 h-4" />
+                      </Button>
+                    </div>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </CardContent>
+      </Card>
+
+      {/* Completed Training Section */}
+      <Card className="mt-8">
+        <CardHeader>
+          <div className="flex justify-between items-center">
+            <CardTitle className="flex items-center gap-2">
+              <Clock className="w-5 h-5" />
+              Completed Training ({filteredCompletedTrainings.length})
+            </CardTitle>
+            <Dialog open={isCompletedDialogOpen} onOpenChange={setIsCompletedDialogOpen}>
+              <DialogTrigger asChild>
+                <Button onClick={() => { setEditingCompletedTraining(null); completedForm.reset(); }}>
+                  <Plus className="w-4 h-4 mr-2" />
+                  Add Completed Training
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+                <DialogHeader>
+                  <DialogTitle>{editingCompletedTraining ? "Edit Completed Training" : "Add New Completed Training"}</DialogTitle>
+                </DialogHeader>
+                <Form {...completedForm}>
+                  <form onSubmit={completedForm.handleSubmit(onCompletedSubmit)} className="space-y-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <FormField
+                        control={completedForm.control}
+                        name="title"
+                        render={({ field }) => (
+                          <FormItem className="md:col-span-2">
+                            <FormLabel>Training Title</FormLabel>
+                            <FormControl>
+                              <Input {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={completedForm.control}
+                        name="participants"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Participants</FormLabel>
+                            <FormControl>
+                              <Input 
+                                type="number" 
+                                {...field} 
+                                onChange={(e) => field.onChange(Number(e.target.value))}
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={completedForm.control}
+                        name="completionDate"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Completion Date</FormLabel>
+                            <FormControl>
+                              <Input type="date" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={completedForm.control}
+                        name="duration"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Duration</FormLabel>
+                            <FormControl>
+                              <Input {...field} placeholder="e.g., 3 Days" />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={completedForm.control}
+                        name="location"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Location</FormLabel>
+                            <FormControl>
+                              <Input {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={completedForm.control}
+                        name="certificate"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Certificate Number</FormLabel>
+                            <FormControl>
+                              <Input {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={completedForm.control}
+                        name="satisfaction"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Satisfaction Rating (1-5)</FormLabel>
+                            <FormControl>
+                              <Input 
+                                type="number" 
+                                min="1" 
+                                max="5" 
+                                step="0.1"
+                                {...field} 
+                                onChange={(e) => field.onChange(Number(e.target.value))}
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+                    <div className="flex justify-end space-x-2">
+                      <Button type="button" variant="outline" onClick={() => setIsCompletedDialogOpen(false)}>
+                        Cancel
+                      </Button>
+                      <Button type="submit">
+                        {editingCompletedTraining ? "Update" : "Add"} Completed Training
+                      </Button>
+                    </div>
+                  </form>
+                </Form>
+              </DialogContent>
+            </Dialog>
+          </div>
+        </CardHeader>
+        <CardContent>
+          <div className="mb-4">
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
+              <Input 
+                placeholder="Search completed trainings..." 
+                className="pl-10"
+                value={completedSearchTerm}
+                onChange={(e) => setCompletedSearchTerm(e.target.value)}
+              />
+            </div>
+          </div>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Training Title</TableHead>
+                <TableHead>Participants</TableHead>
+                <TableHead>Completion Date</TableHead>
+                <TableHead>Duration</TableHead>
+                <TableHead>Location</TableHead>
+                <TableHead>Certificate</TableHead>
+                <TableHead>Satisfaction</TableHead>
+                <TableHead>Actions</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {filteredCompletedTrainings.map((training) => (
+                <TableRow key={training.id}>
+                  <TableCell>
+                    <div className="font-medium">{training.title}</div>
+                  </TableCell>
+                  <TableCell>
+                    <div className="flex items-center gap-1">
+                      <Users className="w-4 h-4 text-muted-foreground" />
+                      {training.participants}
+                    </div>
+                  </TableCell>
+                  <TableCell>
+                    <div className="flex items-center gap-1">
+                      <Calendar className="w-4 h-4 text-muted-foreground" />
+                      {new Date(training.completionDate).toLocaleDateString('id-ID')}
+                    </div>
+                  </TableCell>
+                  <TableCell>
+                    <div className="flex items-center gap-1">
+                      <Clock className="w-4 h-4 text-muted-foreground" />
+                      {training.duration}
+                    </div>
+                  </TableCell>
+                  <TableCell>
+                    <div className="flex items-center gap-1">
+                      <MapPin className="w-4 h-4 text-muted-foreground" />
+                      {training.location}
+                    </div>
+                  </TableCell>
+                  <TableCell>
+                    <div className="font-mono text-sm">{training.certificate}</div>
+                  </TableCell>
+                  <TableCell>
+                    <div className="flex items-center gap-1">
+                      <span className="text-yellow-500">⭐</span>
+                      {training.satisfaction}
+                    </div>
+                  </TableCell>
+                  <TableCell>
+                    <div className="flex gap-2">
+                      <Button size="sm" variant="outline" onClick={() => handleCompletedEdit(training)}>
+                        <Edit className="w-4 h-4" />
+                      </Button>
+                      <Button size="sm" variant="outline" onClick={() => handleCompletedDelete(training.id)}>
                         <Trash2 className="w-4 h-4" />
                       </Button>
                     </div>
