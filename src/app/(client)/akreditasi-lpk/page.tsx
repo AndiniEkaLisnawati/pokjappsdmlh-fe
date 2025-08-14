@@ -9,6 +9,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 
 
+
 const Partnerships = () => {
 
 interface lpkProps {
@@ -30,24 +31,6 @@ axios.get("http://localhost:3000/api/lpk")
 .catch(err => console.error(err))
 },[])
 
-
-
-  const lpkList = [
-    {
-      name: "LPK Teknologi Hijau Indonesia",
-      license: "LPK-001/2023",
-      specialization: "Teknologi Ramah Lingkungan",
-      participants: 150,
-      status: "Aktif"
-    },
-    {
-      name: "LPK Manajemen Limbah Terpadu",
-      license: "LPK-002/2023",
-      specialization: "Pengelolaan Limbah",
-      participants: 200,
-      status: "Aktif"
-    }
-  ];
 
   return (
     <div className="min-h-screen dark:bg-slate-900 bg-gray-100 dark:text-slate-50">
@@ -134,6 +117,7 @@ axios.get("http://localhost:3000/api/lpk")
                   <TableHead>No. Akreditasi</TableHead>
                   <TableHead>Contact Person</TableHead>
                   <TableHead>Jenis Pelatihan</TableHead>
+                  <TableHead>Program Pelatihan</TableHead>
                   <TableHead>Status</TableHead>
                   <TableHead>Aksi</TableHead>
                 </TableRow>
@@ -171,10 +155,14 @@ axios.get("http://localhost:3000/api/lpk")
                         </div>
                       </div>
                     </TableCell>
+                   
                     <TableCell>
-                      <div className="text-sm max-w-xs">
+                      <div className="text-sm max-w-s">
                         {lpk.type}
                       </div>
+                    </TableCell>
+                    <TableCell className="text-md max-w-md">
+                      {lpk.programs}
                     </TableCell>
                     <TableCell>
                       <Badge variant={lpk.status === "Terakreditasi" ? "default" : "secondary"}>
@@ -195,44 +183,6 @@ axios.get("http://localhost:3000/api/lpk")
             </Table>
           </CardContent>
         </Card>
-
-        <Card className="mt-10">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Building2 className="w-5 h-5" />
-              LPK Lainnya
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Nama</TableHead>
-                  <TableHead>Lisensi</TableHead>
-                  <TableHead>Spesialisasi</TableHead>
-                  <TableHead>Peserta</TableHead>
-                  <TableHead>Status</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {lpkList.map((lpk, index) => (
-                  <TableRow key={index}>
-                    <TableCell>{lpk.name}</TableCell>
-                    <TableCell className="font-mono text-sm">{lpk.license}</TableCell>
-                    <TableCell>{lpk.specialization}</TableCell>
-                    <TableCell>{lpk.participants}</TableCell>
-                    <TableCell>
-                      <Badge variant="default">{lpk.status}</Badge>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </CardContent>
-        </Card>
-
-      
-
 
       </div>
     </div>

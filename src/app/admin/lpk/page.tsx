@@ -24,8 +24,7 @@ const lpkSchema = z.object({
   status: z.string().min(1, "Status is required"),
   accreditationNumber: z.string().min(1, "Accreditation number is required"),
   contactPerson: z.string().min(1, "Contact person is required"),
-  phone: z.string().min(1, "Phone is required"),
-  trainingTypes: z.string().min(1, "Training types are required"),
+  phone: z.string().min(1, "Phone is required")
 });
 
 type LPKFormData = z.infer<typeof lpkSchema>;
@@ -40,7 +39,6 @@ interface LPK {
   accreditationNumber: string;
   contactPerson: string;
   phone: string;
-  trainingTypes: string;
 }
 
 const LPKManagement = () => {
@@ -67,8 +65,7 @@ const LPKManagement = () => {
       status: "",
       accreditationNumber: "",
       contactPerson: "",
-      phone: "",
-      trainingTypes: "",
+      phone: ""
     }
   });
 
@@ -115,7 +112,6 @@ const LPKManagement = () => {
       accreditationNumber: lpk.accreditationNumber,
       contactPerson: lpk.contactPerson,
       phone: lpk.phone,
-      trainingTypes: lpk.trainingTypes,
     });
     setIsDialogOpen(true);
   };
@@ -279,19 +275,6 @@ const LPKManagement = () => {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Programs (comma separated)</FormLabel>
-                      <FormControl>
-                        <Textarea {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="trainingTypes"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Training Types</FormLabel>
                       <FormControl>
                         <Textarea {...field} />
                       </FormControl>
