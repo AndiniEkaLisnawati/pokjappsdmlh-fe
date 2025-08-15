@@ -307,7 +307,7 @@ const PartnershipManagement = () => {
 
   return (
     <div className="space-y-6">
-      {/* Header */}
+   
       <div className="flex justify-between items-center">
         <div>
           <h1 className="text-3xl font-bold">Partnership Management</h1>
@@ -483,7 +483,6 @@ const PartnershipManagement = () => {
         </Dialog>
       </div>
 
-      {/* Stats */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <Card>
           <CardContent className="p-6 text-center">
@@ -517,7 +516,6 @@ const PartnershipManagement = () => {
         </Card>
       </div>
 
-      {/* Filters */}
       <Card>
         <CardContent className="p-6">
           <div className="flex flex-col md:flex-row gap-4">
@@ -558,7 +556,6 @@ const PartnershipManagement = () => {
         </CardContent>
       </Card>
 
-      {/* Partnership Table */}
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
@@ -637,7 +634,7 @@ const PartnershipManagement = () => {
         </CardContent>
       </Card>
 
-      {/* Government Partners Section */}
+
       <Card className="mt-8">
         <CardHeader>
           <div className="flex justify-between items-center">
