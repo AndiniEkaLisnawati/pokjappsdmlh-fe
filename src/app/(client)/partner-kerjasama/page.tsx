@@ -5,58 +5,36 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { GraduationCap, Calendar, MapPin, Users } from "lucide-react";
 import Logo from "../../../../public/Logos2.png";
 import Image from 'next/image';
+import { useEffect, useState } from "react";
+import axios from "axios";
+
+  type Partnership = {
+id: number;
+partnerName: string;
+scope: string;
+pksNumber: string;
+region: string;
+trainingsHeld: number;
+startDate: string;
+endDate: string;
+status: string;
+category: string;
+};
 
 const TrainingPartnerships = () => {
-  const partnerships = [
-    {
-      id: 1,
-      partnerName: "Pemerintah Provinsi DKI Jakarta",
-      scope: "Pelatihan Pengelolaan Sampah dan Limbah B3",
-      pksNumber: "PKS-001/KLHK/2024",
-      region: "DKI Jakarta",
-      trainingsHeld: 3,
-      startDate: "2024-01-15",
-      endDate: "2024-12-31",
-      status: "Aktif",
-      category: "Pemda Provinsi"
-    },
-    {
-      id: 2,
-      partnerName: "Kementerian Perindustrian RI",
-      scope: "Sertifikasi Green Industry dan Teknologi Bersih",
-      pksNumber: "PKS-002/KLHK/2024",
-      region: "Nasional",
-      trainingsHeld: 5,
-      startDate: "2024-02-01",
-      endDate: "2024-11-30",
-      status: "Aktif",
-      category: "Kementerian"
-    },
-    {
-      id: 3,
-      partnerName: "Pemerintah Provinsi Jawa Barat",
-      scope: "Pelatihan AMDAL dan UKL-UPL",
-      pksNumber: "PKS-003/KLHK/2024",
-      region: "Jawa Barat",
-      trainingsHeld: 2,
-      startDate: "2024-03-10",
-      endDate: "2024-12-15",
-      status: "Aktif",
-      category: "Pemda Provinsi"
-    },
-    {
-      id: 4,
-      partnerName: "Kementerian ESDM",
-      scope: "Pelatihan Monitoring Kualitas Air dan Udara",
-      pksNumber: "PKS-004/KLHK/2024",
-      region: "Nasional",
-      trainingsHeld: 4,
-      startDate: "2024-01-20",
-      endDate: "2024-10-31",
-      status: "Selesai",
-      category: "Kementerian"
-    }
-  ];
+
+  const [partnerships, setPartnerships] = useState<Partnership[]>([]);
+
+  useEffect(() => {
+    axios
+      .get<Partnership[]>("http://localhost:3000/api/partnership")
+      .then((res) => {
+        setPartnerships(res.data);
+      })
+      .catch((err) => {
+        console.error("Error fetching partnerships:", err);
+      });
+  }, []);
 
   const getStatusColor = (status: string) => {
     switch (status) {
