@@ -1,5 +1,5 @@
 "use client"
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -14,6 +14,8 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { toast } from "sonner";
+import axios from "axios";
+
 
 const partnershipSchema = z.object({
   partnerName: z.string().min(1, "Partner name is required"),
@@ -76,56 +78,13 @@ const PartnershipManagement = () => {
   const [editingGovPartner, setEditingGovPartner] = useState<GovernmentPartner | null>(null);
   const [govSearchTerm, setGovSearchTerm] = useState("");
 
-  const [partnerships, setPartnerships] = useState<Partnership[]>([
-    {
-      id: 1,
-      partnerName: "Pemerintah Provinsi DKI Jakarta",
-      scope: "Pelatihan Pengelolaan Sampah dan Limbah B3",
-      pksNumber: "PKS-001/KLHK/2024",
-      region: "DKI Jakarta",
-      trainingsHeld: 3,
-      startDate: "2024-01-15",
-      endDate: "2024-12-31",
-      status: "Aktif",
-      category: "Pemda Provinsi"
-    },
-    {
-      id: 2,
-      partnerName: "Kementerian Perindustrian RI",
-      scope: "Sertifikasi Green Industry dan Teknologi Bersih",
-      pksNumber: "PKS-002/KLHK/2024",
-      region: "Nasional",
-      trainingsHeld: 5,
-      startDate: "2024-02-01",
-      endDate: "2024-11-30",
-      status: "Aktif",
-      category: "Kementerian"
-    },
-    {
-      id: 3,
-      partnerName: "Pemerintah Provinsi Jawa Barat",
-      scope: "Pelatihan AMDAL dan UKL-UPL",
-      pksNumber: "PKS-003/KLHK/2024",
-      region: "Jawa Barat",
-      trainingsHeld: 2,
-      startDate: "2024-03-10",
-      endDate: "2024-12-15",
-      status: "Aktif",
-      category: "Pemda Provinsi"
-    },
-    {
-      id: 4,
-      partnerName: "Kementerian ESDM",
-      scope: "Pelatihan Monitoring Kualitas Air dan Udara",
-      pksNumber: "PKS-004/KLHK/2024",
-      region: "Nasional",
-      trainingsHeld: 4,
-      startDate: "2024-01-20",
-      endDate: "2024-10-31",
-      status: "Selesai",
-      category: "Kementerian"
-    }
-  ]);
+  const [partnerships, setPartnerships] = useState<Partnership[]>([])
+
+    useEffect(() => {
+    axios.get('http://localhost:3000/api/partnership')
+    .then(res => setPartnerships(res.data))
+    .catch(err => err.message)
+  }, [])
 
   const [governmentPartners, setGovernmentPartners] = useState<GovernmentPartner[]>([
     {
