@@ -43,7 +43,7 @@ type PartnershipFormData = z.infer<typeof partnershipSchema>;
 type GovernmentPartnerFormData = z.infer<typeof governmentPartnerSchema>;
 
 interface Partnership {
-  id: number;
+  id: string;
   partnerName: string;
   scope: string;
   pksNumber: string;
@@ -73,7 +73,7 @@ const PartnershipManagement = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingPartnership, setEditingPartnership] = useState<Partnership | null>(null);
   
-  // Government Partners state
+ 
   const [isGovDialogOpen, setIsGovDialogOpen] = useState(false);
   const [editingGovPartner, setEditingGovPartner] = useState<GovernmentPartner | null>(null);
   const [govSearchTerm, setGovSearchTerm] = useState("");
@@ -149,32 +149,24 @@ const PartnershipManagement = () => {
 
   const onSubmit = (data: PartnershipFormData) => {
     if (editingPartnership) {
-      setPartnerships(prev => prev.map(partnership => 
-        partnership.id === editingPartnership.id 
-          ? { ...partnership, ...data }
-          : partnership
-      ));
-      toast.success("Partnership Updated",
-        {description: "Partnership has been successfully updated.",
-      });
+      axios.put(`http://localhost:3000/api/partnership/${editingPartnership.id}`, { ...data })
+        .then(() => {
+          toast.success("Partnership Updated",
+            {description: "Partnership has been successfully updated.",
+          });
+        });
     } else {
-      const newPartnership: Partnership = {
-        id: Math.max(...partnerships.map(p => p.id), 0) + 1,
-        partnerName: data.partnerName,
-        scope: data.scope,
-        pksNumber: data.pksNumber,
-        region: data.region,
-        trainingsHeld: data.trainingsHeld,
-        startDate: data.startDate,
-        endDate: data.endDate,
-        status: data.status,
-        category: data.category,
-      };
-      setPartnerships(prev => [...prev, newPartnership]);
-      toast.success("Partnership Added",
-        {description: "New partnership has been successfully added.",
-      });
+      axios.post('http://localhost:3000/api/partnership', data)
+        .then(() => {
+          toast.success("Partnership Added",
+            {description: "New partnership has been successfully added.",
+          });
+        });
     }
+
+    axios.get('http://locallhost:3000/api/partnership')
+    .then(res => setPartnerships(res.data))
+    .catch(err => err.message)
     
     setIsDialogOpen(false);
     setEditingPartnership(null);
@@ -187,11 +179,13 @@ const PartnershipManagement = () => {
     setIsDialogOpen(true);
   };
 
-  const handleDelete = (id: number) => {
-    setPartnerships(prev => prev.filter(partnership => partnership.id !== id));
-    toast.warning("Partnership Deleted",
-      {description: "Partnership has been successfully deleted.",
-    });
+  const handleDelete = (id: string) => {
+   axios.delete(`http://localhost:3000/api/partnership/${id}`)
+     .then(() => {
+       toast.warning("Partnership Deleted",
+         {description: "Partnership has been successfully deleted.",
+       });
+     });
   };
 
   const onGovSubmit = (data: GovernmentPartnerFormData) => {
