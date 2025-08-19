@@ -83,7 +83,7 @@ const TrainingPartnerships = () => {
                 </p>
               </div>
 
-              {/* Image */}
+      
               <Image
                 src={Logo}
                 alt="Ilustrasi Program Pelatihan"
@@ -97,7 +97,6 @@ const TrainingPartnerships = () => {
         </section>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
-        {/* Statistics Cards */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
           <Card>
             <CardContent className="p-6 text-center">
