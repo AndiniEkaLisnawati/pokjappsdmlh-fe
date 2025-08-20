@@ -79,7 +79,7 @@ const TrainingPartnerships = () => {
 
                 <p className="text-base md:text-lg text-gray-700 dark:text-gray-300 max-w-xl mb-6">
                    Jaringan kemitraan pelatihan dengan berbagai institusi untuk memperluas akses
-              dan kualitas program pelatihan lingkungan hidup.
+              dan kualitas program pelatihan lingkungan hidup.POKJABANGKOM
                 </p>
               </div>
 
