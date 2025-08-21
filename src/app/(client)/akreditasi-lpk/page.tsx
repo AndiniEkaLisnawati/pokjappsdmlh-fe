@@ -77,25 +77,25 @@ axios.get("http://localhost:3000/api/lpk")
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
           <Card>
             <CardContent className="p-6 text-center">
-              <div className="text-3xl font-bold text-primary mb-2">4</div>
+              <div className="text-3xl font-bold text-primary mb-2">{lpkData.length}</div>
               <div className="text-sm text-muted-foreground">Total LPK</div>
             </CardContent>
           </Card>
           <Card>
             <CardContent className="p-6 text-center">
-              <div className="text-3xl font-bold text-primary mb-2">3</div>
+              <div className="text-3xl font-bold text-primary mb-2">{lpkData.filter(lpk => lpk.status === 'Terakreditasi').length}</div>
               <div className="text-sm text-muted-foreground">Terakreditasi</div>
             </CardContent>
           </Card>
           <Card>
             <CardContent className="p-6 text-center">
-              <div className="text-3xl font-bold text-primary mb-2">1</div>
+              <div className="text-3xl font-bold text-primary mb-2">{lpkData.filter(lpk => lpk.status === 'Proses Akreditasi').length}</div>
               <div className="text-sm text-muted-foreground">Proses Akreditasi</div>
             </CardContent>
           </Card>
           <Card>
             <CardContent className="p-6 text-center">
-              <div className="text-3xl font-bold text-primary mb-2">12</div>
+              <div className="text-3xl font-bold text-primary mb-2">{lpkData.filter(lpk => lpk.programs).length}</div>
               <div className="text-sm text-muted-foreground">Jenis Pelatihan</div>
             </CardContent>
           </Card>
@@ -162,7 +162,7 @@ axios.get("http://localhost:3000/api/lpk")
                       </div>
                     </TableCell>
                     <TableCell className="text-md max-w-md">
-                      {lpk.programs}
+                     {lpk.programs.slice(0, 2).join(', ')}
                     </TableCell>
                     <TableCell>
                       <Badge variant={lpk.status === "Terakreditasi" ? "default" : "secondary"}>

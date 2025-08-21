@@ -157,12 +157,12 @@ const Portfolio = () => {
             <div className="p-2 bg-blue-100 rounded-full">
               <Users className="w-8 h-8 text-blue-600" />
             </div>
-            <span className="text-sm font-medium text-blue-600 uppercase tracking-wider">Portfolio Widyaiswara</span>
+            <span className="text-sm font-medium text-blue-600 uppercase tracking-wider"> Widyaiswara</span>
           </div>
 
           <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6 animate-slide-up">
             <span className="bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
-              Lecturer Portfolio
+              Lecturer 
             </span>
           </h1>
 
@@ -170,16 +170,11 @@ const Portfolio = () => {
             Profil lengkap para widyaiswara dan instruktur ahli dalam bidang lingkungan hidup
             dengan keahlian, sertifikasi, dan pengalaman yang beragam.
           </p>
-
-          <Button size="lg" className="bg-blue-600 hover:bg-blue-700 text-white shadow-xl transition-all duration-300 hover:scale-105 animate-scale-in">
-            <Users className="w-5 h-5 mr-2" />
-            Tambah Widyaiswara
-          </Button>
         </div>
       </section>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
-        {/* Statistics */}
+      
         <div className="grid grid-cols-2 md:grid-cols-6 gap-6 mb-8 animate-fade-in">
           <Card className="hover:shadow-lg transition-all duration-300 hover:-translate-y-1 border-0 bg-white/70 backdrop-blur-sm">
             <CardContent className="p-6 text-center">
