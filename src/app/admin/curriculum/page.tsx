@@ -70,7 +70,7 @@ const CurriculumManagement = () => {
       title: "Kurikulum Teknologi Ramah Lingkungan",
       field: "Teknologi",
       level: "Menengah",
-      duration: "40 Jam",
+      duration: "50 Jam",
       lastUpdated: "2024-01-15",
       version: "v2.1",
       status: "Aktif",

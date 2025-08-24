@@ -22,7 +22,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 }
 
 function ContentArea({ children }: { children: React.ReactNode }) {
-  const { state } = useSidebar(); // "expanded" | "collapsed"
+  const { state } = useSidebar();
 
   return (
     <div
