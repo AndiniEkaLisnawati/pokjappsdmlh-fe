@@ -34,7 +34,23 @@ const AdminDashboard = () => {
     {
       title: "Training Programs",
       value: "45",
-      change: "+5 this month",
+      change: "+5 hi month",
+      icon: BookOpen,
+      color: "text-purple-600",
+      bgColor: "bg-purple-100"
+    },
+    {
+      title: "Training Programs",
+      value: "45",
+      change: "+5 hi month",
+      icon: BookOpen,
+      color: "text-purple-600",
+      bgColor: "bg-purple-100"
+    },
+    {
+      title: "Training Programs",
+      value: "45",
+      change: "+5 hi month",
       icon: BookOpen,
       color: "text-purple-600",
       bgColor: "bg-purple-100"
