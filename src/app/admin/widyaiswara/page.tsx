@@ -99,6 +99,36 @@ const WidyaiswaraManagement = () => {
       trainingsCount: 18,
       participantsCount: 320
     },
+    {
+      id: 9,
+      name: "Dr. Budi Hartono",
+      email: "budi.hartono@pokjappsdm.id",
+      phone: "+62-274-544-008",
+      specialization: "Environmental Assessment",
+      experience: "12 Years",
+      education: "Ph.D in Environmental Assessment",
+      certifications: "AMDAL Expert, Environmental Consultant",
+      bio: "Specialist in environmental impact assessment and sustainable development.",
+      status: "Active",
+      avatar: "/placeholder.svg",
+      trainingsCount: 18,
+      participantsCount: 320
+    },
+    {
+      id: 7,
+      name: "Dr. Budi Hartono",
+      email: "budi.hartono@pokjappsdm.id",
+      phone: "+62-274-544-008",
+      specialization: "Environmental Assessment",
+      experience: "12 Years",
+      education: "Ph.D in Environmental Assessment",
+      certifications: "AMDAL Expert, Environmental Consultant",
+      bio: "Specialist in environmental impact assessment and sustainable development.",
+      status: "Active",
+      avatar: "/placeholder.svg",
+      trainingsCount: 18,
+      participantsCount: 320
+    },
   ]);
 
   const getStatusColor = (status: string) => {
