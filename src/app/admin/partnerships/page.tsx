@@ -14,7 +14,9 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { toast } from "sonner";
+import Image from "next/image";
 import axios from "axios";
+
 
 
 const partnershipSchema = z.object({
@@ -27,8 +29,11 @@ const partnershipSchema = z.object({
   endDate: z.string().min(1, "End date is required"),
   status: z.string().min(1, "Status is required"),
   category: z.string().min(1, "Category is required"),
+  email: z.string().email("Invalid email").optional().or(z.literal("")),
+  phoneNumber: z.string().min(1, "Phone number is required"),
+  contactPerson: z.string().min(1, "Contact person is required"),
+  logoUrl: z.any().optional(),
 });
-
 
 
 type PartnershipFormData = z.infer<typeof partnershipSchema>;
@@ -50,20 +55,21 @@ interface Partnership {
   phoneNumber?: string;
 }
 
-
 const PartnershipManagement = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
   const [categoryFilter, setCategoryFilter] = useState("all");
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingPartnership, setEditingPartnership] = useState<Partnership | null>(null);
+  const [file, setFile] = useState<File | null>(null);
+
 
 
   const [partnerships, setPartnerships] = useState<Partnership[]>([])
 
   useEffect(() => {
     axios.get('https://pokjappsdmlh-be.vercel.app/api/partnership')
-      .then(res => setPartnerships(res.data))
+      .then(res => setPartnerships(res.data.data))
       .catch(err => err.message)
   }, [])
 
@@ -80,38 +86,87 @@ const PartnershipManagement = () => {
       endDate: "",
       status: "",
       category: "",
+      email: "",
+      phoneNumber: "",
+      contactPerson: "",
     }
   });
 
 
 
-  const onSubmit = (data: PartnershipFormData) => {
-    if (editingPartnership) {
-      axios.put(`https://pokjappsdmlh-be.vercel.app/api/partnership/${editingPartnership.id}`, { ...data })
-        .then(() => {
-          toast.success("Partnership Updated",
-            {
-              description: "Partnership has been successfully updated.",
-            });
-        });
-    } else {
-      axios.post('https://pokjappsdmlh-be.vercel.app/api/partnership', data)
-        .then(() => {
-          toast.success("Partnership Added",
-            {
-              description: "New partnership has been successfully added.",
-            });
-        });
+const onSubmit = async (data: PartnershipFormData) => {
+  try {
+    const formData = new FormData();
+
+    Object.entries(data).forEach(([key, value]) => {
+      if (
+        value !== "" &&
+        value !== undefined &&
+        value !== null
+      ) {
+        if (key === "trainingsHeld") {
+          formData.append(key, String(Number(value))); 
+        } else if (key === "startDate" || key === "endDate") {
+          const d = new Date(value as string);
+          if (!isNaN(d.getTime())) {
+            formData.append(key, d.toISOString()); 
+          }
+        } else {
+          formData.append(key, value as any);
+        }
+      }
+    });
+
+  
+    if (file) {
+      formData.append("logo", file);
     }
 
-    axios.get('http://locallhost:3000/api/partnership')
-      .then(res => setPartnerships(res.data))
-      .catch(err => err.message)
+    if (editingPartnership) {
+      await axios.put(
+        `https://pokjappsdmlh-be.vercel.app/api/partnership/${editingPartnership.id}`,
+        formData,
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+        }
+      );
+
+      toast.success("Partnership Updated", {
+        description: "Partnership has been successfully updated.",
+      });
+    } else {
+      await axios.post(
+        "https://pokjappsdmlh-be.vercel.app/api/partnership",
+        formData,
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+        }
+      );
+
+      toast.success("Partnership Added", {
+        description: "New partnership has been successfully added.",
+      });
+    }
+
+
+    const res = await axios.get(
+      "https://pokjappsdmlh-be.vercel.app/api/partnership"
+    );
+    setPartnerships(res.data.data);
 
     setIsDialogOpen(false);
     setEditingPartnership(null);
     form.reset();
-  };
+    setFile(null);
+  } catch (err: any) {
+    console.error("Submit error:", err.response?.data || err.message);
+    toast.error("Error submitting form", {
+      description: err.response?.data?.message || err.message,
+    });
+  }
+};
+
+
 
   const handleEdit = (partnership: Partnership) => {
     setEditingPartnership(partnership);
@@ -362,23 +417,30 @@ const PartnershipManagement = () => {
                       <FormItem>
                         <FormLabel>Logo/Image</FormLabel>
                         <FormControl>
-                          <Input type="file" accept="image/*" placeholder="Upload logo" />
+                          <Input
+                            type="file"
+                            accept="image/*"
+                            onChange={(e) => {
+                              setFile(e.target.files?.[0] || null);
+                            }}
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
                     )}
                   />
+
                 </div>
-              </form>
-            </Form>
             <div className="flex justify-end space-x-2">
               <Button type="button" variant="outline" onClick={() => setIsDialogOpen(false)}>
                 Cancel
               </Button>
-              <Button type="submit">
+              <Button type="submit" className="hover:cursor-pointer">
                 {editingPartnership ? "Update" : "Add"} Partnership
               </Button>
             </div>
+              </form>
+            </Form>
 
           </DialogContent>
         </Dialog>
@@ -563,11 +625,18 @@ const PartnershipManagement = () => {
               <Card key={partner.id} className="p-4">
                 <div className="flex items-start justify-between mb-3">
                   <div className="flex items-center gap-3">
-                    <div className="text-2xl">{partner.logoUrl || "🏛️"}</div>
                     <div>
-                      <h3 className="font-medium text-sm">{partner.contactPerson}</h3>
-                      <p className="text-xs text-muted-foreground">{partner.email}</p>
+                      {partner.logoUrl ? (
+                        <Image src={partner.logoUrl} alt={`${partner.partnerName} logo`} width={30} height={20} className="" />
+                      ) : (
+                        <div className="text-2xl">{partner.partnerName.charAt(0)}</div>
+                      )}
                     </div>
+                    <div className="">
+                      <h3 className="font-medium text-sm">{partner.partnerName}</h3>
+                      <p className="text-xs text-muted-foreground">{partner.category}</p>
+                    </div>
+
                   </div>
                   <Badge variant={partner.status === "Aktif" ? "default" : "secondary"}>
                     {partner.status}

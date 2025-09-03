@@ -22,6 +22,7 @@
     "@radix-ui/react-tooltip": "^1.2.7",
     "@react-pdf-viewer/core": "^3.12.0",
     "@react-pdf-viewer/default-layout": "^3.12.0",
+    "@supabase/supabase-js": "^2.57.0",
     "avatar": "^0.1.0",
     "axios": "^1.11.0",
     "class-variance-authority": "^0.7.1",
