@@ -50,7 +50,7 @@ const LPKManagement = () => {
   const [lpkData, setLPKData] = useState<LPK[]>([]);
 
   useEffect(() => {
-    axios.get("http://localhost:3000/api/lpk")
+    axios.get("https://pokjappsdmlh-be.vercel.app/api/lpk")
       .then(res => setLPKData(res.data))
       .catch(err => console.error(err))
   }, [])
@@ -72,7 +72,7 @@ const LPKManagement = () => {
   const onSubmit = async (data: LPKFormData) => {
     try {
       if (editingLPK) {
-        await axios.put(`http://localhost:3000/api/lpk/${editingLPK.id}`, {
+        await axios.put(`https://pokjappsdmlh-be.vercel.app/api/lpk/${editingLPK.id}`, {
           ...data,
           programs: data.programs.split(",").map(p => p.trim()),
         });
@@ -80,7 +80,7 @@ const LPKManagement = () => {
           description: "LPK has been successfully updated.",
         });
       } else {
-        await axios.post("http://localhost:3000/api/lpk", {
+        await axios.post("https://pokjappsdmlh-be.vercel.app/api/lpk", {
           ...data,
           programs: data.programs.split(",").map(p => p.trim()),
         });
@@ -89,7 +89,7 @@ const LPKManagement = () => {
         });
       }
 
-      const res = await axios.get("http://localhost:3000/api/lpk");
+      const res = await axios.get("https://pokjappsdmlh-be.vercel.app/api/lpk");
       setLPKData(res.data);
 
       setIsDialogOpen(false);
@@ -117,10 +117,10 @@ const LPKManagement = () => {
   };
 
   const handleDelete = (id: number) => {
-    axios.delete(`http://localhost:3000/api/lpk/${id}`)
+    axios.delete(`https://pokjappsdmlh-be.vercel.app/api/lpk/${id}`)
 
     setTimeout(() => {
-      axios.get("http://localhost:3000/api/lpk")
+      axios.get("https://pokjappsdmlh-be.vercel.app/api/lpk")
         .then(res => setLPKData(res.data))
         toast.warning("LPK Deleted",
           {

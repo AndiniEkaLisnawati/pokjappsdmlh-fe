@@ -18,7 +18,7 @@ export default function RegisterPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const res = await axios.post("http://localhost:3000/api/users", {
+      const res = await axios.post("https://pokjappsdmlh-be.vercel.app/api/users", {
         fullname,
         email,
         password,

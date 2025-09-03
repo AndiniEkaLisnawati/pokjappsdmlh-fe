@@ -19,7 +19,7 @@ import { useState } from "react";
 const Documentation = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedType, setSelectedType] = useState("all")
-  const [selectedMonth, setSelectedMonth] = useState("all")
+  const [selectedMonth, setSelectedMonth] = useState("all");
 
   const activities = [
     {

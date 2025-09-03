@@ -29,18 +29,9 @@ const partnershipSchema = z.object({
   category: z.string().min(1, "Category is required"),
 });
 
-const governmentPartnerSchema = z.object({
-  name: z.string().min(1, "Partner name is required"),
-  logo: z.string().optional(),
-  type: z.string().min(1, "Type is required"),
-  status: z.string().min(1, "Status is required"),
-  contactPerson: z.string().min(1, "Contact person is required"),
-  email: z.string().email("Valid email is required"),
-  phone: z.string().min(1, "Phone is required"),
-});
+
 
 type PartnershipFormData = z.infer<typeof partnershipSchema>;
-type GovernmentPartnerFormData = z.infer<typeof governmentPartnerSchema>;
 
 interface Partnership {
   id: string;
@@ -53,18 +44,12 @@ interface Partnership {
   endDate: string;
   status: string;
   category: string;
+  logoUrl?: string;
+  contactPerson?: string;
+  email?: string;
+  phoneNumber?: string;
 }
 
-interface GovernmentPartner {
-  id: number;
-  name: string;
-  logo?: string;
-  type: string;
-  status: string;
-  contactPerson: string;
-  email: string;
-  phone: string;
-}
 
 const PartnershipManagement = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -72,52 +57,16 @@ const PartnershipManagement = () => {
   const [categoryFilter, setCategoryFilter] = useState("all");
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingPartnership, setEditingPartnership] = useState<Partnership | null>(null);
-  
- 
-  const [isGovDialogOpen, setIsGovDialogOpen] = useState(false);
-  const [editingGovPartner, setEditingGovPartner] = useState<GovernmentPartner | null>(null);
-  const [govSearchTerm, setGovSearchTerm] = useState("");
+
 
   const [partnerships, setPartnerships] = useState<Partnership[]>([])
 
-    useEffect(() => {
-    axios.get('http://localhost:3000/api/partnership')
-    .then(res => setPartnerships(res.data))
-    .catch(err => err.message)
+  useEffect(() => {
+    axios.get('https://pokjappsdmlh-be.vercel.app/api/partnership')
+      .then(res => setPartnerships(res.data))
+      .catch(err => err.message)
   }, [])
 
-  const [governmentPartners, setGovernmentPartners] = useState<GovernmentPartner[]>([
-    {
-      id: 1,
-      name: "Pemerintah Provinsi DKI Jakarta",
-      logo: "🏛️",
-      type: "Pemerintah Provinsi",
-      status: "Aktif",
-      contactPerson: "Budi Santoso",
-      email: "budi.santoso@jakarta.go.id",
-      phone: "+62-21-123456"
-    },
-    {
-      id: 2,
-      name: "Kementerian Perindustrian RI",
-      logo: "🏭",
-      type: "Kementerian",
-      status: "Aktif",
-      contactPerson: "Siti Rahayu",
-      email: "siti.rahayu@kemenperin.go.id",
-      phone: "+62-21-789012"
-    },
-    {
-      id: 3,
-      name: "Pemerintah Provinsi Jawa Barat",
-      logo: "🏞️",
-      type: "Pemerintah Provinsi",
-      status: "Aktif",
-      contactPerson: "Ahmad Wijaya",
-      email: "ahmad.wijaya@jabarprov.go.id",
-      phone: "+62-22-345678"
-    }
-  ]);
 
   const form = useForm<PartnershipFormData>({
     resolver: zodResolver(partnershipSchema),
@@ -134,40 +83,31 @@ const PartnershipManagement = () => {
     }
   });
 
-  const govForm = useForm<GovernmentPartnerFormData>({
-    resolver: zodResolver(governmentPartnerSchema),
-    defaultValues: {
-      name: "",
-      logo: "",
-      type: "",
-      status: "",
-      contactPerson: "",
-      email: "",
-      phone: "",
-    }
-  });
+
 
   const onSubmit = (data: PartnershipFormData) => {
     if (editingPartnership) {
-      axios.put(`http://localhost:3000/api/partnership/${editingPartnership.id}`, { ...data })
+      axios.put(`https://pokjappsdmlh-be.vercel.app/api/partnership/${editingPartnership.id}`, { ...data })
         .then(() => {
           toast.success("Partnership Updated",
-            {description: "Partnership has been successfully updated.",
-          });
+            {
+              description: "Partnership has been successfully updated.",
+            });
         });
     } else {
-      axios.post('http://localhost:3000/api/partnership', data)
+      axios.post('https://pokjappsdmlh-be.vercel.app/api/partnership', data)
         .then(() => {
           toast.success("Partnership Added",
-            {description: "New partnership has been successfully added.",
-          });
+            {
+              description: "New partnership has been successfully added.",
+            });
         });
     }
 
     axios.get('http://locallhost:3000/api/partnership')
-    .then(res => setPartnerships(res.data))
-    .catch(err => err.message)
-    
+      .then(res => setPartnerships(res.data))
+      .catch(err => err.message)
+
     setIsDialogOpen(false);
     setEditingPartnership(null);
     form.reset();
@@ -180,58 +120,16 @@ const PartnershipManagement = () => {
   };
 
   const handleDelete = (id: string) => {
-   axios.delete(`http://localhost:3000/api/partnership/${id}`)
-     .then(() => {
-       toast.warning("Partnership Deleted",
-         {description: "Partnership has been successfully deleted.",
-       });
-     });
-  };
-
-  const onGovSubmit = (data: GovernmentPartnerFormData) => {
-    if (editingGovPartner) {
-      setGovernmentPartners(prev => prev.map(partner => 
-        partner.id === editingGovPartner.id 
-          ? { ...partner, ...data }
-          : partner
-      ));
-      toast.success("Government Partner Updated",
-        {description: "Government partner has been successfully updated.",
+    axios.delete(`https://pokjappsdmlh-be.vercel.app/api/partnership/${id}`)
+      .then(() => {
+        toast.warning("Partnership Deleted",
+          {
+            description: "Partnership has been successfully deleted.",
+          });
       });
-    } else {
-      const newPartner: GovernmentPartner = {
-        id: Math.max(...governmentPartners.map(p => p.id), 0) + 1,
-        name: data.name,
-        logo: data.logo,
-        type: data.type,
-        status: data.status,
-        contactPerson: data.contactPerson,
-        email: data.email,
-        phone: data.phone,
-      };
-      setGovernmentPartners(prev => [...prev, newPartner]);
-      toast.success("Government Partner Added",
-        {description: "New government partner has been successfully added.",
-      });
-    }
-    
-    setIsGovDialogOpen(false);
-    setEditingGovPartner(null);
-    govForm.reset();
   };
 
-  const handleGovEdit = (partner: GovernmentPartner) => {
-    setEditingGovPartner(partner);
-    govForm.reset(partner);
-    setIsGovDialogOpen(true);
-  };
 
-  const handleGovDelete = (id: number) => {
-    setGovernmentPartners(prev => prev.filter(partner => partner.id !== id));
-    toast.warning("Government Partner Deleted",
-      {description: "Government partner has been successfully deleted.",
-    });
-  };
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -244,23 +142,18 @@ const PartnershipManagement = () => {
 
   const filteredPartnerships = partnerships.filter(partnership => {
     const matchesSearch = partnership.partnerName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         partnership.scope.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         partnership.pksNumber.toLowerCase().includes(searchTerm.toLowerCase());
+      partnership.scope.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      partnership.pksNumber.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesStatus = statusFilter === "all" || partnership.status === statusFilter;
     const matchesCategory = categoryFilter === "all" || partnership.category === categoryFilter;
     return matchesSearch && matchesStatus && matchesCategory;
   });
 
-  const filteredGovPartners = governmentPartners.filter(partner => {
-    const matchesSearch = partner.name.toLowerCase().includes(govSearchTerm.toLowerCase()) ||
-                         partner.contactPerson.toLowerCase().includes(govSearchTerm.toLowerCase()) ||
-                         partner.email.toLowerCase().includes(govSearchTerm.toLowerCase());
-    return matchesSearch;
-  });
+
 
   return (
     <div className="space-y-6">
-   
+
       <div className="flex justify-between items-center">
         <div>
           <h1 className="text-3xl font-bold">Partnership Management</h1>
@@ -350,9 +243,9 @@ const PartnershipManagement = () => {
                       <FormItem>
                         <FormLabel>Trainings Held</FormLabel>
                         <FormControl>
-                          <Input 
-                            type="number" 
-                            {...field} 
+                          <Input
+                            type="number"
+                            {...field}
                             onChange={(e) => field.onChange(Number(e.target.value))}
                           />
                         </FormControl>
@@ -422,16 +315,71 @@ const PartnershipManagement = () => {
                     </FormItem>
                   )}
                 />
-                <div className="flex justify-end space-x-2">
-                  <Button type="button" variant="outline" onClick={() => setIsDialogOpen(false)}>
-                    Cancel
-                  </Button>
-                  <Button type="submit">
-                    {editingPartnership ? "Update" : "Add"} Partnership
-                  </Button>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <FormField
+                    control={form.control}
+                    name="contactPerson"
+                    render={({ field }) => (
+                      <FormItem className="md:col-span-2">
+                        <FormLabel>Contact Person</FormLabel>
+                        <FormControl>
+                          <Input {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="email"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Email</FormLabel>
+                        <FormControl>
+                          <Input {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="phoneNumber"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Phone Number</FormLabel>
+                        <FormControl>
+                          <Input {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="logoUrl"
+                    render={({ }) => (
+                      <FormItem>
+                        <FormLabel>Logo/Image</FormLabel>
+                        <FormControl>
+                          <Input type="file" accept="image/*" placeholder="Upload logo" />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
                 </div>
               </form>
             </Form>
+            <div className="flex justify-end space-x-2">
+              <Button type="button" variant="outline" onClick={() => setIsDialogOpen(false)}>
+                Cancel
+              </Button>
+              <Button type="submit">
+                {editingPartnership ? "Update" : "Add"} Partnership
+              </Button>
+            </div>
+
           </DialogContent>
         </Dialog>
       </div>
@@ -475,8 +423,8 @@ const PartnershipManagement = () => {
             <div className="flex-1">
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
-                <Input 
-                  placeholder="Search partnerships..." 
+                <Input
+                  placeholder="Search partnerships..."
                   className="pl-10"
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
@@ -593,168 +541,32 @@ const PartnershipManagement = () => {
           <div className="flex justify-between items-center">
             <CardTitle className="flex items-center gap-2">
               <Users className="w-5 h-5" />
-              Government Partners ({filteredGovPartners.length})
+              Government Partners
             </CardTitle>
-            <Dialog open={isGovDialogOpen} onOpenChange={setIsGovDialogOpen}>
-              <DialogTrigger asChild>
-                <Button onClick={() => { setEditingGovPartner(null); govForm.reset(); }}>
-                  <Plus className="w-4 h-4 mr-2" />
-                  Add Government Partner
-                </Button>
-              </DialogTrigger>
-              <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
-                <DialogHeader>
-                  <DialogTitle>{editingGovPartner ? "Edit Government Partner" : "Add New Government Partner"}</DialogTitle>
-                </DialogHeader>
-                <Form {...govForm}>
-                  <form onSubmit={govForm.handleSubmit(onGovSubmit)} className="space-y-4">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <FormField
-                        control={govForm.control}
-                        name="name"
-                        render={({ field }) => (
-                          <FormItem className="md:col-span-2">
-                            <FormLabel>Partner Name</FormLabel>
-                            <FormControl>
-                              <Input {...field} />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      <FormField
-                        control={govForm.control}
-                        name="type"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Type</FormLabel>
-                            <Select onValueChange={field.onChange} defaultValue={field.value}>
-                              <FormControl>
-                                <SelectTrigger>
-                                  <SelectValue placeholder="Select type" />
-                                </SelectTrigger>
-                              </FormControl>
-                              <SelectContent>
-                                <SelectItem value="Kementerian">Kementerian</SelectItem>
-                                <SelectItem value="Pemerintah Provinsi">Pemerintah Provinsi</SelectItem>
-                                <SelectItem value="Pemerintah Kabupaten">Pemerintah Kabupaten</SelectItem>
-                                <SelectItem value="Lembaga Negara">Lembaga Negara</SelectItem>
-                              </SelectContent>
-                            </Select>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      <FormField
-                        control={govForm.control}
-                        name="status"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Status</FormLabel>
-                            <Select onValueChange={field.onChange} defaultValue={field.value}>
-                              <FormControl>
-                                <SelectTrigger>
-                                  <SelectValue placeholder="Select status" />
-                                </SelectTrigger>
-                              </FormControl>
-                              <SelectContent>
-                                <SelectItem value="Aktif">Aktif</SelectItem>
-                                <SelectItem value="Tidak Aktif">Tidak Aktif</SelectItem>
-                                <SelectItem value="Pending">Pending</SelectItem>
-                              </SelectContent>
-                            </Select>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      <FormField
-                        control={govForm.control}
-                        name="contactPerson"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Contact Person</FormLabel>
-                            <FormControl>
-                              <Input {...field} />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      <FormField
-                        control={govForm.control}
-                        name="email"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Email</FormLabel>
-                            <FormControl>
-                              <Input type="email" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      <FormField
-                        control={govForm.control}
-                        name="phone"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Phone</FormLabel>
-                            <FormControl>
-                              <Input {...field} />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      <FormField
-                        control={govForm.control}
-                        name="logo"
-                        render={({ }) => (
-                          <FormItem>
-                            <FormLabel>Logo/Image</FormLabel>
-                            <FormControl>
-                              <Input type="file" accept="image/*" placeholder="Upload logo" />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                    </div>
-                    <div className="flex justify-end space-x-2">
-                      <Button type="button" variant="outline" onClick={() => setIsGovDialogOpen(false)}>
-                        Cancel
-                      </Button>
-                      <Button type="submit">
-                        {editingGovPartner ? "Update" : "Add"} Partner
-                      </Button>
-                    </div>
-                  </form>
-                </Form>
-              </DialogContent>
-            </Dialog>
+
           </div>
         </CardHeader>
         <CardContent>
           <div className="mb-4">
             <div className="relative">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
-              <Input 
-                placeholder="Search government partners..." 
+              <Input
+                placeholder="Search government partners..."
                 className="pl-10"
-                value={govSearchTerm}
-                onChange={(e) => setGovSearchTerm(e.target.value)}
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
               />
             </div>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {filteredGovPartners.map((partner) => (
+            {filteredPartnerships.map((partner) => (
               <Card key={partner.id} className="p-4">
                 <div className="flex items-start justify-between mb-3">
                   <div className="flex items-center gap-3">
-                    <div className="text-2xl">{partner.logo || "🏛️"}</div>
+                    <div className="text-2xl">{partner.logoUrl || "🏛️"}</div>
                     <div>
-                      <h3 className="font-medium text-sm">{partner.name}</h3>
-                      <p className="text-xs text-muted-foreground">{partner.type}</p>
+                      <h3 className="font-medium text-sm">{partner.contactPerson}</h3>
+                      <p className="text-xs text-muted-foreground">{partner.email}</p>
                     </div>
                   </div>
                   <Badge variant={partner.status === "Aktif" ? "default" : "secondary"}>
@@ -764,14 +576,14 @@ const PartnershipManagement = () => {
                 <div className="space-y-1 text-xs text-muted-foreground">
                   <div>{partner.contactPerson}</div>
                   <div>{partner.email}</div>
-                  <div>{partner.phone}</div>
+                  <div>{partner.phoneNumber}</div>
                 </div>
                 <div className="flex gap-1 mt-3">
-                  <Button size="sm" variant="outline" onClick={() => handleGovEdit(partner)} className="flex-1">
+                  <Button size="sm" variant="outline" onClick={() => handleEdit(partner)} className="flex-1">
                     <Edit className="w-3 h-3 mr-1" />
                     Edit
                   </Button>
-                  <Button size="sm" variant="outline" onClick={() => handleGovDelete(partner.id)} className="flex-1">
+                  <Button size="sm" variant="outline" onClick={() => handleDelete(partner.id)} className="flex-1">
                     <Trash2 className="w-3 h-3 mr-1" />
                     Delete
                   </Button>

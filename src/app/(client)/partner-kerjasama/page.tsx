@@ -27,7 +27,7 @@ const TrainingPartnerships = () => {
 
   useEffect(() => {
     axios
-      .get<Partnership[]>("http://localhost:3000/api/partnership")
+      .get<Partnership[]>("https://pokjappsdmlh-be.vercel.app/api/partnership")
       .then((res) => {
         setPartnerships(res.data);
       })
@@ -83,7 +83,6 @@ const TrainingPartnerships = () => {
                 </p>
               </div>
 
-      
               <Image
                 src={Logo}
                 alt="Ilustrasi Program Pelatihan"

@@ -9,7 +9,7 @@ import Logo from "../../../public/image.png";
 
 export default function Header(){
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const isAdmin = false;
+  const isAdmin = localStorage.getItem("role") === "admin";
 
   const navLinks = [
     { href: "/", label: "Home", icon: Home },
@@ -88,13 +88,12 @@ export default function Header(){
                 );
               })}
               <div className="pt-2 border-t border-border mt-2">
-                {isAdmin?
-                <Button variant="outline" size="sm" className="w-full">
-                  Admin Panel
-                </Button>
-                :
-                <ToggleTheme></ToggleTheme>
-                }
+             <ToggleTheme></ToggleTheme>
+             {isAdmin && (
+               <Button variant="outline" size="sm" className="w-full">
+                 Admin Panel
+               </Button>
+             )}
               </div>
             </div>
           </div>

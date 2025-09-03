@@ -26,7 +26,7 @@ interface lpkProps {
 const [lpkData, setLpkData] = useState<lpkProps[]>([]);
 
 useEffect(()=>{
-axios.get("http://localhost:3000/api/lpk")
+axios.get("https://pokjappsdmlh-be.vercel.app/api/lpk")
 .then(res => setLpkData(res.data))
 .catch(err => console.error(err))
 },[])
