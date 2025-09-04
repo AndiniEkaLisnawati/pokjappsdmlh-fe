@@ -112,7 +112,7 @@ const onSubmit = async (data: PartnershipFormData) => {
             formData.append(key, d.toISOString()); 
           }
         } else {
-          formData.append(key, value as any);
+          formData.append(key, value);
         }
       }
     });
@@ -158,10 +158,11 @@ const onSubmit = async (data: PartnershipFormData) => {
     setEditingPartnership(null);
     form.reset();
     setFile(null);
-  } catch (err: any) {
-    console.error("Submit error:", err.response?.data || err.message);
+  } catch (err: unknown) {
+    const error = err as { response?: { data?: { message: string } }; message: string };
+    console.error("Submit error:", error.response?.data || error.message);
     toast.error("Error submitting form", {
-      description: err.response?.data?.message || err.message,
+      description: error.response?.data?.message || error.message,
     });
   }
 };
@@ -603,7 +604,7 @@ const onSubmit = async (data: PartnershipFormData) => {
           <div className="flex justify-between items-center">
             <CardTitle className="flex items-center gap-2">
               <Users className="w-5 h-5" />
-              Government Partners
+              Contact Partners
             </CardTitle>
 
           </div>

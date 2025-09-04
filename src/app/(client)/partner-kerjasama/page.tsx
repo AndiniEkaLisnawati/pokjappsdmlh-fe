@@ -7,18 +7,23 @@ import Logo from "../../../../public/Logos2.png";
 import Image from 'next/image';
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { motion } from "framer-motion"
 
-  type Partnership = {
-id: number;
-partnerName: string;
-scope: string;
-pksNumber: string;
-region: string;
-trainingsHeld: number;
-startDate: string;
-endDate: string;
-status: string;
-category: string;
+type Partnership = {
+  id: string;
+  partnerName: string;
+  scope: string;
+  pksNumber: string;
+  region: string;
+  trainingsHeld: number;
+  startDate: string;
+  endDate: string;
+  status: string;
+  category: string;
+  logoUrl?: string;
+  contactPerson?: string;
+  email?: string;
+  phoneNumber?: string;
 };
 
 const TrainingPartnerships = () => {
@@ -27,9 +32,9 @@ const TrainingPartnerships = () => {
 
   useEffect(() => {
     axios
-      .get<Partnership[]>("https://pokjappsdmlh-be.vercel.app/api/partnership")
+      .get<{ data: Partnership[] }>("https://pokjappsdmlh-be.vercel.app/api/partnership")
       .then((res) => {
-        setPartnerships(res.data);
+        setPartnerships(res.data.data)
       })
       .catch((err) => {
         console.error("Error fetching partnerships:", err);
@@ -38,86 +43,97 @@ const TrainingPartnerships = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'Berlangsung': return 'default';
-      case 'Mendatang': return 'secondary';
+      case 'Aktif': return 'default';
       case 'Selesai': return 'outline';
-      default: return 'secondary';
+      case 'Ditunda': return 'secondary';
+      default: return 'destructive';
     }
   };
 
   const getCategoryColor = (category: string) => {
     switch (category) {
-      case 'Teknologi': return 'bg-blue-100 text-blue-800';
-      case 'Lingkungan': return 'bg-green-100 text-green-800';
-      case 'Sertifikasi': return 'bg-purple-100 text-purple-800';
-      case 'Regulasi': return 'bg-orange-100 text-orange-800';
+      case 'Kementerian': return 'bg-blue-100 text-blue-800';
+      case 'Pemda Provinsi': return 'bg-green-100 text-green-800';
+      case 'Pemda Kabupaten': return 'bg-purple-100 text-purple-800';
+      case 'Swasta': return 'bg-orange-100 text-orange-800';
+      case 'NGO': return 'bg-teal-100 text-teal-800';
       default: return 'bg-gray-100 text-gray-800';
     }
   };
 
+  const formatDate = (dateString: string) => {
+  if (!dateString) return "-";
+  return new Date(dateString).toLocaleDateString("id-ID", {
+    day: "2-digit",
+    month: "long",
+    year: "numeric",
+  });
+};
+
+
   return (
     <div className="min-h-screen max-w-screen dark:bg-slate-900 bg-gray-100 dark:text-slate-50">
-  
-     <section className="w-screen px-4 sm:px-6 lg:px-8 py-5">
-          <div className="max-w-7xl mx-auto">
-            <div className="relative w-full min-h-[60vh] flex flex-col-reverse md:flex-row items-center justify-between gap-8 bg-gradient-to-br from-white to-sky-100 dark:from-slate-900 dark:to-slate-800 transition-all duration-700 px-6 md:px-16 py-12 rounded-2xl shadow-lg">
+
+      <section className="w-screen px-4 sm:px-6 lg:px-8 py-5">
+        <div className="max-w-7xl mx-auto">
+          <div className="relative w-full min-h-[60vh] flex flex-col-reverse md:flex-row items-center justify-between gap-8 bg-gradient-to-br from-white to-sky-100 dark:from-slate-900 dark:to-slate-800 transition-all duration-700 px-6 md:px-16 py-12 rounded-2xl shadow-lg">
 
 
-              <div className="text-center md:text-left max-w-2xl">
-                <div className="inline-flex items-center gap-2 mb-4">
-                  <GraduationCap className="w-6 h-6 text-indigo-600 dark:text-indigo-400" />
-                  <span className="text-sm font-semibold uppercase tracking-wide text-indigo-600 dark:text-indigo-400">
-                   Kemitraan Pelatihan
-                  </span>
-                </div>
-
-                <h1 className="text-3xl md:text-5xl font-extrabold leading-tight text-gray-800 dark:text-white mb-4">
-                  <span className="bg-gradient-to-r from-indigo-700 to-blue-500 bg-clip-text text-transparent">
-                    Training Partnerships
-                  </span>
-                </h1>
-
-                <p className="text-base md:text-lg text-gray-700 dark:text-gray-300 max-w-xl mb-6">
-                   Jaringan kemitraan pelatihan dengan berbagai institusi untuk memperluas akses
-              dan kualitas program pelatihan lingkungan hidup.POKJABANGKOM
-                </p>
+            <div className="text-center md:text-left max-w-2xl">
+              <div className="inline-flex items-center gap-2 mb-4">
+                <GraduationCap className="w-6 h-6 text-indigo-600 dark:text-indigo-400" />
+                <span className="text-sm font-semibold uppercase tracking-wide text-indigo-600 dark:text-indigo-400">
+                  Kemitraan Pelatihan
+                </span>
               </div>
 
-              <Image
-                src={Logo}
-                alt="Ilustrasi Program Pelatihan"
-                width={420}
-                height={420}
-                className="w-auto h-[250px] md:h-[360px] object-cover drop-shadow-2xl rounded-xl mb-6 md:mb-0 md:self-end"
-                priority
-              />
+              <h1 className="text-3xl md:text-5xl font-extrabold leading-tight text-gray-800 dark:text-white mb-4">
+                <span className="bg-gradient-to-r from-indigo-700 to-blue-500 bg-clip-text text-transparent">
+                  Training Partnerships
+                </span>
+              </h1>
+
+              <p className="text-base md:text-lg text-gray-700 dark:text-gray-300 max-w-xl mb-6">
+                Jaringan kemitraan pelatihan dengan berbagai institusi untuk memperluas akses
+                dan kualitas program pelatihan lingkungan hidup.POKJABANGKOM
+              </p>
             </div>
+
+            <Image
+              src={Logo}
+              alt="Ilustrasi Program Pelatihan"
+              width={420}
+              height={420}
+              className="w-auto h-[250px] md:h-[360px] object-cover drop-shadow-2xl rounded-xl mb-6 md:mb-0 md:self-end"
+              priority
+            />
           </div>
-        </section>
+        </div>
+      </section>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
           <Card>
             <CardContent className="p-6 text-center">
-              <div className="text-3xl font-bold text-primary mb-2">4</div>
+              <div className="text-3xl font-bold text-primary mb-2">{partnerships.length}</div>
               <div className="text-sm text-muted-foreground">Total Kemitraan</div>
             </CardContent>
           </Card>
           <Card>
             <CardContent className="p-6 text-center">
-              <div className="text-3xl font-bold text-primary mb-2">2</div>
+              <div className="text-3xl font-bold text-primary mb-2">{partnerships.filter(p => p.category === 'Pemda Provinsi').length}</div>
               <div className="text-sm text-muted-foreground">Pemda Provinsi</div>
             </CardContent>
           </Card>
           <Card>
             <CardContent className="p-6 text-center">
-              <div className="text-3xl font-bold text-primary mb-2">2</div>
+              <div className="text-3xl font-bold text-primary mb-2">{partnerships.filter(p => p.category === 'Kementerian').length}</div>
               <div className="text-sm text-muted-foreground">Kementerian</div>
             </CardContent>
           </Card>
           <Card>
             <CardContent className="p-6 text-center">
-              <div className="text-3xl font-bold text-primary mb-2">14</div>
+              <div className="text-3xl font-bold text-primary mb-2">{partnerships.reduce((sum, p) => sum + p.trainingsHeld, 0)}</div>
               <div className="text-sm text-muted-foreground">Pelatihan Dilaksanakan</div>
             </CardContent>
           </Card>
@@ -140,7 +156,7 @@ const TrainingPartnerships = () => {
                   <TableHead>Wilayah</TableHead>
                   <TableHead>Pelatihan</TableHead>
                   <TableHead>Status</TableHead>
-                  <TableHead>Aksi</TableHead>
+                  <TableHead>Tanggal mulai - Tanggal selesai</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -149,7 +165,10 @@ const TrainingPartnerships = () => {
                     <TableCell>
                       <div>
                         <div className="font-medium">{partnership.partnerName}</div>
-                        <div className={`text-sm text-black dark:text-slate-50 dark:bg-gray-800 ${getCategoryColor(partnership.category)}`}>{partnership.category}</div>
+                        <div className="flex justify-end">
+
+                        <Badge className={`text-xs text-black dark:text-slate-50 dark:bg-gray-800 ${getCategoryColor(partnership.category)}`}>{partnership.category}</Badge>
+                        </div>
                       </div>
                     </TableCell>
                     <TableCell>
@@ -177,9 +196,8 @@ const TrainingPartnerships = () => {
                     </TableCell>
                     <TableCell>
                       <div className="text-center">
-                        <div className="inline-flex items-center gap-1 px-2 py-1 bg-green-50 text-green-700 rounded-full text-xs">
-                          <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                          Active Partnership
+                        <div className="inline-flex items-center gap-1 px-2 py-1 p-2 bg-green-50 text-green-700 rounded-full text-xs">
+                          {formatDate(partnership.startDate)} s/d <br /> {formatDate(partnership.endDate)}
                         </div>
                       </div>
                     </TableCell>
@@ -190,38 +208,76 @@ const TrainingPartnerships = () => {
           </CardContent>
         </Card>
 
-  
-        <Card className="mt-8">
-          <CardHeader>
-            <CardTitle>Mitra Pemerintah</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-              {[
-                { name: "Pemerintah Provinsi DKI Jakarta", logo: "🏛️" },
-                { name: "Kementerian Perindustrian RI", logo: "🏭" }, 
-                { name: "Pemerintah Provinsi Jawa Barat", logo: "🏞️" },
-                { name: "Kementerian ESDM", logo: "⚡" },
-                { name: "Pemerintah Provinsi Jawa Tengah", logo: "🏛️" },
-                { name: "Kementerian Kelautan & Perikanan", logo: "🌊" },
-                { name: "Pemerintah Provinsi Jawa Timur", logo: "🗻" },
-                { name: "Kementerian Pertanian", logo: "🌾" }
-              ].map((partner, index) => (
-                <div key={index} className="group border border-border rounded-lg p-6 text-center hover:shadow-lg hover:border-primary/20 transition-all duration-300 hover:-translate-y-1">
-                  <div className="w-16 h-16 bg-gradient-to-br from-primary/10 to-accent/10 rounded-full mx-auto mb-4 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform">
-                    {partner.logo}
-                  </div>
-                  <h3 className="font-medium text-sm text-foreground group-hover:text-primary transition-colors">{partner.name}</h3>
-                  <div className="mt-2">
-                    <Badge variant="outline" className="text-xs">Official Partner</Badge>
-                  </div>
-                </div>
-              ))}
+
+
+
+<Card className="mt-8 shadow-sm border rounded-2xl">
+  <CardHeader>
+    <CardTitle className="flex items-center gap-2">
+      <Users className="w-5 h-5" />
+      Kontak Mitra Pelatihan
+    </CardTitle>
+  </CardHeader>
+
+  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-4">
+    {partnerships.map((partner, idx) => (
+      <motion.div
+        key={partner.id}
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.3, delay: idx * 0.05 }}
+        whileHover={{ scale: 1.02 }}
+        whileTap={{ scale: 0.98 }}
+      >
+        <Card className="p-5 rounded-xl shadow-sm hover:shadow-md transition-all duration-300 h-full flex flex-col justify-between">
+          <div className="flex items-start justify-between mb-4">
+            <div className="flex items-center gap-3">
+              <div className="flex items-center justify-center w-10 h-10 rounded-full bg-muted overflow-hidden">
+                {partner.logoUrl ? (
+                  <Image
+                    src={partner.logoUrl}
+                    alt={`${partner.partnerName} logo`}
+                    width={50}
+                    height={50}
+                    className="object-contain"
+                  />
+                ) : (
+                  <span className="text-sm font-semibold">
+                    {partner.partnerName.charAt(0)}
+                  </span>
+                )}
+              </div>
+              <div>
+                <h3 className="font-semibold text-sm">{partner.partnerName}</h3>
+                <span
+                  className={`text-[10px] px-2 py-0.5 rounded-full font-medium ${getCategoryColor(
+                    partner.category
+                  )}`}
+                >
+                  {partner.category}
+                </span>
+              </div>
             </div>
-          </CardContent>
+            <Badge
+              variant={partner.status === "Aktif" ? "default" : "secondary"}
+              className="text-[10px] px-2 py-1"
+            >
+              {partner.status}
+            </Badge>
+          </div>
+
+          <div className="space-y-1 text-xs text-muted-foreground">
+            <p>{partner.contactPerson}</p>
+            <p>{partner.email}</p>
+            <p>{partner.phoneNumber}</p>
+          </div>
         </Card>
-      </div>
-    </div>
+      </motion.div>
+    ))}
+  </div>
+</Card>
+      </div >
+    </div >
   );
 };
 

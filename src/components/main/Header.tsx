@@ -9,7 +9,7 @@ import Logo from "../../../public/image.png";
 
 export default function Header(){
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const isAdmin = localStorage.getItem("role") === "admin";
+  const isAdmin = false;
 
   const navLinks = [
     { href: "/", label: "Home", icon: Home },
