@@ -1,4 +1,5 @@
 "use client"
+
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -6,130 +7,77 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { BookOpen, Search, Eye, Calendar, FileText, Filter } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import axios from "axios";
 import Image from "next/image";
-import Logo from "../../../../public/Logos4.png"
+import Logo from "../../../../public/Logos4.png";
+import Link from "next/link";
+import { format } from "date-fns" 
+export interface CurriculumProps {
+  id: string
+  title: string
+  field: string
+  level: string
+  duration: string
+  lastUpdated: string
+  version: string
+  status: string
+  description: string
+  modules: number
+  fileLink?: string | null
+}
 
 const Curriculum = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedField, setSelectedField] = useState("all");
   const [selectedLevel, setSelectedLevel] = useState("all");
 
-  const curriculums = [
-    {
-      id: 1,
-      title: "Kurikulum Teknologi Ramah Lingkungan",
-      field: "Teknologi",
-      level: "Menengah",
-      duration: "40 Jam",
-      lastUpdated: "2024-01-15",
-      version: "v2.1",
-      status: "Aktif",
-      description: "Kurikulum komprehensif tentang teknologi ramah lingkungan untuk industri",
-      modules: 8,
-      fileLink: ""
-    },
-    {
-      id: 2,
-      title: "Kurikulum Manajemen Limbah B3",
-      field: "Lingkungan",
-      level: "Lanjutan",
-      duration: "60 Jam",
-      lastUpdated: "2024-02-01",
-      version: "v3.0",
-      status: "Aktif",
-      description: "Panduan lengkap pengelolaan limbah bahan berbahaya dan beracun",
-      modules: 12,
-      fileLink: "3.8 MB"
-    },
-    {
-      id: 3,
-      title: "Kurikulum Audit Lingkungan",
-      field: "Audit",
-      level: "Lanjutan",
-      duration: "80 Jam",
-      lastUpdated: "2023-12-20",
-      version: "v2.3",
-      status: "Aktif",
-      description: "Kurikulum untuk pelatihan auditor lingkungan bersertifikat",
-      modules: 15,
-      fileLink: "4.2 MB"
-    },
-    {
-      id: 4,
-      title: "Kurikulum AMDAL dan UKL-UPL",
-      field: "Regulasi",
-      level: "Menengah",
-      duration: "50 Jam",
-      lastUpdated: "2024-01-30",
-      version: "v1.8",
-      status: "Aktif",
-      description: "Kurikulum tentang analisis mengenai dampak lingkungan",
-      modules: 10,
-      fileLink: "3.1 MB"
-    },
-    {
-      id: 5,
-      title: "Kurikulum Energi Terbarukan",
-      field: "Energi",
-      level: "Dasar",
-      duration: "30 Jam",
-      lastUpdated: "2024-02-10",
-      version: "v1.5",
-      status: "Aktif",
-      description: "Pengenalan teknologi dan implementasi energi terbarukan",
-      modules: 6,
-      fileLink: "2.0 MB"
-    },
-    {
-      id: 6,
-      title: "Kurikulum Konservasi Air",
-      field: "Konservasi",
-      level: "Dasar",
-      duration: "25 Jam",
-      lastUpdated: "2023-11-15",
-      version: "v1.2",
-      status: "Revisi",
-      description: "Teknik dan strategi konservasi sumber daya air",
-      modules: 5,
-      fileLink: "1.8 MB"
-    }
-  ];
+
+  const [curriculums, setCurriculums] = useState<CurriculumProps[]>([]);
+  const API_KURIKULUM = "https://pokjappsdmlh-be.vercel.app/api/curriculum/";
+
+  useEffect(() => {
+    axios.get<CurriculumProps[]>(API_KURIKULUM)
+      .then((res) => setCurriculums(res.data))
+      .catch((err) => console.error(err.message));
+  }, []);
 
   const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'Aktif': return 'default';
-      case 'Revisi': return 'secondary';
-      case 'Draft': return 'outline';
-      default: return 'secondary';
+    switch (status.toLowerCase()) {
+      case "Active": return "default";
+      case "revisi": return "secondary";
+      case "Draft": return "outline";
+      default: return "secondary";
     }
   };
 
   const getLevelColor = (level: string) => {
-    switch (level) {
-      case 'Dasar': return 'bg-green-100 text-green-800';
-      case 'Menengah': return 'bg-yellow-100 text-yellow-800';
-      case 'Lanjutan': return 'bg-red-100 text-red-800';
-      default: return 'bg-gray-100 text-gray-800';
+    switch (level.toLowerCase()) {
+      case "beginner": return "bg-green-100 text-green-800";
+      case "intermediate": return "bg-yellow-100 text-yellow-800";
+      case "advanced": return "bg-red-100 text-red-800";
+      default: return "bg-gray-100 text-gray-800";
     }
   };
 
   const getFieldColor = (field: string) => {
-    switch (field) {
-      case 'Teknologi': return 'bg-blue-100 text-blue-800';
-      case 'Lingkungan': return 'bg-green-100 text-green-800';
-      case 'Audit': return 'bg-purple-100 text-purple-800';
-      case 'Regulasi': return 'bg-orange-100 text-orange-800';
-      case 'Energi': return 'bg-yellow-100 text-yellow-800';
-      case 'Konservasi': return 'bg-teal-100 text-teal-800';
-      default: return 'bg-gray-100 text-gray-800';
+    switch (field.toLowerCase()) {
+      case "teknologi": return "bg-blue-100 text-blue-800";
+      case "lingkungan": return "bg-green-100 text-green-800";
+      case "audit": return "bg-purple-100 text-purple-800";
+      case "pendidikan": return "bg-purple-100 text-purple-800";
+      case "regulasi": return "bg-orange-100 text-orange-800";
+      case "energi": return "bg-yellow-100 text-yellow-800";
+      case "pertanian": return "bg-yellow-100 text-yellow-800";
+      case "konservasi": return "bg-teal-100 text-teal-800";
+      default: return "bg-gray-100 text-gray-800";
     }
   };
 
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-slate-800 dark:text-slate-50">
 
-       <section className="w-screen px-4 sm:px-6 lg:px-8 py-5">
+      <section className="w-screen px-4 sm:px-6 lg:px-8 py-5">
         <div className="max-w-7xl mx-auto">
           <div className="relative w-full min-h-[60vh] flex flex-col-reverse md:flex-row items-center justify-between gap-8 bg-gradient-to-br from-white to-sky-100 dark:from-slate-900 dark:to-slate-800 transition-all duration-700 px-6 md:px-16 py-12 rounded-2xl shadow-lg">
 
@@ -154,16 +102,10 @@ const Curriculum = () => {
               </p>
 
 
-              <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
 
-                <Button size="lg" className="shadow-xl">
-                  <FileText className="w-5 h-5 mr-2" />
-                  Upload Silabus Baru
-                </Button>
-              </div>
             </div>
 
-            {/* Image */}
+
             <Image
               src={Logo}
               alt="Ilustrasi Program Pelatihan"
@@ -177,43 +119,57 @@ const Curriculum = () => {
       </section>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
-        {/* Statistics */}
+
+
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
           <Card>
             <CardContent className="p-6 text-center">
-              <div className="text-3xl font-bold text-primary mb-2">18</div>
+              <div className="text-3xl font-bold text-primary mb-2">{curriculums.length}</div>
               <div className="text-sm text-muted-foreground">Total Kurikulum</div>
             </CardContent>
           </Card>
           <Card>
             <CardContent className="p-6 text-center">
-              <div className="text-3xl font-bold text-primary mb-2">6</div>
-              <div className="text-sm text-muted-foreground">Bidang Spesialisasi</div>
+              <div className="text-3xl font-bold text-primary mb-2">{curriculums.filter(p => p.status === "Active").length}</div>
+              <div className="text-sm text-muted-foreground">Kurikulum Aktif</div>
             </CardContent>
           </Card>
           <Card>
             <CardContent className="p-6 text-center">
-              <div className="text-3xl font-bold text-primary mb-2">85</div>
+              <div className="text-3xl font-bold text-primary mb-2">{curriculums.reduce((sum, k) => sum + k.modules, 0)}</div>
               <div className="text-sm text-muted-foreground">Total Modul</div>
             </CardContent>
           </Card>
           <Card>
-            <CardContent className="p-6 text-center">
-              <div className="text-3xl font-bold text-primary mb-2">1,250</div>
-              <div className="text-sm text-muted-foreground">Jam Pelatihan</div>
-            </CardContent>
+
+
+            <Card>
+              <CardContent className="p-6 text-center">
+                <div className="text-3xl font-bold text-primary mb-2">
+                  {curriculums.length > 0
+                    ? format(
+                      new Date(
+                        Math.max(...curriculums.map(c => new Date(c.lastUpdated).getTime()))
+                      ),
+                      "dd MMM yyyy"
+                    )
+                    : "-"}
+                </div>
+                <div className="text-sm text-muted-foreground">Update Terakhir</div>
+              </CardContent>
+            </Card>
+
           </Card>
         </div>
 
-        {/* Search and Filter */}
         <Card className="mb-8">
           <CardContent className="p-6">
             <div className="flex flex-col md:flex-row gap-4">
               <div className="flex-1">
                 <div className="relative">
                   <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
-                  <Input 
-                    placeholder="Cari kurikulum..." 
+                  <Input
+                    placeholder="Cari kurikulum..."
                     className="pl-10"
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
@@ -232,6 +188,8 @@ const Curriculum = () => {
                   <SelectItem value="regulasi">Regulasi</SelectItem>
                   <SelectItem value="energi">Energi</SelectItem>
                   <SelectItem value="konservasi">Konservasi</SelectItem>
+                  <SelectItem value="pendidikan">Energi</SelectItem>
+                  <SelectItem value="pertanian">Konservasi</SelectItem>
                 </SelectContent>
               </Select>
               <Select value={selectedLevel} onValueChange={setSelectedLevel}>
@@ -240,9 +198,9 @@ const Curriculum = () => {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">Semua Level</SelectItem>
-                  <SelectItem value="dasar">Dasar</SelectItem>
-                  <SelectItem value="menengah">Menengah</SelectItem>
-                  <SelectItem value="lanjutan">Lanjutan</SelectItem>
+                  <SelectItem value="beginner">Dasar</SelectItem>
+                  <SelectItem value="intermediate">Menengah</SelectItem>
+                  <SelectItem value="advanced">Lanjutan</SelectItem>
                 </SelectContent>
               </Select>
               <Button variant="outline">
@@ -253,7 +211,6 @@ const Curriculum = () => {
           </CardContent>
         </Card>
 
-        {/* Curriculum Table */}
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
@@ -278,82 +235,60 @@ const Curriculum = () => {
                 {curriculums
                   .filter(curriculum => {
                     const matchesSearch = curriculum.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                                        curriculum.description.toLowerCase().includes(searchTerm.toLowerCase());
+                      curriculum.description.toLowerCase().includes(searchTerm.toLowerCase());
                     const matchesField = selectedField === "all" || curriculum.field.toLowerCase() === selectedField;
                     const matchesLevel = selectedLevel === "all" || curriculum.level.toLowerCase() === selectedLevel;
                     return matchesSearch && matchesField && matchesLevel;
                   })
                   .map((curriculum) => (
-                  <TableRow key={curriculum.id}>
-                    <TableCell>
-                      <div>
-                        <div className="font-medium">{curriculum.title}</div>
-                        <div className="text-sm text-muted-foreground">
-                          {curriculum.modules} modul • {curriculum.version} • {curriculum.fileLink}
+                    <TableRow key={curriculum.id}>
+                      <TableCell>
+                        <div>
+                          <div className="font-medium">{curriculum.title}</div>
+                          <div className="text-sm text-muted-foreground">
+                            {curriculum.modules} modul • {curriculum.version}
+                          </div>
+                          <div className="text-sm text-muted-foreground mt-1 line-clamp-1">
+                            {curriculum.description}
+                          </div>
                         </div>
-                        <div className="text-sm text-muted-foreground mt-1 line-clamp-1">
-                          {curriculum.description}
+                      </TableCell>
+                      <TableCell>
+                        <span className={`px-2 py-1 rounded-full text-xs font-medium ${getFieldColor(curriculum.field)}`}>
+                          {curriculum.field}
+                        </span>
+                      </TableCell>
+                      <TableCell>
+                        <span className={`px-2 py-1 rounded-full text-xs font-medium ${getLevelColor(curriculum.level)}`}>
+                          {curriculum.level}
+                        </span>
+                      </TableCell>
+                      <TableCell className="font-medium">{curriculum.duration}</TableCell>
+                      <TableCell>
+                        <Badge variant={getStatusColor(curriculum.status)}>
+                          {curriculum.status}
+                        </Badge>
+                      </TableCell>
+                      <TableCell>
+                        <div className="flex items-center gap-1 text-sm text-muted-foreground">
+                          <Calendar className="w-4 h-4" />
+                          {new Date(curriculum.lastUpdated).toLocaleDateString("id-ID")}
                         </div>
-                      </div>
-                    </TableCell>
-                    <TableCell>
-                      <span className={`px-2 py-1 rounded-full text-xs font-medium ${getFieldColor(curriculum.field)}`}>
-                        {curriculum.field}
-                      </span>
-                    </TableCell>
-                    <TableCell>
-                      <span className={`px-2 py-1 rounded-full text-xs font-medium ${getLevelColor(curriculum.level)}`}>
-                        {curriculum.level}
-                      </span>
-                    </TableCell>
-                    <TableCell className="font-medium">{curriculum.duration}</TableCell>
-                    <TableCell>
-                      <Badge variant={getStatusColor(curriculum.status)}>
-                        {curriculum.status}
-                      </Badge>
-                    </TableCell>
-                    <TableCell>
-                      <div className="flex items-center gap-1 text-sm text-muted-foreground">
-                        <Calendar className="w-4 h-4" />
-                        {new Date(curriculum.lastUpdated).toLocaleDateString('id-ID')}
-                      </div>
-                    </TableCell>
-                    <TableCell>
-               
-                        <Button size="sm" variant="outline">
-                          <Eye className="w-4 h-4" />
-                        </Button>
-             
-                    </TableCell>
-                  </TableRow>
-                ))}
+                      </TableCell>
+                      {curriculum.fileLink && (
+                        <TableCell>
+                          <Link href={curriculum.fileLink} target="_blank">
+                            <Button size="sm" variant="outline">
+                              <Eye className="w-4 h-4" />
+                            </Button>
+                          </Link>
+
+                        </TableCell>
+                      )}
+                    </TableRow>
+                  ))}
               </TableBody>
             </Table>
-          </CardContent>
-        </Card>
-
-        {/* Summary by Field */}
-        <Card className="mt-8">
-          <CardHeader>
-            <CardTitle>Ringkasan per Bidang</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-4">
-              {[
-                { field: "Teknologi", count: 3, hours: 170 },
-                { field: "Lingkungan", count: 4, hours: 220 },
-                { field: "Audit", count: 2, hours: 130 },
-                { field: "Regulasi", count: 3, hours: 180 },
-                { field: "Energi", count: 2, hours: 80 },
-                { field: "Konservasi", count: 4, hours: 160 }
-              ].map((item, index) => (
-                <div key={index} className="border border-border rounded-lg p-4 text-center">
-                  <div className="text-2xl font-bold text-primary mb-1">{item.count}</div>
-                  <div className="text-sm font-medium mb-1">{item.field}</div>
-                  <div className="text-xs text-muted-foreground">{item.hours} jam</div>
-                </div>
-              ))}
-            </div>
           </CardContent>
         </Card>
       </div>
