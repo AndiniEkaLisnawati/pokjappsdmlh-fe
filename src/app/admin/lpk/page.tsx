@@ -30,7 +30,7 @@ const lpkSchema = z.object({
 type LPKFormData = z.infer<typeof lpkSchema>;
 
 interface LPK {
-  id: number;
+  id: string;
   name: string;
   type: string;
   locations: string;
@@ -116,7 +116,7 @@ const LPKManagement = () => {
     setIsDialogOpen(true);
   };
 
-  const handleDelete = (id: number) => {
+  const handleDelete = (id: string) => {
     axios.delete(`https://pokjappsdmlh-be.vercel.app/api/lpk/${id}`)
 
     setTimeout(() => {

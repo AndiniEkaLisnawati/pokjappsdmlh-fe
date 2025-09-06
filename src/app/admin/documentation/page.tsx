@@ -23,6 +23,7 @@ const documentationSchema = z.object({
   participants: z.number().min(1, "Participants must be at least 1"),
   photos: z.number().min(0, "Photos count cannot be negative"),
   image: z.string().optional(),
+  photosUrl: z.string().min(1, "Image URL is required"),
 });
 
 type DocumentationFormData = z.infer<typeof documentationSchema>;
@@ -44,6 +45,7 @@ const DocumentationManagement = () => {
       participants: 0,
       photos: 0,
       image: "",
+      photosUrl: "",
     },
   });
 
@@ -57,7 +59,8 @@ const DocumentationManagement = () => {
       participants: 150,
       photos: 25,
       description: "Workshop tentang implementasi teknologi ramah lingkungan di industri",
-      image: "/placeholder.svg"
+      image: "/placeholder.svg",
+      photosUrl: "",
     },
     {
       id: 2,
@@ -68,7 +71,8 @@ const DocumentationManagement = () => {
       participants: 300,
       photos: 45,
       description: "Seminar nasional tentang isu-isu terkini lingkungan hidup di Indonesia",
-      image: "/placeholder.svg"
+      image: "/placeholder.svg",
+      photosUrl: "",
     },
     {
       id: 3,
@@ -79,7 +83,8 @@ const DocumentationManagement = () => {
       participants: 40,
       photos: 18,
       description: "Pelatihan sertifikasi sistem manajemen lingkungan ISO 14001",
-      image: "/placeholder.svg"
+      image: "/placeholder.svg",
+      photosUrl: "",
     },
   ]);
 
@@ -121,7 +126,8 @@ const DocumentationManagement = () => {
         participants: data.participants,
         photos: data.photos,
         description: data.description,
-        image: "/placeholder.svg"
+        image: "/placeholder.svg",
+        photosUrl: data.photosUrl,
       };
       setActivities(prev => [...prev, newActivity]);
       toast.success("Activity Added",
@@ -144,6 +150,7 @@ type Item = {
   participants: number;
   photos: number;
   image: string;
+  photosUrl: string;
 };
 
   const handleEdit = (item: Item ) => {
@@ -157,6 +164,7 @@ type Item = {
       participants: item.participants,
       photos: item.photos,
       image: item.image,
+      photosUrl: item.photosUrl,
     });
     setIsDialogOpen(true);
   };
@@ -198,7 +206,7 @@ type Item = {
               </DialogDescription>
             </DialogHeader>
             <Form {...form}>
-              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5 p-2 overflow-y-auto max-h-[80vh]">
                 <div className="grid grid-cols-2 gap-4">
                   <FormField
                     control={form.control}
@@ -308,6 +316,19 @@ type Item = {
                             {...field}
                             onChange={(e) => field.onChange(parseInt(e.target.value) || 0)}
                           />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="photosUrl"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Image URL</FormLabel>
+                        <FormControl>
+                          <Input placeholder="Enter image URL" {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>

@@ -24,7 +24,7 @@ const curriculumSchema = z.object({
   modules: z.number().min(1, "Modules must be at least 1"),
   version: z.string().min(1, "Version is required"),
   status: z.string().min(1, "Status is required"),
-  fileSize: z.string().optional(),
+  fileLink: z.string().optional(),
 });
 
 type CurriculumFormData = z.infer<typeof curriculumSchema>;
@@ -46,7 +46,7 @@ const CurriculumManagement = () => {
   modules: number;
   version: string;
   status: string;
-  fileSize: string;
+  fileLink: string;
 };
 
   const form = useForm<CurriculumFormData>({
@@ -60,7 +60,7 @@ const CurriculumManagement = () => {
       modules: 0,
       version: "",
       status: "",
-      fileSize: "",
+      fileLink: "",
     },
   });
 
@@ -76,7 +76,7 @@ const CurriculumManagement = () => {
       status: "Aktif",
       description: "Kurikulum komprehensif tentang teknologi ramah lingkungan untuk industri",
       modules: 8,
-      fileSize: "2.5 MB"
+      fileLink: "2.5 MB"
     },
     {
       id: 2,
@@ -89,7 +89,7 @@ const CurriculumManagement = () => {
       status: "Aktif",
       description: "Panduan lengkap pengelolaan limbah bahan berbahaya dan beracun",
       modules: 12,
-      fileSize: "3.8 MB"
+      fileLink: "3.8 MB"
     },
     {
       id: 3,
@@ -102,7 +102,7 @@ const CurriculumManagement = () => {
       status: "Aktif",
       description: "Kurikulum untuk pelatihan auditor lingkungan bersertifikat",
       modules: 15,
-      fileSize: "4.2 MB"
+      fileLink: "4.2 MB"
     },
   ]);
 
@@ -170,7 +170,7 @@ const CurriculumManagement = () => {
         status: data.status,
         description: data.description,
         modules: data.modules,
-        fileSize: data.fileSize || "",
+        fileLink: data.fileLink || "",
         lastUpdated: new Date().toISOString().split('T')[0]
       };
       setCurriculums(prev => [...prev, newCurriculum]);
@@ -197,7 +197,7 @@ const CurriculumManagement = () => {
       modules: item.modules,
       version: item.version,
       status: item.status,
-      fileSize: item.fileSize,
+      fileLink: item.fileLink,
     });
     setIsDialogOpen(true);
   };
@@ -239,7 +239,7 @@ const CurriculumManagement = () => {
               </DialogDescription>
             </DialogHeader>
             <Form {...form}>
-              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-1" >
+              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5 overflow-y-auto max-h-[80vh] p-2" >
                 <div className="grid grid-cols-2 gap-1">
                   <FormField
                     control={form.control}
@@ -382,12 +382,12 @@ const CurriculumManagement = () => {
                   />
                   <FormField
                     control={form.control}
-                    name="fileSize"
+                    name="fileLink"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>File Size</FormLabel>
+                        <FormLabel>File Link</FormLabel>
                         <FormControl>
-                          <Input placeholder="e.g., 2.5 MB" {...field} />
+                          <Input placeholder="url" {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -513,7 +513,7 @@ const CurriculumManagement = () => {
                     <div>
                       <div className="font-medium">{curriculum.title}</div>
                       <div className="text-sm text-muted-foreground">
-                        {curriculum.modules} modules • {curriculum.version} • {curriculum.fileSize}
+                        {curriculum.modules} modules • {curriculum.version} • {curriculum.fileLink}
                       </div>
                       <div className="text-sm text-muted-foreground mt-1 line-clamp-1">
                         {curriculum.description}

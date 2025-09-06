@@ -27,7 +27,7 @@ const Curriculum = () => {
       status: "Aktif",
       description: "Kurikulum komprehensif tentang teknologi ramah lingkungan untuk industri",
       modules: 8,
-      fileSize: "2.5 MB"
+      fileLink: ""
     },
     {
       id: 2,
@@ -40,7 +40,7 @@ const Curriculum = () => {
       status: "Aktif",
       description: "Panduan lengkap pengelolaan limbah bahan berbahaya dan beracun",
       modules: 12,
-      fileSize: "3.8 MB"
+      fileLink: "3.8 MB"
     },
     {
       id: 3,
@@ -53,7 +53,7 @@ const Curriculum = () => {
       status: "Aktif",
       description: "Kurikulum untuk pelatihan auditor lingkungan bersertifikat",
       modules: 15,
-      fileSize: "4.2 MB"
+      fileLink: "4.2 MB"
     },
     {
       id: 4,
@@ -66,7 +66,7 @@ const Curriculum = () => {
       status: "Aktif",
       description: "Kurikulum tentang analisis mengenai dampak lingkungan",
       modules: 10,
-      fileSize: "3.1 MB"
+      fileLink: "3.1 MB"
     },
     {
       id: 5,
@@ -79,7 +79,7 @@ const Curriculum = () => {
       status: "Aktif",
       description: "Pengenalan teknologi dan implementasi energi terbarukan",
       modules: 6,
-      fileSize: "2.0 MB"
+      fileLink: "2.0 MB"
     },
     {
       id: 6,
@@ -92,7 +92,7 @@ const Curriculum = () => {
       status: "Revisi",
       description: "Teknik dan strategi konservasi sumber daya air",
       modules: 5,
-      fileSize: "1.8 MB"
+      fileLink: "1.8 MB"
     }
   ];
 
@@ -289,7 +289,7 @@ const Curriculum = () => {
                       <div>
                         <div className="font-medium">{curriculum.title}</div>
                         <div className="text-sm text-muted-foreground">
-                          {curriculum.modules} modul • {curriculum.version} • {curriculum.fileSize}
+                          {curriculum.modules} modul • {curriculum.version} • {curriculum.fileLink}
                         </div>
                         <div className="text-sm text-muted-foreground mt-1 line-clamp-1">
                           {curriculum.description}

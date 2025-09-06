@@ -1,5 +1,5 @@
 "use client"
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -8,11 +8,14 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { Plus, Search, Edit, Trash2, BookOpen, Calendar, MapPin, Users, User, Clock } from "lucide-react";
+import { Plus, Search, Edit, Trash2, BookOpen, Calendar, MapPin, Users, User, Clock, ExternalLink } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { toast } from "sonner";
+import axios from "axios";
+import Link from "next/link";
+
 
 const trainingSchema = z.object({
   title: z.string().min(1, "Title is required"),
@@ -22,7 +25,8 @@ const trainingSchema = z.object({
   maleParticipants: z.number().min(0, "Must be a positive number"),
   femaleParticipants: z.number().min(0, "Must be a positive number"),
   trainersCount: z.number().min(1, "Must have at least 1 trainer"),
-  date: z.string().min(1, "Date is required"),
+  startDate: z.string().min(1, "Start date is required"),
+  endDate: z.string().min(1, "End date is required"),
   location: z.string().min(1, "Location is required"),
   status: z.string().min(1, "Status is required"),
   type: z.string().min(1, "Type is required"),
@@ -31,10 +35,12 @@ const trainingSchema = z.object({
 const completedTrainingSchema = z.object({
   title: z.string().min(1, "Title is required"),
   participants: z.number().min(1, "Participants must be at least 1"),
-  completionDate: z.string().min(1, "Completion date is required"),
+  startDate: z.string().min(1, "Start date is required"),
+  endDate: z.string().min(1, "End date is required"),
   duration: z.string().min(1, "Duration is required"),
   location: z.string().min(1, "Location is required"),
   certificate: z.string().min(1, "Certificate info is required"),
+  totalCertificate: z.number().min(0, "Must be a positive number"),
   satisfaction: z.number().min(1).max(5, "Rating must be between 1-5"),
 });
 
@@ -42,7 +48,7 @@ type TrainingFormData = z.infer<typeof trainingSchema>;
 type CompletedTrainingFormData = z.infer<typeof completedTrainingSchema>;
 
 interface Training {
-  id: number;
+  id: string;
   title: string;
   instructor: string;
   duration: string;
@@ -50,19 +56,22 @@ interface Training {
   maleParticipants: number;
   femaleParticipants: number;
   trainersCount: number;
-  date: string;
+  startDate: string;
+  endDate: string;
   location: string;
   status: string;
   type: string;
 }
 
 interface CompletedTraining {
-  id: number;
+  id: string;
   title: string;
   participants: number;
-  completionDate: string;
+  startDate: string;
+  endDate: string;
   duration: string;
   location: string;
+  totalCertificate: number;
   certificate: string;
   satisfaction: number;
 }
@@ -74,78 +83,29 @@ const TrainingManagement = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingTraining, setEditingTraining] = useState<Training | null>(null);
   
-  // Completed Training state
+
   const [isCompletedDialogOpen, setIsCompletedDialogOpen] = useState(false);
   const [editingCompletedTraining, setEditingCompletedTraining] = useState<CompletedTraining | null>(null);
   const [completedSearchTerm, setCompletedSearchTerm] = useState("");
 
-  const [trainings, setTrainings] = useState<Training[]>([
-    {
-      id: 1,
-      title: "Pelatihan AMDAL Batch 15",
-      instructor: "Dr. Ahmad Santoso",
-      duration: "3 Days",
-      participants: 25,
-      maleParticipants: 15,
-      femaleParticipants: 10,
-      trainersCount: 4,
-      date: "15-17 Februari 2025",
-      location: "Jakarta",
-      status: "Ongoing",
-      type: "Sertifikasi"
-    },
-    {
-      id: 2,
-      title: "Workshop Pengelolaan Limbah B3",
-      instructor: "Ir. Siti Rahayu, M.Eng",
-      duration: "2 Days",
-      participants: 30,
-      maleParticipants: 18,
-      femaleParticipants: 12,
-      trainersCount: 3,
-      date: "22-23 Februari 2025",
-      location: "Bandung",
-      status: "Completed",
-      type: "Workshop"
-    },
-    {
-      id: 3,
-      title: "Pelatihan Green Technology",
-      instructor: "Prof. Dr. Budi Hartono",
-      duration: "5 Days",
-      participants: 20,
-      maleParticipants: 12,
-      femaleParticipants: 8,
-      trainersCount: 5,
-      date: "1-5 Maret 2025",
-      location: "Yogyakarta",
-      status: "Ongoing",
-      type: "Sertifikasi"
-    }
-  ]);
+  const [trainings, setTrainings] = useState<Training[]>([]);
 
-  const [completedTrainings, setCompletedTrainings] = useState<CompletedTraining[]>([
-    {
-      id: 1,
-      title: "Pelatihan AMDAL Batch 14",
-      participants: 28,
-      completionDate: "2024-12-15",
-      duration: "3 Days",
-      location: "Jakarta",
-      certificate: "KLHK-CERT-001/2024",
-      satisfaction: 4.8
-    },
-    {
-      id: 2,
-      title: "Workshop Pengelolaan Limbah B3",
-      participants: 25,
-      completionDate: "2024-11-30",
-      duration: "2 Days",
-      location: "Bandung",
-      certificate: "KLHK-CERT-002/2024",
-      satisfaction: 4.5
-    }
-  ]);
+  const API_TRAINING_URL = "https://pokjappsdmlh-be.vercel.app/api/training";
+  const API_COMPLETED_URL = "https://pokjappsdmlh-be.vercel.app/api/completedTrainings"
+
+  useEffect(() => {
+    axios.get(API_TRAINING_URL)
+    .then((res) => setTrainings(res.data))
+    .catch((err) => err.message)
+  }, [])
+
+  const [completedTrainings, setCompletedTrainings] = useState<CompletedTraining[]>([]);
+
+  useEffect(()=> {
+    axios.get(API_COMPLETED_URL)
+    .then((res) => setCompletedTrainings(res.data))
+    .catch((err) => err.message)
+  }, [])
 
   const form = useForm<TrainingFormData>({
     resolver: zodResolver(trainingSchema),
@@ -156,8 +116,9 @@ const TrainingManagement = () => {
       participants: 0,
       maleParticipants: 0,
       femaleParticipants: 0,
-      trainersCount: 1,
-      date: "",
+      trainersCount: 0,
+      startDate: "",
+      endDate: "",
       location: "",
       status: "",
       type: "",
@@ -169,16 +130,24 @@ const TrainingManagement = () => {
     defaultValues: {
       title: "",
       participants: 0,
-      completionDate: "",
+      startDate: "",
+      endDate: "",
       duration: "",
       location: "",
       certificate: "",
+      totalCertificate: 0,
       satisfaction: 5,
     }
   });
 
-  const onSubmit = (data: TrainingFormData) => {
+  const onSubmit = async(data: TrainingFormData) => {
+        const payload = {
+      ...data,
+      startDate: new Date(data.startDate).toISOString(),
+      endDate: new Date(data.endDate).toISOString(),
+    };
     if (editingTraining) {
+      await axios.put(`${API_TRAINING_URL}/${editingTraining.id}`, payload)
       setTrainings(prev => prev.map(training => 
         training.id === editingTraining.id 
           ? { ...training, ...data }
@@ -188,21 +157,8 @@ const TrainingManagement = () => {
         {description: "Training has been successfully updated.",
       });
     } else {
-      const newTraining: Training = {
-        id: Math.max(...trainings.map(t => t.id), 0) + 1,
-        title: data.title,
-        instructor: data.instructor,
-        duration: data.duration,
-        participants: data.participants,
-        maleParticipants: data.maleParticipants,
-        femaleParticipants: data.femaleParticipants,
-        trainersCount: data.trainersCount,
-        date: data.date,
-        location: data.location,
-        status: data.status,
-        type: data.type,
-      };
-      setTrainings(prev => [...prev, newTraining]);
+      const res = await axios.post(API_TRAINING_URL, data)
+      setTrainings(prev => [...prev, res.data]);
       toast.success("Training Added",
         {description: "New training has been successfully added.",
       });
@@ -213,41 +169,47 @@ const TrainingManagement = () => {
     form.reset();
   };
 
-  const handleEdit = (training: Training) => {
+  const handleEdit = async(training: Training) => {
     setEditingTraining(training);
     form.reset(training);
     setIsDialogOpen(true);
   };
 
-  const handleDelete = (id: number) => {
-    setTrainings(prev => prev.filter(training => training.id !== id));
-    toast.warning("Training Deleted",
-      {description: "Training has been successfully deleted.",
-    });
+  const handleDelete = async(id: string) => {
+    await axios.delete(`https://pokjappsdmlh-be.vercel.app/api/training/${id}`);
+
+    setTimeout(() => {
+      axios.get("https://pokjappsdmlh-be.vercel.app/api/training")
+        .then(res => setTrainings(res.data))
+        toast.warning("Training Deleted",
+          {
+            description: "Training has been successfully deleted.",
+          });
+    }, 2000);
   };
 
-  const onCompletedSubmit = (data: CompletedTrainingFormData) => {
+  const onCompletedSubmit = async (data: CompletedTrainingFormData) => {
+      const payload = {
+      ...data,
+      participants: Number(data.participants),
+      satisfaction: Number(data.satisfaction),
+      totalCertificate: Number(data.totalCertificate),
+      startDate: new Date(data.startDate).toISOString(),
+      endDate: new Date(data.endDate).toISOString(),
+    };
     if (editingCompletedTraining) {
+      await axios.put(`${API_COMPLETED_URL}/${editingCompletedTraining.id}`, payload);
       setCompletedTrainings(prev => prev.map(training => 
         training.id === editingCompletedTraining.id 
-          ? { ...training, ...data }
+          ? { ...training, ...payload }
           : training
       ));
       toast.success("Completed Training Updated",
         {description: "Completed training has been successfully updated.",
       });
     } else {
-      const newCompleted: CompletedTraining = {
-        id: Math.max(...completedTrainings.map(t => t.id), 0) + 1,
-        title: data.title,
-        participants: data.participants,
-        completionDate: data.completionDate,
-        duration: data.duration,
-        location: data.location,
-        certificate: data.certificate,
-        satisfaction: data.satisfaction,
-      };
-      setCompletedTrainings(prev => [...prev, newCompleted]);
+    const res = await axios.post(API_COMPLETED_URL, data)
+      setCompletedTrainings(prev => [...prev, res.data]);
       toast.success("Completed Training Added",
         {description: "New completed training has been successfully added.",
       });
@@ -258,13 +220,14 @@ const TrainingManagement = () => {
     completedForm.reset();
   };
 
-  const handleCompletedEdit = (training: CompletedTraining) => {
+  const handleCompletedEdit = async(training: CompletedTraining) => {
     setEditingCompletedTraining(training);
     completedForm.reset(training);
     setIsCompletedDialogOpen(true);
   };
 
-  const handleCompletedDelete = (id: number) => {
+  const handleCompletedDelete = async (id: string) => {
+    await axios.delete(`${API_COMPLETED_URL}/${id}`);
     setCompletedTrainings(prev => prev.filter(training => training.id !== id));
     toast.success("Completed Training Deleted",
       {description: "Completed training has been successfully deleted.",
@@ -299,7 +262,7 @@ const TrainingManagement = () => {
 
   return (
     <div className="space-y-6">
-      {/* Header */}
+      
       <div className="flex justify-between items-center">
         <div>
           <h1 className="text-3xl font-bold">Training Management</h1>
@@ -352,7 +315,7 @@ const TrainingManagement = () => {
                       <FormItem>
                         <FormLabel>Duration</FormLabel>
                         <FormControl>
-                          <Input {...field} placeholder="e.g., 3 Days" />
+                          <Input {...field} type="text" placeholder="e.g., 3 Days" />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -360,12 +323,25 @@ const TrainingManagement = () => {
                   />
                   <FormField
                     control={form.control}
-                    name="date"
+                    name="startDate"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Date</FormLabel>
+                        <FormLabel>Start Date</FormLabel>
                         <FormControl>
-                          <Input {...field} placeholder="e.g., 15-17 Februari 2025" />
+                          <Input type="date" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="endDate"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>End Date</FormLabel>
+                        <FormControl>
+                          <Input {...field} type="date" />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -513,11 +489,10 @@ const TrainingManagement = () => {
         </Dialog>
       </div>
 
-      {/* Stats */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <Card>
           <CardContent className="p-6 text-center">
-            <div className="text-2xl font-bold text-primary">{trainings.length}</div>
+            <div className="text-2xl font-bold text-primary">{trainings.length + completedTrainings.length}</div>
             <div className="text-sm text-muted-foreground">Total Programs</div>
           </CardContent>
         </Card>
@@ -532,22 +507,32 @@ const TrainingManagement = () => {
         <Card>
           <CardContent className="p-6 text-center">
             <div className="text-2xl font-bold text-blue-600">
-              {trainings.filter(t => t.status === "Completed").length}
+              {trainings.filter(t => t.status === "Completed").length + completedTrainings.length}
             </div>
             <div className="text-sm text-muted-foreground">Completed</div>
           </CardContent>
         </Card>
         <Card>
-          <CardContent className="p-6 text-center">
+          <CardContent className="p-4 text-center">
             <div className="text-2xl font-bold text-purple-600">
-              {trainings.reduce((sum, t) => sum + t.participants, 0)}
+              {trainings.reduce((sum, t) => sum + t.participants, 0) + completedTrainings.reduce((sum, t) => sum + t.participants, 0)}
             </div>
             <div className="text-sm text-muted-foreground">Total Participants</div>
+            <div className="flex justify-center space-x-4 mt-2">
+              <div className="flex items-center justify-center mt-2">
+                <Users className="w-4 h-4 text-muted-foreground mr-1" />
+                <p className="text-[10px]">Ongoing : {trainings.reduce((sum, t) => sum + t.participants, 0)}</p>
+              </div>
+              <div className="flex items-center justify-center mt-2">
+                <Users className="w-4 h-4 text-muted-foreground mr-1" />
+                <p className="text-[10px]">Completed : {completedTrainings.reduce((sum, t) => sum + t.participants, 0)}</p>
+              </div>
+            </div>
           </CardContent>
         </Card>
       </div>
 
-      {/* Filters */}
+      
       <Card>
         <CardContent className="p-6">
           <div className="flex flex-col md:flex-row gap-4">
@@ -590,7 +575,7 @@ const TrainingManagement = () => {
         </CardContent>
       </Card>
 
-      {/* Training Table */}
+    
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
@@ -619,7 +604,7 @@ const TrainingManagement = () => {
                       <div className="font-medium">{training.title}</div>
                       <div className="text-sm text-muted-foreground flex items-center gap-1">
                         <Calendar className="w-3 h-3" />
-                        {training.date}
+                        {new Date(training.startDate).toLocaleDateString('id-ID')} - {new Date(training.endDate).toLocaleDateString('id-ID')}
                       </div>
                       <Badge variant="outline" className="text-xs mt-1">
                         {training.type}
@@ -677,7 +662,6 @@ const TrainingManagement = () => {
         </CardContent>
       </Card>
 
-      {/* Completed Training Section */}
       <Card className="mt-8">
         <CardHeader>
           <div className="flex justify-between items-center">
@@ -731,10 +715,23 @@ const TrainingManagement = () => {
                       />
                       <FormField
                         control={completedForm.control}
-                        name="completionDate"
+                        name="startDate"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Completion Date</FormLabel>
+                            <FormLabel>Start Date</FormLabel>
+                            <FormControl>
+                              <Input type="date" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={completedForm.control}
+                        name="endDate"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>End Date</FormLabel>
                             <FormControl>
                               <Input type="date" {...field} />
                             </FormControl>
@@ -768,12 +765,28 @@ const TrainingManagement = () => {
                           </FormItem>
                         )}
                       />
+                      <FormField control={completedForm.control}
+                      name="totalCertificate"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel> Total Certificate</FormLabel>
+                          <FormControl>
+                             <Input 
+                            type="number" 
+                            {...field} 
+                            onChange={(e) => field.onChange(Number(e.target.value))}
+                          />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                      />
                       <FormField
                         control={completedForm.control}
                         name="certificate"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Certificate Number</FormLabel>
+                            <FormLabel>Certificate Link</FormLabel>
                             <FormControl>
                               <Input {...field} />
                             </FormControl>
@@ -856,7 +869,9 @@ const TrainingManagement = () => {
                   <TableCell>
                     <div className="flex items-center gap-1">
                       <Calendar className="w-4 h-4 text-muted-foreground" />
-                      {new Date(training.completionDate).toLocaleDateString('id-ID')}
+                      {new Date(training.startDate).toLocaleDateString('id-ID')}
+                      {" - "}
+                      {new Date(training.endDate).toLocaleDateString('id-ID')}
                     </div>
                   </TableCell>
                   <TableCell>
@@ -872,7 +887,7 @@ const TrainingManagement = () => {
                     </div>
                   </TableCell>
                   <TableCell>
-                    <div className="font-mono text-sm">{training.certificate}</div>
+                    <Link target="_blank" href={training.certificate} className="font-mono text-sm text-blue-500 text-nowrap"><span className="flex gap-2">Visit Link<ExternalLink size={16} /></span></Link>
                   </TableCell>
                   <TableCell>
                     <div className="flex items-center gap-1">
