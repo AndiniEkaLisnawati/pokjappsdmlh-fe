@@ -1,5 +1,5 @@
 "use client"
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -14,6 +14,8 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import {format} from 'date-fns'
+import LoadingScreen from "@/components/main/LoadingScreen";
 
 const curriculumSchema = z.object({
   title: z.string().min(1, "Title is required"),
@@ -25,29 +27,32 @@ const curriculumSchema = z.object({
   version: z.string().min(1, "Version is required"),
   status: z.string().min(1, "Status is required"),
   fileLink: z.string().optional(),
-});
+})
 
-type CurriculumFormData = z.infer<typeof curriculumSchema>;
+type CurriculumFormData = z.infer<typeof curriculumSchema>
+
+type Item = {
+  id: string
+  title: string
+  description: string
+  field: string
+  level: string
+  duration: string
+  modules: number
+  version: string
+  status: string
+  fileLink: string | null
+  lastUpdated: string
+}
 
 const CurriculumManagement = () => {
-  const [searchTerm, setSearchTerm] = useState("");
-  const [selectedField, setSelectedField] = useState("all");
-  const [selectedLevel, setSelectedLevel] = useState("all");
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [editingItem, setEditingItem] = useState< Item| null>(null);
-
-  type Item = {
-  id: number;
-  title: string;
-  description: string;
-  field: string;
-  level: string;
-  duration: string;
-  modules: number;
-  version: string;
-  status: string;
-  fileLink: string;
-};
+  const [searchTerm, setSearchTerm] = useState("")
+  const [selectedField, setSelectedField] = useState("all")
+  const [selectedLevel, setSelectedLevel] = useState("all")
+  const [isDialogOpen, setIsDialogOpen] = useState(false)
+  const [editingItem, setEditingItem] = useState<Item | null>(null)
+  const [curriculums, setCurriculums] = useState<Item[]>([])
+  const [loading, setLoading] = useState(true)
 
   const form = useForm<CurriculumFormData>({
     resolver: zodResolver(curriculumSchema),
@@ -62,132 +67,105 @@ const CurriculumManagement = () => {
       status: "",
       fileLink: "",
     },
-  });
+  })
 
-  const [curriculums, setCurriculums] = useState([
-    {
-      id: 1,
-      title: "Kurikulum Teknologi Ramah Lingkungan",
-      field: "Teknologi",
-      level: "Menengah",
-      duration: "98 Jam",
-      lastUpdated: "2024-01-15",
-      version: "v2.1",
-      status: "Aktif",
-      description: "Kurikulum komprehensif tentang teknologi ramah lingkungan untuk industri",
-      modules: 8,
-      fileLink: "2.5 MB"
-    },
-    {
-      id: 2,
-      title: "Kurikulum Manajemen Limbah B3",
-      field: "Lingkungan",
-      level: "Lanjutan",
-      duration: "60 Jam",
-      lastUpdated: "2024-02-01",
-      version: "v3.0",
-      status: "Aktif",
-      description: "Panduan lengkap pengelolaan limbah bahan berbahaya dan beracun",
-      modules: 12,
-      fileLink: "3.8 MB"
-    },
-    {
-      id: 3,
-      title: "Kurikulum Audit Lingkungan",
-      field: "Audit",
-      level: "Lanjutan",
-      duration: "80 Jam",
-      lastUpdated: "2023-12-20",
-      version: "v2.3",
-      status: "Aktif",
-      description: "Kurikulum untuk pelatihan auditor lingkungan bersertifikat",
-      modules: 15,
-      fileLink: "4.2 MB"
-    },
-  ]);
-
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'Aktif': return 'default';
-      case 'Revisi': return 'secondary';
-      case 'Draft': return 'outline';
-      default: return 'secondary';
+    const getStatusColor = (status: string) => {
+    switch (status.toLowerCase()) {
+      case "Active": return "default";
+      case "revisi": return "secondary";
+      case "Draft": return "outline";
+      default: return "secondary";
     }
   };
 
   const getLevelColor = (level: string) => {
-    switch (level) {
-      case 'Dasar': return 'bg-green-100 text-green-800';
-      case 'Menengah': return 'bg-yellow-100 text-yellow-800';
-      case 'Lanjutan': return 'bg-red-100 text-red-800';
-      default: return 'bg-gray-100 text-gray-800';
+    switch (level.toLowerCase()) {
+      case "beginner": return "bg-green-100 text-green-800";
+      case "intermediate": return "bg-yellow-100 text-yellow-800";
+      case "advanced": return "bg-red-100 text-red-800";
+      default: return "bg-gray-100 text-gray-800";
     }
   };
 
   const getFieldColor = (field: string) => {
-    switch (field) {
-      case 'Teknologi': return 'bg-blue-100 text-blue-800';
-      case 'Lingkungan': return 'bg-green-100 text-green-800';
-      case 'Audit': return 'bg-purple-100 text-purple-800';
-      case 'Regulasi': return 'bg-orange-100 text-orange-800';
-      case 'Energi': return 'bg-yellow-100 text-yellow-800';
-      case 'Konservasi': return 'bg-teal-100 text-teal-800';
-      default: return 'bg-gray-100 text-gray-800';
+    switch (field.toLowerCase()) {
+      case "teknologi": return "bg-blue-100 text-blue-800";
+      case "lingkungan": return "bg-green-100 text-green-800";
+      case "audit": return "bg-purple-100 text-purple-800";
+      case "pendidikan": return "bg-purple-100 text-purple-800";
+      case "regulasi": return "bg-orange-100 text-orange-800";
+      case "energi": return "bg-yellow-100 text-yellow-800";
+      case "pertanian": return "bg-yellow-100 text-yellow-800";
+      case "konservasi": return "bg-teal-100 text-teal-800";
+      default: return "bg-gray-100 text-gray-800";
     }
   };
 
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await fetch("https://pokjappsdmlh-be.vercel.app/api/curriculum/")
+        const data = await res.json()
+        setCurriculums(data)
+      } catch (error) {
+        console.error("Failed to fetch curriculums:", error)
+      } finally {
+        setLoading(false)
+      }
+    }
+    fetchData()
+  }, [])
+
   const filteredCurriculums = curriculums.filter(curriculum => {
-    const matchesSearch = curriculum.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         curriculum.description.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesField = selectedField === "all" || curriculum.field.toLowerCase() === selectedField;
-    const matchesLevel = selectedLevel === "all" || curriculum.level.toLowerCase() === selectedLevel;
-    return matchesSearch && matchesField && matchesLevel;
-  });
+    const matchesSearch =
+      curriculum.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      curriculum.description.toLowerCase().includes(searchTerm.toLowerCase())
+    const matchesField =
+      selectedField === "all" || curriculum.field.toLowerCase() === selectedField
+    const matchesLevel =
+      selectedLevel === "all" || curriculum.level.toLowerCase() === selectedLevel
+    return matchesSearch && matchesField && matchesLevel
+  })
 
   const onSubmit = (data: CurriculumFormData) => {
     if (editingItem) {
-      setCurriculums(prev => prev.map(item => 
-        item.id === editingItem.id 
-          ? { 
-              ...item, 
-              ...data, 
-              id: editingItem.id,
-              lastUpdated: new Date().toISOString().split('T')[0]
-            }
-          : item
-      ));
-      toast.success("Curriculum Updated",
-        {description: "The curriculum has been updated successfully.",
-      });
+  
+      setCurriculums(prev =>
+        prev.map(item =>
+          item.id === editingItem.id
+            ? {
+                ...item,
+                ...data,
+                lastUpdated: new Date().toISOString(),
+              }
+            : item
+        )
+      )
+      toast.success("Curriculum Updated", {
+        description: "The curriculum has been updated successfully.",
+      })
     } else {
-      const newCurriculum = {
-        id: Date.now(),
-        title: data.title,
-        field: data.field,
-        level: data.level,
-        duration: data.duration,
-        version: data.version,
-        status: data.status,
-        description: data.description,
-        modules: data.modules,
-        fileLink: data.fileLink || "",
-        lastUpdated: new Date().toISOString().split('T')[0]
-      };
-      setCurriculums(prev => [...prev, newCurriculum]);
-      toast.success("Curriculum Added",
-        {description: "New curriculum has been added successfully.",
-      });
+
+      const newCurriculum: Item = {
+        id: crypto.randomUUID(), 
+        ...data,
+        fileLink: data.fileLink || null,
+        lastUpdated: new Date().toISOString(),
+      }
+      setCurriculums(prev => [...prev, newCurriculum])
+      toast.success("Curriculum Added", {
+        description: "New curriculum has been added successfully.",
+      })
     }
-    
-    setIsDialogOpen(false);
-    setEditingItem(null);
-    form.reset();
-  };
 
-
+    setIsDialogOpen(false)
+    setEditingItem(null)
+    form.reset()
+  }
 
   const handleEdit = (item: Item) => {
-    setEditingItem(item);
+    setEditingItem(item)
     form.reset({
       title: item.title,
       description: item.description,
@@ -197,23 +175,26 @@ const CurriculumManagement = () => {
       modules: item.modules,
       version: item.version,
       status: item.status,
-      fileLink: item.fileLink,
-    });
-    setIsDialogOpen(true);
-  };
+      fileLink: item.fileLink || "",
+    })
+    setIsDialogOpen(true)
+  }
 
-  const handleDelete = (id: number) => {
-    setCurriculums(prev => prev.filter(item => item.id !== id));
-    toast.success("Curriculum Deleted",
-      {description: "The curriculum has been deleted successfully.",
-    });
-  };
+  const handleDelete = (id: string) => {
+    setCurriculums(prev => prev.filter(item => item.id !== id))
+    toast.success("Curriculum Deleted", {
+      description: "The curriculum has been deleted successfully.",
+    })
+  }
 
   const handleAdd = () => {
-    setEditingItem(null);
-    form.reset();
-    setIsDialogOpen(true);
-  };
+    setEditingItem(null)
+    form.reset()
+    setIsDialogOpen(true)
+  }
+
+  if (loading) return <LoadingScreen mode="inline" message="Loading Curriculum.." showSpinner={true} />;
+
 
   return (
     <div className="space-y-6">
@@ -409,38 +390,46 @@ const CurriculumManagement = () => {
       </div>
 
     
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-        <Card>
-          <CardContent className="p-6 text-center">
-            <div className="text-3xl font-bold text-primary mb-2">{curriculums.length}</div>
-            <div className="text-sm text-muted-foreground">Total Curricula</div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="p-6 text-center">
-            <div className="text-3xl font-bold text-primary mb-2">
-              {new Set(curriculums.map(c => c.field)).size}
-            </div>
-            <div className="text-sm text-muted-foreground">Specialization Fields</div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="p-6 text-center">
-            <div className="text-3xl font-bold text-primary mb-2">
-              {curriculums.reduce((sum, c) => sum + c.modules, 0)}
-            </div>
-            <div className="text-sm text-muted-foreground">Total Modules</div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="p-6 text-center">
-            <div className="text-3xl font-bold text-primary mb-2">
-              {curriculums.filter(c => c.status === "Aktif").length}
-            </div>
-            <div className="text-sm text-muted-foreground">Active Curricula</div>
-          </CardContent>
-        </Card>
-      </div>
+       <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+               <Card>
+                 <CardContent className="p-6 text-center">
+                   <div className="text-3xl font-bold text-primary mb-2">{curriculums.length}</div>
+                   <div className="text-sm text-muted-foreground">Total Kurikulum</div>
+                 </CardContent>
+               </Card>
+               <Card>
+                 <CardContent className="p-6 text-center">
+                   <div className="text-3xl font-bold text-primary mb-2">{curriculums.filter(p => p.status === "Active").length}</div>
+                   <div className="text-sm text-muted-foreground">Kurikulum Aktif</div>
+                 </CardContent>
+               </Card>
+               <Card>
+                 <CardContent className="p-6 text-center">
+                   <div className="text-3xl font-bold text-primary mb-2">{curriculums.reduce((sum, k) => sum + k.modules, 0)}</div>
+                   <div className="text-sm text-muted-foreground">Total Modul</div>
+                 </CardContent>
+               </Card>
+               <Card>
+     
+     
+                 <Card>
+                   <CardContent className="p-6 text-center">
+                     <div className="text-3xl font-bold text-primary mb-2">
+                       {curriculums.length > 0
+                         ? format(
+                           new Date(
+                             Math.max(...curriculums.map(c => new Date(c.lastUpdated).getTime()))
+                           ),
+                           "dd MMM yyyy"
+                         )
+                         : "-"}
+                     </div>
+                     <div className="text-sm text-muted-foreground">Update Terakhir</div>
+                   </CardContent>
+                 </Card>
+     
+               </Card>
+             </div>
 
     
       <Card>

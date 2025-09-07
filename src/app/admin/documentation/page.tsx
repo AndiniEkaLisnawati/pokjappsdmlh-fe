@@ -1,5 +1,5 @@
 "use client"
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -13,6 +13,11 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import axios from "axios";
+import LoadingScreen from "@/components/main/LoadingScreen";
+
+
+const API_URL = "https://pokjappsdmlh-be.vercel.app/api/activity"
 
 const documentationSchema = z.object({
   title: z.string().min(1, "Title is required"),
@@ -24,15 +29,31 @@ const documentationSchema = z.object({
   photos: z.number().min(0, "Photos count cannot be negative"),
   image: z.string().optional(),
   photosUrl: z.string().min(1, "Image URL is required"),
-});
+})
 
-type DocumentationFormData = z.infer<typeof documentationSchema>;
+type DocumentationFormData = z.infer<typeof documentationSchema>
+
+type Item = {
+  id: string
+  title: string
+  description: string
+  date: string
+  location: string
+  type: string
+  participants: number
+  photos: number
+  image?: string
+  photosUrl: string
+}
 
 const DocumentationManagement = () => {
-  const [searchTerm, setSearchTerm] = useState("");
-  const [selectedType, setSelectedType] = useState("all");
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [editingItem, setEditingItem] = useState<Item | null>(null);
+  const [searchTerm, setSearchTerm] = useState("")
+  const [selectedType, setSelectedType] = useState("all")
+  const [isDialogOpen, setIsDialogOpen] = useState(false)
+  const [editingItem, setEditingItem] = useState<Item | null>(null)
+  const [activities, setActivities] = useState<Item[]>([])
+  const [file, setFile] = useState<File | null>(null)
+  const [loading, setLoading] = useState(true);
 
   const form = useForm<DocumentationFormData>({
     resolver: zodResolver(documentationSchema),
@@ -47,114 +68,81 @@ const DocumentationManagement = () => {
       image: "",
       photosUrl: "",
     },
-  });
+  })
 
-  const [activities, setActivities] = useState([
-    {
-      id: 1,
-      title: "Workshop Teknologi Hijau 2024",
-      date: "2024-01-15",
-      location: "Jakarta Convention Center",
-      type: "Workshop",
-      participants: 150,
-      photos: 25,
-      description: "Workshop tentang implementasi teknologi ramah lingkungan di industri",
-      image: "/placeholder.svg",
-      photosUrl: "",
-    },
-    {
-      id: 2,
-      title: "Seminar Nasional Lingkungan Hidup",
-      date: "2024-01-20",
-      location: "Universitas Indonesia",
-      type: "Seminar",
-      participants: 300,
-      photos: 45,
-      description: "Seminar nasional tentang isu-isu terkini lingkungan hidup di Indonesia",
-      image: "/placeholder.svg",
-      photosUrl: "",
-    },
-    {
-      id: 3,
-      title: "Pelatihan Sertifikasi ISO 14001",
-      date: "2024-02-05",
-      location: "Bogor",
-      type: "Pelatihan",
-      participants: 40,
-      photos: 18,
-      description: "Pelatihan sertifikasi sistem manajemen lingkungan ISO 14001",
-      image: "/placeholder.svg",
-      photosUrl: "",
-    },
-  ]);
 
-  const getTypeColor = (type: string) => {
-    switch (type) {
-      case 'Workshop': return 'bg-blue-100 text-blue-800';
-      case 'Seminar': return 'bg-green-100 text-green-800';
-      case 'Pelatihan': return 'bg-purple-100 text-purple-800';
-      case 'Kunjungan': return 'bg-orange-100 text-orange-800';
-      case 'Forum': return 'bg-teal-100 text-teal-800';
-      case 'Expo': return 'bg-pink-100 text-pink-800';
-      default: return 'bg-gray-100 text-gray-800';
+  useEffect(() => {
+    const fetchActivities = async () => {
+      try {
+        const res = await axios.get(API_URL)
+        setActivities(res.data)
+      } catch (err) {
+        console.error(err)
+        toast.error("Gagal memuat data aktivitas")
+      } finally {
+        setLoading(false)
+      }
     }
-  };
+    fetchActivities()
+  }, [])
 
-  const filteredActivities = activities.filter(activity => {
-    const matchesSearch = activity.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         activity.description.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesType = selectedType === "all" || activity.type.toLowerCase() === selectedType;
-    return matchesSearch && matchesType;
-  });
+  const onSubmit = async (data: DocumentationFormData) => {
+    try {
+      const formData = new FormData()
 
-  const onSubmit = (data: DocumentationFormData) => {
-    if (editingItem) {
-      setActivities(prev => prev.map(item => 
-        item.id === editingItem.id 
-          ? { ...item, ...data, id: editingItem.id }
-          : item
-      ));
-      toast.success("Activity Updated",{
-        description: "The activity documentation has been updated successfully."});
-    } else {
-      const newActivity = {
-        id: Date.now(),
-        title: data.title,
-        date: data.date,
-        location: data.location,
-        type: data.type,
-        participants: data.participants,
-        photos: data.photos,
-        description: data.description,
-        image: "/placeholder.svg",
-        photosUrl: data.photosUrl,
-      };
-      setActivities(prev => [...prev, newActivity]);
-      toast.success("Activity Added",
-        {description: "New activity documentation has been added successfully.",
-      });
+      Object.entries(data).forEach(([key, value]) => {
+        if (value !== "" && value !== undefined && value !== null) {
+          if (key === "participants" || key === "photos") {
+            formData.append(key, String(Number(value)))
+          } else if (key === "date") {
+            const d = new Date(value as string)
+            if (!isNaN(d.getTime())) {
+              formData.append(key, d.toISOString()) 
+            }
+          } else {
+            formData.append(key, value as string)
+          }
+        }
+      })
+
+      if (file) {
+        formData.append("activityImage", file) 
+      }
+
+      if (editingItem) {
+        await axios.put(`${API_URL}/${editingItem.id}`, formData, {
+          headers: { "Content-Type": "multipart/form-data" },
+        })
+        toast.success("Activity Updated", {
+          description: "The activity documentation has been updated successfully.",
+        })
+      } else {
+        await axios.post(API_URL, formData, {
+          headers: { "Content-Type": "multipart/form-data" },
+        })
+        toast.success("Activity Added", {
+          description: "New activity documentation has been added successfully.",
+        })
+      }
+
+      const res = await axios.get(API_URL)
+      setActivities(res.data)
+
+      setIsDialogOpen(false)
+      setEditingItem(null)
+      form.reset()
+      setFile(null)
+    } catch (err: any) {
+      console.error("Submit error:", err.response?.data || err.message)
+      toast.error("Error submitting form", {
+        description: err.response?.data?.message || err.message,
+      })
     }
-    
-    setIsDialogOpen(false);
-    setEditingItem(null);
-    form.reset();
-  };
+  }
 
-type Item = {
-  id: number;
-  title: string;
-  description: string;
-  date: string;
-  location: string;
-  type: string;
-  participants: number;
-  photos: number;
-  image: string;
-  photosUrl: string;
-};
 
-  const handleEdit = (item: Item ) => {
-    setEditingItem(item);
+  const handleEdit = (item: Item) => {
+    setEditingItem(item)
     form.reset({
       title: item.title,
       description: item.description,
@@ -165,25 +153,60 @@ type Item = {
       photos: item.photos,
       image: item.image,
       photosUrl: item.photosUrl,
-    });
-    setIsDialogOpen(true);
-  };
+    })
+    setIsDialogOpen(true)
+  }
 
-  const handleDelete = (id: number) => {
-    setActivities(prev => prev.filter(item => item.id !== id));
-    toast.success("Activity Deleted",
-      {description: "The activity documentation has been deleted successfully.",
-    });
-  };
+  const handleDelete = async (id: string) => {
+    try {
+      await axios.delete(`${API_URL}/${id}`)
+      setActivities(prev => prev.filter(item => item.id !== id))
+      toast.success("Activity Deleted", {
+        description: "The activity documentation has been deleted successfully.",
+      })
+    } catch (err) {
+      console.error(err)
+      toast.error("Gagal menghapus data aktivitas")
+    }
+  }
 
   const handleAdd = () => {
-    setEditingItem(null);
-    form.reset();
-    setIsDialogOpen(true);
-  };
+    setEditingItem(null)
+    form.reset()
+    setIsDialogOpen(true)
+  }
+
+  const getTypeColor = (type: string) => {
+    switch (type) {
+      case "Workshop":
+        return "bg-blue-100 text-blue-800"
+      case "Seminar":
+        return "bg-green-100 text-green-800"
+      case "Pelatihan":
+        return "bg-purple-100 text-purple-800"
+      case "Kunjungan":
+        return "bg-orange-100 text-orange-800"
+      case "Forum":
+        return "bg-teal-100 text-teal-800"
+      case "Expo":
+        return "bg-pink-100 text-pink-800"
+      default:
+        return "bg-gray-100 text-gray-800"
+    }
+  }
+
+  const filteredActivities = activities.filter(activity => {
+    const matchesSearch =
+      activity.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      activity.description.toLowerCase().includes(searchTerm.toLowerCase())
+    const matchesType =
+      selectedType === "all" || activity.type.toLowerCase() === selectedType
+    return matchesSearch && matchesType
+  })
 
   return (
     <div className="space-y-6">
+      {loading? <LoadingScreen showSpinner={true} message="Loading.." mode="inline"/> : <>
       <div className="flex justify-between items-center">
         <div>
           <h1 className="text-3xl font-bold text-foreground">Documentation Management</h1>
@@ -292,9 +315,9 @@ type Item = {
                       <FormItem>
                         <FormLabel>Participants</FormLabel>
                         <FormControl>
-                          <Input 
-                            type="number" 
-                            placeholder="Number of participants" 
+                          <Input
+                            type="number"
+                            placeholder="Number of participants"
                             {...field}
                             onChange={(e) => field.onChange(parseInt(e.target.value) || 0)}
                           />
@@ -310,9 +333,9 @@ type Item = {
                       <FormItem>
                         <FormLabel>Photos Count</FormLabel>
                         <FormControl>
-                          <Input 
-                            type="number" 
-                            placeholder="Number of photos" 
+                          <Input
+                            type="number"
+                            placeholder="Number of photos"
                             {...field}
                             onChange={(e) => field.onChange(parseInt(e.target.value) || 0)}
                           />
@@ -341,7 +364,12 @@ type Item = {
                       <FormItem>
                         <FormLabel>Cover Image</FormLabel>
                         <FormControl>
-                          <Input type="file" accept="image/*" placeholder="Upload cover image" />
+                          <Input
+                            type="file"
+                            accept="image/*"
+                            onChange={(e) => setFile(e.target.files?.[0] || null)}
+                            placeholder="Upload cover Image"
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -402,8 +430,8 @@ type Item = {
             <div className="flex-1">
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
-                <Input 
-                  placeholder="Search activities..." 
+                <Input
+                  placeholder="Search activities..."
                   className="pl-10"
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
@@ -504,6 +532,7 @@ type Item = {
           </Table>
         </CardContent>
       </Card>
+      </>}
     </div>
   );
 };
