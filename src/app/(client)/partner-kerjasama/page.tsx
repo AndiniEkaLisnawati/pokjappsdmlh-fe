@@ -8,6 +8,7 @@ import Image from 'next/image';
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { motion } from "framer-motion"
+import LoadingScreen from "@/components/main/LoadingScreen";
 
 type Partnership = {
   id: string;
@@ -29,6 +30,7 @@ type Partnership = {
 const TrainingPartnerships = () => {
 
   const [partnerships, setPartnerships] = useState<Partnership[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     axios
@@ -38,7 +40,8 @@ const TrainingPartnerships = () => {
       })
       .catch((err) => {
         console.error("Error fetching partnerships:", err);
-      });
+      })
+      .finally(() => setLoading(false));
   }, []);
 
   const getStatusColor = (status: string) => {
@@ -76,10 +79,16 @@ const TrainingPartnerships = () => {
 
       <section className="w-screen px-4 sm:px-6 lg:px-8 py-5">
         <div className="max-w-7xl mx-auto">
-          <div className="relative w-full min-h-[60vh] flex flex-col-reverse md:flex-row items-center justify-between gap-8 bg-gradient-to-br from-white to-sky-100 dark:from-slate-900 dark:to-slate-800 transition-all duration-700 px-6 md:px-16 py-12 rounded-2xl shadow-lg">
-
-
-            <div className="text-center md:text-left max-w-2xl">
+          <motion.div
+            initial={{ opacity: 0, y: 50 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
+          className="relative w-full min-h-[60vh] flex flex-col-reverse md:flex-row items-center justify-between gap-8 bg-gradient-to-br from-white to-sky-100 dark:from-slate-900 dark:to-slate-800 transition-all duration-700 px-6 md:px-16 py-12 rounded-2xl shadow-lg">
+            <motion.div 
+             initial={{ opacity: 0, x: -40 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+            className="text-center md:text-left max-w-2xl">
               <div className="inline-flex items-center gap-2 mb-4">
                 <GraduationCap className="w-6 h-6 text-indigo-600 dark:text-indigo-400" />
                 <span className="text-sm font-semibold uppercase tracking-wide text-indigo-600 dark:text-indigo-400">
@@ -97,7 +106,12 @@ const TrainingPartnerships = () => {
                 Jaringan kemitraan pelatihan dengan berbagai institusi untuk memperluas akses
                 dan kualitas program pelatihan lingkungan hidup.POKJABANGKOM
               </p>
-            </div>
+            </motion.div>
+        <motion.div
+         initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.8, delay: 0.3 }}
+        >
 
             <Image
               src={Logo}
@@ -106,11 +120,15 @@ const TrainingPartnerships = () => {
               height={420}
               className="w-auto h-[250px] md:h-[360px] object-cover drop-shadow-2xl rounded-xl mb-6 md:mb-0 md:self-end"
               priority
-            />
-          </div>
+              />
+              </motion.div>
+          </motion.div>
         </div>
       </section>
 
+      {loading? <LoadingScreen mode="inline" message="Loading Kemitraan Kerjasama.."/> : <>
+
+    
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
           <Card>
@@ -277,6 +295,7 @@ const TrainingPartnerships = () => {
   </div>
 </Card>
       </div >
+       </>}
     </div >
   );
 };

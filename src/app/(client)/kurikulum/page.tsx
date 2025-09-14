@@ -13,6 +13,9 @@ import Image from "next/image";
 import Logo from "../../../../public/Logos4.png";
 import Link from "next/link";
 import { format } from "date-fns" 
+import {motion} from 'framer-motion'
+import LoadingScreen from "@/components/main/LoadingScreen";
+
 export interface CurriculumProps {
   id: string
   title: string
@@ -31,6 +34,7 @@ const Curriculum = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedField, setSelectedField] = useState("all");
   const [selectedLevel, setSelectedLevel] = useState("all");
+  const[loading, setLoading] = useState(true);
 
 
   const [curriculums, setCurriculums] = useState<CurriculumProps[]>([]);
@@ -39,7 +43,8 @@ const Curriculum = () => {
   useEffect(() => {
     axios.get<CurriculumProps[]>(API_KURIKULUM)
       .then((res) => setCurriculums(res.data))
-      .catch((err) => console.error(err.message));
+      .catch((err) => console.error(err.message))
+      .finally(() => setLoading(false));
   }, []);
 
   const getStatusColor = (status: string) => {
@@ -79,10 +84,18 @@ const Curriculum = () => {
 
       <section className="w-screen px-4 sm:px-6 lg:px-8 py-5">
         <div className="max-w-7xl mx-auto">
-          <div className="relative w-full min-h-[60vh] flex flex-col-reverse md:flex-row items-center justify-between gap-8 bg-gradient-to-br from-white to-sky-100 dark:from-slate-900 dark:to-slate-800 transition-all duration-700 px-6 md:px-16 py-12 rounded-2xl shadow-lg">
+          <motion.div
+           initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+          className="relative w-full min-h-[60vh] flex flex-col-reverse md:flex-row items-center justify-between gap-8 bg-gradient-to-br from-white to-sky-100 dark:from-slate-900 dark:to-slate-800 transition-all duration-700 px-6 md:px-16 py-12 rounded-2xl shadow-lg">
 
 
-            <div className="text-center md:text-left max-w-2xl">
+            <motion.div 
+               initial={{ opacity: 0, x: -40 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+            className="text-center md:text-left max-w-2xl">
               <div className="inline-flex items-center gap-2 mb-4 animate-bounce-gentle">
                 <FileText className="w-6 h-6 text-indigo-600 dark:text-indigo-400" />
                 <span className="text-sm font-semibold uppercase tracking-wide text-indigo-600 dark:text-indigo-400">
@@ -103,8 +116,12 @@ const Curriculum = () => {
 
 
 
-            </div>
+            </motion.div>
 
+          <motion.div
+          initial={{opacity: 0, scale:0.9}}
+          animate={{opacity: 1, scale: 1}}
+          transition={{duration: 0.3, delay: 0.3}}>
 
             <Image
               src={Logo}
@@ -113,10 +130,14 @@ const Curriculum = () => {
               height={420}
               className="w-auto h-[250px] md:h-[360px] object-cover drop-shadow-2xl rounded-xl mb-6 md:mb-0 md:self-end"
               priority
-            />
-          </div>
+              />
+            </motion.div>
+          </motion.div>
         </div>
       </section>
+
+      {loading? <LoadingScreen mode="inline" message="loading Syllabus.."/> : <>
+     
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
 
@@ -292,7 +313,9 @@ const Curriculum = () => {
           </CardContent>
         </Card>
       </div>
+      </>}
     </div>
+
   );
 };
 
