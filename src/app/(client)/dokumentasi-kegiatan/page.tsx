@@ -33,7 +33,7 @@ const Documentation = () => {
   useEffect(() => {
     const fetchActivities = async () => {
       try {
-        const res = await fetch("https://pokjappsdmlh-be.vercel.app/api/activity"); // sesuaikan endpoint
+        const res = await fetch("https://pokjappsdmlh-be.vercel.app/api/activity"); 
         const data: Activity[] = await res.json();
         setActivities(data);
       } catch (error) {
@@ -61,7 +61,7 @@ const Documentation = () => {
 
   return (
     <div className="min-h-screen dark:bg-slate-800 dark:text-slate-50 bg-gradient-to-br from-background to-muted/30">
-      {loading ? <LoadingScreen showSpinner={true} message="Loading Documentation.." mode="inline" /> : <>
+      {loading ? <LoadingScreen showSpinner={true} message="Loading Documentation.." mode="fullscreen" /> : <>
 
         <section className="w-screen px-4 sm:px-6 lg:px-8 py-5">
           <div className="max-w-7xl mx-auto">

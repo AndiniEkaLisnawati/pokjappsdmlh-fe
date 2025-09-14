@@ -15,49 +15,52 @@ interface SlideProps {
   gradient: string;
 }
 
-export default function Slide({ id, title, path, image, description, icon, gradient }: SlideProps) {
+export default function Slide({ id, title, path, image, description, icon }: SlideProps) {
  return (
-  <div className="relative group rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300">
-    <Link href={path} key={id}>
-      <Image
-        src={image}
-        alt={title}
-        width={800}
-        height={500}
-        className="h-72 w-full object-cover transition-transform duration-500 ease-in-out group-hover:scale-105"
-      />
-      <div className="absolute inset-0 bg-black/50 group-hover:bg-black/20 transition-colors duration-300 flex flex-col items-center justify-center text-center text-white px-6 py-8 space-y-4">
-        
-    
-        <div className={`w-14 h-14 flex items-center justify-center rounded-xl shadow-md bg-gradient-to-br ${gradient}`}>
-          {icon}
-        </div>
+<div className="relative group rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500">
+  <Link href={path} key={id}>
+    <Image
+      src={image}
+      alt={title}
+      width={800}
+      height={500}
+      className="h-72 w-full object-cover transition-transform duration-500 ease-in-out group-hover:scale-110"
+    />
 
-    
-        <h3 className="text-2xl font-bold text-white group-hover:text-primary transition-colors duration-200">
-          {title}
-        </h3>
+    {/* Overlay dengan gradasi hijau-biru */}
+    <div className="absolute inset-0 bg-gradient-to-br from-green-600/30 via-teal-500/30 to-blue-600/30 group-hover:from-green-500/40 group-hover:to-blue-500/40 transition-colors duration-500 flex flex-col items-center justify-center text-center text-white px-6 py-8 space-y-5 backdrop-blur-xs hover:backdrop-blur-none">
 
- 
-        <p className="text-sm text-white/80 line-clamp-3 max-w-md">
-          {description}
-        </p>
-
-     
-        <Button
-          variant="ghost"
-          size="sm"
-          className="text-primary hover:text-white hover:bg-primary group-hover:translate-x-1 transition-all duration-200"
-          asChild
-        >
-          <Link href={path} className="flex items-center gap-2">
-            <span>Lihat Detail</span>
-            <ArrowRight className="w-4 h-4" />
-          </Link>
-        </Button>
+      {/* Icon container */}
+      <div className="w-16 h-16 flex items-center justify-center rounded-xl shadow-lg bg-gradient-to-tr from-green-400 to-blue-500 group-hover:scale-110 transition-transform duration-300">
+        {icon}
       </div>
-    </Link>
-  </div>
+
+      {/* Title */}
+      <h3 className="text-2xl font-bold tracking-wide group-hover:text-white drop-shadow-md transition-all duration-300">
+        {title}
+      </h3>
+
+      {/* Description */}
+      <p className="text-sm text-white/90 line-clamp-3 max-w-md leading-relaxed">
+        {description}
+      </p>
+
+      {/* Button */}
+      <Button
+        variant="ghost"
+        size="sm"
+        className="text-white bg-gradient-to-r from-green-400 to-blue-500 px-4 py-2 rounded-lg shadow-md hover:shadow-xl hover:scale-105 transition-all duration-300"
+        asChild
+      >
+        <Link href={path} className="flex items-center gap-2 font-medium">
+          <span>Lihat Detail</span>
+          <ArrowRight className="w-4 h-4" />
+        </Link>
+      </Button>
+    </div>
+  </Link>
+</div>
+
 );
 
 }

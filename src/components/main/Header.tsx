@@ -1,10 +1,11 @@
 "use client"
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Menu, X, Users, Home, Building, Handshake, BookOpenText, GraduationCap } from "lucide-react";
+import { Menu, X, Users, Building, Handshake, BookOpenText, GraduationCap, CameraIcon } from "lucide-react";
 import ToggleTheme from "@/components/main/ToggleTheme";
 import Image from "next/image";
 import Logo from "../../../public/image.png";
+import Link from "next/link";
 
 
 export default function Header(){
@@ -12,12 +13,12 @@ export default function Header(){
   const isAdmin = false;
 
   const navLinks = [
-    { href: "/", label: "Home", icon: Home },
-    { href: "/portfolio", label: "Widyaiswara", icon: Users },
-    { href: "/akreditasi-lpk", label: "LPK accreditation", icon: Building },
-    { href: "/partner-kerjasama", label: "collabs", icon: Handshake },
-    { href: "/kurikulum", label: "syllabus", icon: BookOpenText },
-    { href: "/pelatihan", label: "Training", icon: GraduationCap },
+    { href: "/akreditasi-lpk", label: "Akreditasi LPK", icon: Building },
+    { href: "/partner-kerjasama", label: "Kerjasama", icon: Handshake },
+    { href: "/kurikulum", label: "Syllabus", icon: BookOpenText },
+    { href: "/portfolio", label: "Pengajar", icon: Users },
+    { href: "/pelatihan", label: "Pelatihan", icon: GraduationCap },
+    { href: "/dokumentasi-kegiatan", label: "Dokumentasi", icon: CameraIcon },
   ];
     
 
@@ -28,13 +29,11 @@ export default function Header(){
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
        
-          <div className="flex items-center space-x-3">
-           <Image src={Logo} alt="Logo" width={40} height={40} />
-            <div>
-              <h1 className="text-xl font-bold text-foreground">POKJA PPSDMLH</h1>
-              <p className="text-xs text-muted-foreground">Platform Internal</p>
-            </div>
-          </div>
+       
+        <Link href="/" className="flex items-center space-x-3 hover:opacity-90 transition-opacity">
+            <Image src={Logo} alt="Logo" width={42} height={42} className="rounded-lg shadow-sm" />
+           <div> <h1 className="text-xl font-bold text-indigo-900 dark:text-indigo-200">POKJA PPSDMLH</h1> <p className="text-xs text-muted-foreground">Platform Internal</p> </div>
+          </Link>
 
           <div className="hidden md:flex items-center space-x-8">
             {navLinks.map((link, idx) => {
