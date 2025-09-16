@@ -1,3 +1,6 @@
+import Img from "../../../public/login.png"
+import Image from "next/image"
+
 export default function AuthForm({
   children,
   btnType = "submit",
@@ -10,10 +13,19 @@ export default function AuthForm({
   onsubmit?: (event: React.FormEvent<HTMLFormElement>) => void;
 }) {
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-sm">
-        <div className="text-center mb-6">
-        </div>
+    <div className="relative flex items-center justify-center min-h-screen">
+      {/* Background image */}
+      <Image
+        src={Img}
+        alt="Background"
+        fill
+        className="object-cover -z-10 opacity-75"
+        priority
+      />
+
+      {/* Card form */}
+      <div className="bg-white/90 p-8 rounded-lg shadow-md w-full max-w-sm">
+        <div className="text-center mb-6"></div>
         <form onSubmit={onsubmit} className="space-y-4">
           {children}
           <button

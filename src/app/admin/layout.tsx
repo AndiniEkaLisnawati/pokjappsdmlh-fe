@@ -4,7 +4,8 @@ import { SidebarProvider, useSidebar } from "@/components/ui/sidebar";
 import { AdminSidebar } from "@/components/main/AdminSidebar";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Bell, User, LogOut } from "lucide-react";
+import { LogOut } from "lucide-react";
+import Link from "next/link";
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -45,16 +46,14 @@ function Header() {
       </div>
 
       <div className="flex items-center space-x-4">
-        <Button variant="ghost" size="sm">
-          <Bell className="w-4 h-4" />
-        </Button>
-        <Button variant="ghost" size="sm">
-          <User className="w-4 h-4" />
-        </Button>
+    
+      
+        <Link href={"/"}>
         <Button variant="outline" size="sm">
           <LogOut className="w-4 h-4 mr-2" />
           Logout
         </Button>
+         </Link>
       </div>
     </header>
   );

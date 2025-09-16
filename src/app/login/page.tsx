@@ -10,58 +10,54 @@ import { useRouter } from "next/navigation";
 import { toast } from 'sonner';
 import { jwtDecode } from 'jwt-decode';
 import Cookies from 'js-cookie';
-import { getUserRole } from "@/utils/auth";
+import Loading from "@/components/main/Loading";
 
 export default function LoginPage() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const router = useRouter();
+const [email, setEmail] = useState("");
+const [password, setPassword] = useState("");
+const router = useRouter();
+const [loading, setLoading] = useState(false);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    try {
-      const res = await axios.post("https://pokjappsdmlh-be.vercel.app/api/auth/login", {
-        email,
-        password,
+const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
+  try {
+    setLoading(true); // start loading
+
+    const res = await axios.post("https://pokjappsdmlh-be.vercel.app/api/auth/login", {
+      email,
+      password,
+    });
+
+    const { token, role } = res.data;
+    localStorage.setItem("role", role);
+
+    Cookies.set("token", token, { expires: 1 });
+    const decoded: { role: string } = jwtDecode(token);
+
+    if (decoded.role?.toLowerCase() === "admin") {
+      toast.success("Login Succes!", {
+        description: "Welcome to Dashboard Platform POKJABANGKOM",
       });
-      const { token, role } = res.data;
-      localStorage.setItem('role', role);
-
-      setTimeout(() => {
-
-        Cookies.set('token', token, { expires: 1 })
-        const decoded: { role: string } = jwtDecode(token);
-
-        console.log(getUserRole());
-
-        if (decoded.role?.toLowerCase() === 'admin') {
-           toast.success("Login Succes!", {
-            description: "Welcome to Dashboard Platform POKJABANGKOM"
-          })
-          router.push('/admin/dashboard');
-          return;
-        } else {
-          toast.success("Login Succes!", {
-            description: "Welcome to Platform Internal POKJABANGKOM"
-          })
-          router.push('/');
-          return;
-        }
-      }, 3000);
-
-
-
-    } catch (err) {
-      toast.error("Login Failed!", {
-        description: "Please check your password and email."
-      })
-      console.error("Login failed:", err);
+      router.push("/admin/dashboard");
+    } else {
+      toast.success("Login Succes!", {
+        description: "Welcome to Platform Internal POKJABANGKOM",
+      });
+      router.push("/");
     }
-  };
-
-
-
+  } catch (err) {
+    toast.error("Login Failed!", {
+      description: "Please check your password and email.",
+    });
+    console.error("Login failed:", err);
+  } finally {
+    setLoading(false); // stop loading apapun hasilnya
+  }
+};
   return (
+    <>
+{loading? <Loading/> : <>
+
     <AuthForm btnType="submit" btnText="Login" onsubmit={handleSubmit}>
       <Heading
         title="Login"
@@ -85,6 +81,10 @@ export default function LoginPage() {
           onChange={(e) => setPassword(e.target.value)}
         />
       </div>
+
+      
     </AuthForm>
+    </>}
+   </>
   );
 }

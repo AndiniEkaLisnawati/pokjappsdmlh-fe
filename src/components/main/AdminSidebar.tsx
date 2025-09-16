@@ -11,7 +11,6 @@ import {
   FileText, 
   Users, 
   Home,
-  Settings
 } from "lucide-react";
 import {
   Sidebar,
@@ -89,24 +88,6 @@ export function AdminSidebar() {
         </SidebarGroup>
 
         {/* Menu System */}
-        <SidebarGroup>
-          <SidebarGroupLabel>System</SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              <SidebarMenuItem>
-                <SidebarMenuButton asChild>
-                  <Link
-                    href="/admin/settings"
-                    className={getNavCls(isActive("/admin/settings"))}
-                  >
-                    <Settings className="mr-2 h-4 w-4" />
-                    {!collapsed && <span>Settings</span>}
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
       </SidebarContent>
     </Sidebar>
   );
