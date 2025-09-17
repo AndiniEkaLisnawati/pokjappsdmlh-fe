@@ -133,7 +133,7 @@ setStats([
     change: "+",
     icon: <Building2 className="h-6 w-6" />,
     color: "text-blue-600",
-    bgColor: "bg-blue-100",
+    bgColor: "bg-blue-100 dark:bg-blue-900/20",
   },
   {
     title: "Active Partnerships",
@@ -141,7 +141,7 @@ setStats([
     change: "+",
     icon: <Handshake className="h-6 w-6" />,
     color: "text-green-600",
-    bgColor: "bg-green-100",
+    bgColor: "bg-green-100 dark:bg-green-900/20",
   },
   {
     title: "Training Programs",
@@ -149,7 +149,7 @@ setStats([
     change: "+",
     icon: <BookOpen className="h-6 w-6" />,
     color: "text-purple-600",
-    bgColor: "bg-purple-100",
+    bgColor: "bg-purple-100 dark:bg-purple-900/20",
   },
   {
     title: "Documentation Items",
@@ -157,7 +157,7 @@ setStats([
     change: "+",
     icon: <Camera className="h-6 w-6" />,
     color: "text-orange-600",
-    bgColor: "bg-orange-100",
+    bgColor: "bg-orange-100 dark:bg-orange-900/20",
   },
   {
     title: "Curriculum Items",
@@ -165,7 +165,7 @@ setStats([
     change: "+",
     icon: <FileText className="h-6 w-6" />,
     color: "text-teal-600",
-    bgColor: "bg-teal-100",
+    bgColor: "bg-teal-100 dark:bg-teal-900/20",
   },
   {
     title: "Widyaiswara",
@@ -173,7 +173,7 @@ setStats([
     change: "+",
     icon: <Users className="h-6 w-6" />,
     color: "text-pink-600",
-    bgColor: "bg-pink-100",
+    bgColor: "bg-pink-100 dark:bg-pink-900/20",
   },
 ]);
 
@@ -252,8 +252,9 @@ setStats([
                         {stat.title}
                       </p>
                       <p className="text-3xl font-bold">{stat.value}</p>
-                      <p className="text-sm text-green-600">{stat.change}</p>
+                      
                     </div>
+                    <p className="text-sm text-green-600">{stat.change}</p>
                     <div
                       className={`w-12 h-12 ${stat.bgColor} rounded-lg flex items-center justify-center`}
                     >

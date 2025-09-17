@@ -125,44 +125,55 @@ const Portfolio = () => {
       </section>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
-        <div className="grid grid-cols-2 md:grid-cols-6 gap-6 mb-8 animate-fade-in">
-          <Card className="hover:shadow-lg transition-all duration-300 hover:-translate-y-1 border-0 bg-white/70 backdrop-blur-sm">
-            <CardContent className="p-6 text-center">
-              <div className="text-3xl font-bold text-blue-600 mb-2">28</div>
-              <div className="text-sm text-gray-600">Internal</div>
-            </CardContent>
-          </Card>
-          <Card className="hover:shadow-lg transition-all duration-300 hover:-translate-y-1 border-0 bg-white/70 backdrop-blur-sm">
-            <CardContent className="p-6 text-center">
-              <div className="text-3xl font-bold text-blue-600 mb-2">17</div>
-              <div className="text-sm text-gray-600">Eksternal</div>
-            </CardContent>
-          </Card>
-          <Card className="hover:shadow-lg transition-all duration-300 hover:-translate-y-1 border-0 bg-white/70 backdrop-blur-sm">
-            <CardContent className="p-6 text-center">
-              <div className="text-3xl font-bold text-blue-600 mb-2">45</div>
-              <div className="text-sm text-gray-600">Total</div>
-            </CardContent>
-          </Card>
-          <Card className="hover:shadow-lg transition-all duration-300 hover:-translate-y-1 border-0 bg-white/70 backdrop-blur-sm">
-            <CardContent className="p-6 text-center">
-              <div className="text-3xl font-bold text-indigo-600 mb-2">32</div>
-              <div className="text-sm text-gray-600">S1</div>
-            </CardContent>
-          </Card>
-          <Card className="hover:shadow-lg transition-all duration-300 hover:-translate-y-1 border-0 bg-white/70 backdrop-blur-sm">
-            <CardContent className="p-6 text-center">
-              <div className="text-3xl font-bold text-purple-600 mb-2">13</div>
-              <div className="text-sm text-gray-600">S2</div>
-            </CardContent>
-          </Card>
-          <Card className="hover:shadow-lg transition-all duration-300 hover:-translate-y-1 border-0 bg-white/70 backdrop-blur-sm">
-            <CardContent className="p-6 text-center">
-              <div className="text-3xl font-bold text-emerald-600 mb-2">8</div>
-              <div className="text-sm text-gray-600">Bidang Keahlian</div>
-            </CardContent>
-          </Card>
+       <div className="grid grid-cols-2 md:grid-cols-6 gap-6 mb-8 animate-fade-in">
+  {[
+    {
+      label: "Internal",
+      value: lecturers.filter((l) => l.type === "internal").length,
+      color: "text-blue-600",
+    },
+    {
+      label: "Eksternal",
+      value: lecturers.filter((l) => l.type === "eksternal").length,
+      color: "text-blue-600",
+    },
+    {
+      label: "Total",
+      value: lecturers.length,
+      color: "text-blue-600",
+    },
+    {
+      label: "S1",
+      value: lecturers.filter((l) => l.education.includes("S1")).length,
+      color: "text-indigo-600",
+    },
+    {
+      label: "S2",
+      value: lecturers.filter((l) => l.education.includes("S2")).length,
+      color: "text-purple-600",
+    },
+    {
+      label: "Bidang Keahlian",
+      value: new Set(
+        lecturers.flatMap((l) => l.expertise)
+      ).size,
+      color: "text-emerald-600",
+    },
+  ].map((stat, i) => (
+    <Card
+      key={i}
+      className="hover:shadow-lg transition-all duration-300 hover:-translate-y-1 border-0 bg-white/70 backdrop-blur-sm"
+    >
+      <CardContent className="p-6 text-center">
+        <div className={`text-3xl font-bold ${stat.color} mb-2`}>
+          {stat.value}
         </div>
+        <div className="text-sm text-gray-600">{stat.label}</div>
+      </CardContent>
+    </Card>
+  ))}
+</div>
+
 
         {/* Filters */}
         <Card className="mb-8 border-0 bg-white/70 backdrop-blur-sm shadow-lg animate-slide-up">

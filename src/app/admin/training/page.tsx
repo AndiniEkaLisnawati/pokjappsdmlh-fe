@@ -157,12 +157,34 @@ const TrainingManagement = () => {
         {description: "Training has been successfully updated.",
       });
     } else {
-      const res = await axios.post(API_TRAINING_URL, data)
-      setTrainings(prev => [...prev, res.data]);
+      const res = await axios.post(API_TRAINING_URL, payload)
+        setTrainings(prev => [
+      {
+        ...res.data, 
+        startDate: payload.startDate,
+        endDate: payload.endDate,
+      },
+      ...prev,
+    ]);
       toast.success("Training Added",
         {description: "New training has been successfully added.",
       });
     }
+    
+ form.reset({
+    title: "",
+    instructor: "",
+    duration: "",
+    participants: 0,
+    maleParticipants: 0,
+    femaleParticipants: 0,
+    trainersCount: 0,
+    startDate: "",
+    endDate: "",
+    location: "",
+    status: "",
+    type: "",
+  });
     
     setIsDialogOpen(false);
     setEditingTraining(null);
@@ -259,6 +281,7 @@ const TrainingManagement = () => {
                          training.certificate.toLowerCase().includes(completedSearchTerm.toLowerCase());
     return matchesSearch;
   });
+  
 
   return (
     <div className="space-y-6">
@@ -507,7 +530,7 @@ const TrainingManagement = () => {
         <Card>
           <CardContent className="p-6 text-center">
             <div className="text-2xl font-bold text-blue-600">
-              {trainings.filter(t => t.status === "Completed").length + completedTrainings.length}
+              {trainings.filter(t => t.status.toLowerCase().trim() === "completed").length + completedTrainings.length}
             </div>
             <div className="text-sm text-muted-foreground">Completed</div>
           </CardContent>
@@ -634,9 +657,10 @@ const TrainingManagement = () => {
                       </div>
                     </div>
                   </TableCell>
-                  <TableCell>
+                  <TableCell className="flex flex-col justify-center items-center gap-5">
+                    <MapPin className="w-4 h-4 text-muted-foreground" />
                     <div className="flex items-center gap-1">
-                      <MapPin className="w-4 h-4 text-muted-foreground" />
+                      
                       {training.location}
                     </div>
                   </TableCell>
@@ -667,18 +691,18 @@ const TrainingManagement = () => {
           <div className="flex justify-between items-center">
             <CardTitle className="flex items-center gap-2">
               <Clock className="w-5 h-5" />
-              Completed Training ({filteredCompletedTrainings.length})
+              Certificate Training ({filteredCompletedTrainings.length})
             </CardTitle>
             <Dialog open={isCompletedDialogOpen} onOpenChange={setIsCompletedDialogOpen}>
               <DialogTrigger asChild>
                 <Button onClick={() => { setEditingCompletedTraining(null); completedForm.reset(); }}>
                   <Plus className="w-4 h-4 mr-2" />
-                  Add Completed Training
+                  Add Certificate Training
                 </Button>
               </DialogTrigger>
               <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
                 <DialogHeader>
-                  <DialogTitle>{editingCompletedTraining ? "Edit Completed Training" : "Add New Completed Training"}</DialogTitle>
+                  <DialogTitle>{editingCompletedTraining ? "Edit Certificate Training" : "Add New Certificate Training"}</DialogTitle>
                 </DialogHeader>
                 <Form {...completedForm}>
                   <form onSubmit={completedForm.handleSubmit(onCompletedSubmit)} className="space-y-4">
@@ -687,7 +711,7 @@ const TrainingManagement = () => {
                         control={completedForm.control}
                         name="title"
                         render={({ field }) => (
-                          <FormItem className="md:col-span-2">
+                          <FormItem className="md:col-span-2 flex flex-col gap-1 ">
                             <FormLabel>Training Title</FormLabel>
                             <FormControl>
                               <Input {...field} />
