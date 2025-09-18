@@ -91,11 +91,12 @@ const Training = () => {
 
   return (
     <>
-      <div className="min-h-screen bg-gray-100 dark:bg-slate-900 dark:text-slate-50">
         {isLoading ? (
-          <LoadingScreen />
+          <LoadingScreen mode="inline" />
         ) : (
           <>
+      <div className="min-h-screen bg-gray-100 dark:bg-slate-900 dark:text-slate-50">
+    
             <div className="w-screen px-4 sm:px-6 lg:px-8 py-5">
               <div className="max-w-7xl mx-auto">
                 <div className="relative w-full min-h-[60vh] flex flex-col-reverse md:flex-row items-center justify-between gap-8 bg-gradient-to-br from-white to-sky-100 dark:from-slate-900 dark:to-slate-800 transition-all duration-700 px-6 md:px-16 py-12 rounded-2xl shadow-lg">
@@ -397,9 +398,10 @@ const Training = () => {
                 </Tabs>
               </div>
             </section>
-          </>
-        )}
+          
       </div>
+      </>
+        )}
     </>
   );
 };

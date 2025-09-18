@@ -10,7 +10,7 @@ export default function ClientLayout({
     <>
       <Header />
       {children}
-      <Footer />
+      <Footer/>
     </>
   )
 }
