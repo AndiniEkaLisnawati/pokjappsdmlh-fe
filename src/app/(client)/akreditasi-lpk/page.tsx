@@ -179,7 +179,7 @@ const Partnerships = () => {
               ))}
             </div>
 
-            {/* Search Bar */}
+   
             <div className="flex items-center justify-between mb-4">
               <div className="relative w-full max-w-sm">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
@@ -196,7 +196,7 @@ const Partnerships = () => {
               </div>
             </div>
 
-            {/* Table Data */}
+        
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}

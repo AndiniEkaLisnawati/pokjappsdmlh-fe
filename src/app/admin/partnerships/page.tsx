@@ -124,7 +124,7 @@ const onSubmit = async (data: PartnershipFormData) => {
 
     if (editingPartnership) {
       await axios.put(
-        `https://pokjappsdmlh-be.vercel.app/api/partnership/${editingPartnership.id}`,
+        `http://localhost:3000/api/partnership/${editingPartnership.id}`,
         formData,
         {
           headers: { "Content-Type": "multipart/form-data" },
@@ -176,7 +176,7 @@ const onSubmit = async (data: PartnershipFormData) => {
   };
 
   const handleDelete = (id: string) => {
-    axios.delete(`https://pokjappsdmlh-be.vercel.app/api/partnership/${id}`)
+    axios.delete(`http://localhost:3000/api/partnership/${id}`)
       .then(() => {
         toast.warning("Partnership Deleted",
           {

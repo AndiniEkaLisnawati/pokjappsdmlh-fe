@@ -60,6 +60,7 @@ import Image from "next/image";
 const widyaiswaraSchema = z.object({
   name: z.string().min(1, "Name is required"),
   expertise: z.array(z.string().min(1, "Expertise is required")),
+  customExpertise: z.string().optional(),
   position: z.string().min(1, "Position is required"),
   education: z.string().min(1, "Education is required"),
   experience: z.string().min(1, "Experience is required"),
@@ -116,6 +117,7 @@ const WidyaiswaraManagement = () => {
       name: "",
       photo: "",
       expertise: [],
+      customExpertise: "",
       position: "",
       education: "",
       experience: "",
@@ -176,6 +178,10 @@ const WidyaiswaraManagement = () => {
       .filter(Boolean);
 
   const onSubmit = async (data: WidyaiswaraFormData) => {
+    const finalExpertise = data.customExpertise
+      ? [...data.expertise.filter((e) => e !== "Other.."), data.customExpertise]
+      : data.expertise; 
+
     try {
       const formData = new FormData();
       formData.append("name", data.name);
@@ -191,7 +197,7 @@ const WidyaiswaraManagement = () => {
         "participants_trained",
         String(data.participants_trained)
       );
-      formData.append("expertise", JSON.stringify(data.expertise));
+      formData.append("expertise", JSON.stringify(finalExpertise));
       formData.append("certifications", JSON.stringify(data.certifications));
 
       if (photos) {
@@ -199,7 +205,7 @@ const WidyaiswaraManagement = () => {
       }
 
       if (editingItem) {
-    
+
         const { data: res } = await axios.put<Widyaiswara>(
           `https://pokjappsdmlh-be.vercel.app/api/lecturer/${editingItem.id}`,
           formData,
@@ -225,7 +231,7 @@ const WidyaiswaraManagement = () => {
       setIsDialogOpen(false);
       setEditingItem(null);
       form.reset();
-      setPhotos(null); 
+      setPhotos(null);
     }
   };
 
@@ -291,7 +297,7 @@ const WidyaiswaraManagement = () => {
               <Form {...form}>
                 <form
                   onSubmit={form.handleSubmit((data) => {
-                    
+
                     const fixedData: WidyaiswaraFormData = {
                       ...data,
                       certifications:
@@ -355,32 +361,73 @@ const WidyaiswaraManagement = () => {
                       )}
                     />
                     <FormField
-                      control={form.control}
-                      name="expertise"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Expertise</FormLabel>
-                          <Select
-                            onValueChange={(val) => field.onChange([val])}
-                            defaultValue={field.value?.[0] || ""}
-                          >
-                            <FormControl>
-                              <SelectTrigger>
-                                <SelectValue placeholder="Select expertise" />
-                              </SelectTrigger>
-                            </FormControl>
-                            <SelectContent>
-                              {expertiseOptions.map((opt) => (
-                                <SelectItem key={opt} value={opt}>
-                                  {opt}
-                                </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
+  control={form.control}
+  name="expertise"
+  render={({ field }) => (
+    <FormItem>
+      <FormLabel>Expertise</FormLabel>
+      <Select
+        onValueChange={(val) => {
+          if (val === "Other..") {
+            // simpan "Other.." dulu biar trigger input
+            field.onChange([...field.value, "Other.."]);
+          } else {
+            // kalau belum ada, tambahin
+            if (!field.value?.includes(val)) {
+              field.onChange([...(field.value || []), val]);
+            }
+          }
+        }}
+      >
+        <FormControl>
+          <SelectTrigger>
+            <SelectValue placeholder="Select expertise" />
+          </SelectTrigger>
+        </FormControl>
+        <SelectContent>
+          {expertiseOptions.map((opt) => (
+            <SelectItem key={opt} value={opt}>
+              {opt}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+
+      {/* tampilkan list expertise yg udah dipilih */}
+      <div className="mt-2 flex flex-wrap gap-2">
+        {field.value?.map((exp, idx) =>
+          exp === "Other.." ? null : (
+            <span
+              key={idx}
+              className="px-2 py-1 bg-gray-200 rounded text-sm"
+            >
+              {exp}
+            </span>
+          )
+        )}
+      </div>
+
+      {/* kalau pilih Other.. → munculin input */}
+      {field.value?.includes("Other..") && (
+        <FormField
+          control={form.control}
+          name="customExpertise"
+          render={({ field: customField }) => (
+            <Input
+              className="mt-2"
+              placeholder="Specify other expertise"
+              {...customField}
+            />
+          )}
+        />
+      )}
+
+      <FormMessage />
+    </FormItem>
+  )}
+/>
+
+
                     <FormField
                       control={form.control}
                       name="position"
@@ -717,10 +764,10 @@ const WidyaiswaraManagement = () => {
                                     className="rounded-full"
                                     src={
                                       typeof widyaiswara.photo === "string" && widyaiswara.photo.startsWith("http")
-                                        ? widyaiswara.photo 
+                                        ? widyaiswara.photo
                                         : photos instanceof File
-                                          ? URL.createObjectURL(photos) 
-                                          : "/default-avatar.png" 
+                                          ? URL.createObjectURL(photos)
+                                          : "/default-avatar.png"
                                     }
                                     width={30}
                                     height={30}
