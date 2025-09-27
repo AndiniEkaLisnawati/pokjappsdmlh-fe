@@ -26,6 +26,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Search } from "lucide-react";
 import { useMemo } from "react";
+import Nodata from "@/app/(client)/NoData";
 
 const Partnerships = () => {
   interface lpkProps {
@@ -69,6 +70,8 @@ const Partnerships = () => {
     (page - 1) * rowsPerPage,
     page * rowsPerPage
   );
+
+
 
   return (
     <div className="min-h-screen dark:bg-slate-900 bg-gray-100 dark:text-slate-50">
@@ -188,7 +191,12 @@ const Partnerships = () => {
               </div>
             </div>
 
-        
+        { filteredData.length === 0 ? (
+          <Nodata subject="LPK"/>
+        ) : (
+          <>
+          
+         
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -305,6 +313,9 @@ const Partnerships = () => {
                 </CardContent>
               </Card>
             </motion.div>
+
+             </>
+        )}
 
             {/* Pagination */}
             <div className="flex justify-between items-center mt-4">

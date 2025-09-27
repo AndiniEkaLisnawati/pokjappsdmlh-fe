@@ -26,6 +26,7 @@ import Image from "next/image";
 import Logo from "../../../../public/Logos5.png";
 import axios from "axios";
 import Link from "next/link";
+import NoData from "../NoData";
 
 export interface Training {
   id: string;
@@ -222,7 +223,10 @@ const Training = () => {
                     </TabsTrigger>
                   </TabsList>
 
-                  {/* Upcoming Training */}
+
+                 {training.length === 0 ? (<><NoData subject="Pelatihan]" /></>) : (<>
+                 
+               
                   <TabsContent value="upcoming" className="space-y-6">
                     <div className="grid gap-6">
                       {training.map((training, i) => (
@@ -310,18 +314,18 @@ const Training = () => {
                     </div>
                   </TabsContent>
 
+                    </>)}
+
                   {completedTrainings.length === 0 ? (
                     <TabsContent value="completed" className="space-y-6">
-                      <div className="text-center text-gray-500 dark:text-gray-400">
-                        No Certificate trainings available.
-                      </div>
+                      <NoData subject="Sertifikat Pelatihan" />
                     </TabsContent>
                   ) : (
                     <TabsContent value="completed" className="space-y-6">
                       <div className="grid gap-6">
-                        {completedTrainings.map((training, i) => (
+                        {completedTrainings.map((trainingss, i) => (
                           <motion.div
-                            key={training.id}
+                            key={trainingss.id}
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: i * 0.15 }}
@@ -331,12 +335,12 @@ const Training = () => {
                                 <div className="flex justify-between items-start">
                                   <div className="space-y-2">
                                     <CardTitle className="text-xl font-semibold">
-                                      {training.title}
+                                      {trainingss.title}
                                     </CardTitle>
                                     <CardDescription className="flex items-center text-sm text-muted-foreground">
                                       <Calendar className="w-4 h-4 mr-2" />
                                       {new Date(
-                                        training.startDate
+                                        trainingss.startDate
                                       ).toLocaleDateString("id-ID", {
                                         day: "2-digit",
                                         month: "long",
@@ -344,7 +348,7 @@ const Training = () => {
                                       })}{" "}
                                       -{" "}
                                       {new Date(
-                                        training.endDate
+                                        trainingss.endDate
                                       ).toLocaleDateString("id-ID", {
                                         day: "2-digit",
                                         month: "long",
@@ -356,11 +360,11 @@ const Training = () => {
                                     <div className="flex items-center space-x-1">
                                       <Award className="w-4 h-4 text-yellow-500" />
                                       <span className="text-sm font-medium">
-                                        {training.satisfaction}
+                                        {trainingss.satisfaction}
                                       </span>
                                     </div>
                                     <Link
-                                      href={training.certificate}
+                                      href={trainingss.certificate}
                                       target="_blank"
                                       rel="noopener noreferrer"
                                     >
@@ -376,15 +380,15 @@ const Training = () => {
                                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm text-muted-foreground">
                                   <div className="flex items-center">
                                     <Users className="w-4 h-4 mr-2" />
-                                    {training.participants} peserta
+                                    {trainingss.participants} peserta
                                   </div>
                                   <div className="flex items-center">
                                     <MapPin className="w-4 h-4 mr-2" />
-                                    {training.location}
+                                    {trainingss.location}
                                   </div>
                                   <div className="flex items-center">
                                     <Award className="w-4 h-4 mr-2" />
-                                    {training.totalCertificate} sertifikat
+                                    {trainingss.totalCertificate} sertifikat
                                     diterbitkan
                                   </div>
                                 </div>

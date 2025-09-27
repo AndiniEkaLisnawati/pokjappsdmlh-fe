@@ -24,6 +24,7 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import axios from "axios";
 import { motion } from 'framer-motion'
+import NoData from "../NoData";
 
 interface Lecturers {
   id: number;
@@ -241,7 +242,11 @@ const Portfolio = () => {
           </CardContent>
         </Card>
 
+   {
+            lecturers.length === 0 ? (<><NoData subject="Widyaiswara" /></>) : (<>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 animate-fade-in">
+       
+         
           {lecturers
             .filter((lecturer: Lecturers) => {
               const matchesSearch =
@@ -270,6 +275,7 @@ const Portfolio = () => {
               );
             })
             .map((lecturer: Lecturers) => (
+            
               <Card
                 key={lecturer.id}
                 className="overflow-hidden hover:shadow-xl hover:-translate-y-2 transition-all duration-300 group border-0 bg-white/80 backdrop-blur-sm"
@@ -389,7 +395,10 @@ const Portfolio = () => {
                 </CardContent>
               </Card>
             ))}
+
+
         </div>
+           </>) }
       </div>
     </div>
   );

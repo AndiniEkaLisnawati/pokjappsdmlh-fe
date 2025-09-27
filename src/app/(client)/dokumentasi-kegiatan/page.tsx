@@ -24,6 +24,7 @@ import LoadingScreen from "@/components/main/LoadingScreen";
 import DocumentationImg from "../../../../public/dokumentasi.png";
 import fallbackJpg from "../../../../public/fallback.png";
 import { motion, AnimatePresence } from "framer-motion";
+import NoData from "../NoData";
 
 interface Activity {
   id: string;
@@ -246,6 +247,11 @@ const Documentation = () => {
                 </div>
               </CardContent>
             </Card>
+{ activities.length === 0 ? (
+              <NoData subject="Dokumentasi Kegiatan" />
+      ) : (
+        <>
+            <div className="mt-6">
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {activities
@@ -335,6 +341,10 @@ const Documentation = () => {
                   </Card>
                 ))}
             </div>
+
+            
+              </div>
+              </>)}
           </div>
         </>
       )}

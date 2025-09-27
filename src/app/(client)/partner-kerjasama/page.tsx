@@ -9,6 +9,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { motion } from "framer-motion"
 import LoadingScreen from "@/components/main/LoadingScreen";
+import NoData from "../NoData";
 
 type Partnership = {
   id: string;
@@ -176,7 +177,11 @@ const TrainingPartnerships = () => {
               ))}
             </div>
 
-            {/* Tabel Kemitraan */}
+           {partnerships.length === 0 ? (
+            <NoData subject="Kemitraan dan PKS" />
+           ) : (<>
+           
+          
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -202,7 +207,7 @@ const TrainingPartnerships = () => {
                         <TableHead>Tanggal mulai - selesai</TableHead>
                       </TableRow>
                     </TableHeader>
-                    <TableBody className="text-nowrap">
+                    <TableBody className="text-nowrap spacing-normal">
                       {partnerships.length === 0 ? (
                         <TableRow>
                           <TableCell
@@ -226,15 +231,7 @@ const TrainingPartnerships = () => {
                           >
                             <TableCell className="">
                               <div className="flex flex-col items-start gap-3">
-                                   <div className="flex justify-end">
-                                  <Badge
-                                    className={`text-xs text-black dark:text-slate-50 dark:bg-gray-800 ${getCategoryColor(
-                                      partnership.category
-                                    )}`}
-                                  >
-                                    {partnership.category}
-                                  </Badge>
-                                </div>
+                               
                                 <div className="font-medium">
                                   {partnership.partnerName}
                                 </div>
@@ -284,6 +281,8 @@ const TrainingPartnerships = () => {
                 </CardContent>
               </Card>
             </motion.div>
+
+
 
             {/* Kontak Mitra */}
             <Card className="mt-8 shadow-sm border rounded-2xl">
@@ -354,6 +353,8 @@ const TrainingPartnerships = () => {
                 ))}
               </div>
             </Card>
+
+             </>)}
           </div>
         </>
       )}
