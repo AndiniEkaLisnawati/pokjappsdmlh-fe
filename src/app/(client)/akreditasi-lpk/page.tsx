@@ -11,10 +11,8 @@ import {
 } from "@/components/ui/table";
 import {
   Handshake,
-  Award,
   Building2,
   Phone,
-  BookOpen,
   ShieldCheck,
   MapPin,
 } from "lucide-react";
@@ -56,7 +54,6 @@ const Partnerships = () => {
   const [page, setPage] = useState(1);
   const rowsPerPage = 8;
 
-  // 🔎 Filtered data
   const filteredData = useMemo(() => {
     return lpkData.filter(
       (lpk) =>
@@ -66,7 +63,7 @@ const Partnerships = () => {
     );
   }, [search, lpkData]);
 
-  // 📄 Pagination logic
+
   const totalPages = Math.ceil(filteredData.length / rowsPerPage);
   const paginatedData = filteredData.slice(
     (page - 1) * rowsPerPage,
@@ -132,27 +129,24 @@ const Partnerships = () => {
           <LoadingScreen message="Loading Akreditasi LPK.." mode="inline" />
         ) : (
           <>
-            {/* Statistik Cards */}
+           
             <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
               {[
                 { value: lpkData.length, label: "Total LPK", icon: Building2 },
                 {
                   value: lpkData.filter((lpk) => lpk.status === "Terakreditasi")
                     .length,
-                  label: "Terakreditasi",
-                  icon: Award,
+                  label: "Terakreditasi"
                 },
                 {
                   value: lpkData.filter(
                     (lpk) => lpk.status === "Proses Akreditasi"
                   ).length,
                   label: "Proses Akreditasi",
-                  icon: Phone,
                 },
                 {
                   value: lpkData.filter((lpk) => lpk.programs).length,
                   label: "Jenis Pelatihan",
-                  icon: BookOpen,
                 },
               ].map((item, i) => (
                 <motion.div
@@ -164,9 +158,7 @@ const Partnerships = () => {
                 >
                   <Card className="hover:shadow-lg transition duration-300 border border-slate-200 dark:border-slate-700 bg-gradient-to-br from-white to-slate-50 dark:from-slate-800 dark:to-slate-900">
                     <CardContent className="p-6 text-center">
-                      <div className="flex justify-center mb-3">
-                        <item.icon className="w-6 h-6 text-blue-700 dark:text-blue-400" />
-                      </div>
+                     
                       <div className="text-4xl font-extrabold text-blue-700 dark:text-blue-400 mb-2">
                         {item.value}
                       </div>
